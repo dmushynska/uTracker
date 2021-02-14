@@ -21,7 +21,7 @@ class DataBase : public QObject {
     std::mutex g_i_mutex;
 
 public:
-
+    bool insert(const QString &table, const QString &insert, const QString &values, int &lastInsert);
     bool insert(const QString &table, const QString &insert, const QString &values);
     bool update(const QString &table, const QString &update, const QString &where);
     QSqlQuery select(const QString &table, const QString &select, const QString &where);
