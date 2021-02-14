@@ -16,6 +16,8 @@ Q_OBJECT
 public:
     AbstractResponseHandler(QTcpSocket *socket);
 
+    QString getToken();
+
 signals:
     void handleInited(QJsonObject itemObject);
 
@@ -25,6 +27,7 @@ public slots:
 protected:
     QTcpSocket *m_socket;
     QByteArray m_json;
+    QString m_token;
 };
 
 class SignUpResponse : public AbstractResponseHandler {

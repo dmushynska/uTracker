@@ -58,7 +58,10 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     if (static_cast<int>(RequestType::SIGN_UP) == itemObject["type"].toInt()
         || static_cast<int>(RequestType::SIGN_IN) == itemObject["type"].toInt()) {
         m_mutex->lock();
-        m_itr->find(m_ptr).value() = itemObject["login"].toString();
+        if(!itemObject["login"].toString().isEmpty())
+            m_itr->find(m_ptr).value() = itemObject["login"].toString();
+        else
+            m_itr->find(m_ptr).value() = itemObject["email"].toString();
         m_mutex->unlock();
     }
     for (auto i : types)
@@ -78,7 +81,7 @@ void Runnable::setTask(QByteArray task) {
     m_task = task;
 }
 
-void Runnable::setVector(QMap<Connection *, QString> *map) {
+void Runnable::setMap(QMap<Connection *, QString> *map) {
     m_itr = map;
 }
 

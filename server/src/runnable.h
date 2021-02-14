@@ -15,7 +15,7 @@ public:
     
     void setMutex(QMutex *mutex);
     void setTask(QByteArray task);
-    void setVector(QMap<Connection *, QString> *map);
+    void setMap(QMap<Connection *, QString> *map);
 
 protected:
     void run() override;

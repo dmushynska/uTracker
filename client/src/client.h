@@ -6,7 +6,6 @@
 #include <QDebug>
 
 #include "requests.h"
-#include "responsehandler.h"
 #include "hash.h"
 
 
@@ -19,8 +18,7 @@ public:
     void doConnect(char *ip, int port);
     void testRequestLoop();
     void parseJSON(QJsonDocument itemDoc);
-
-signals:
+//signals:
 
 public slots:
     void disconnected();
