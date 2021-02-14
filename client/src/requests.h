@@ -18,20 +18,21 @@ enum class RequestType {
     AUTO_OAUTH = 3,
     LOG_OUT = 4,
     CREATE_WORKFLOW = 5,
-    UPDATE_WORKFLOW = 6,
-    INVITE_TO_WORKFLOW = 7,
-    GET_ALL_WORKFLOWS = 8,
-    GET_SINGLE_WORKFLOW_DATA = 9,
-    GET_STATISTICS = 10,
-    GET_PROFILE = 11,
-    UPDATE_PROFILE = 12,
-    CREATE_LIST = 13,
-    REMOVE_LIST = 14,
-    CREATE_TASK = 15,
-    UPDATE_TASK = 16,
-    MOVE_TASK = 17,
-    REMOVE_TASK = 18,
-    GET_TASK_DATA = 19
+//    ARCHIVE_WORKFLOW = 6,
+    UPDATE_WORKFLOW = 7,
+    INVITE_TO_WORKFLOW = 8,
+    GET_ALL_WORKFLOWS = 9,
+    GET_SINGLE_WORKFLOW_DATA = 10,
+    GET_STATISTICS = 11,
+    GET_PROFILE = 12,
+    UPDATE_PROFILE = 13,
+    CREATE_LIST = 14,
+    REMOVE_LIST = 15,
+    CREATE_TASK = 16,
+    UPDATE_TASK = 17,
+    MOVE_TASK = 18,
+    REMOVE_TASK = 19,
+    GET_TASK_DATA = 20
 };
 
 class AbstractRequest {
@@ -44,8 +45,8 @@ public:
     //auth sector
     void signUp(const QString& login, const QString& pass, const QString& name, const QString& surname, const QString& email);
     void signIn(const QString& email, const QString&  login, const QString& pass);
-    void autoSignInWithGoogle(const QString& token);
-    void autoSignIn(const QString& token);
+    void autoSignInWithGoogle();
+    void autoSignIn();
     void logOut(int userId);
 
     //workdflow (desk) sector
@@ -71,6 +72,7 @@ public:
     void removeTask(int taskId);
     void getTaskData(int taskId);
 
+    QString m_token;
 protected:
     QTcpSocket *m_socket;
 };

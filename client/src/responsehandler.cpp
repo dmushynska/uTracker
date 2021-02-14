@@ -82,3 +82,44 @@ void ToUpdateProfileResponse::responseHandle(QJsonObject itemObject) {
     qDebug() << "Message :" << itemObject["message"].toString() << "\n";
 }
 ////////////////////////////////////////////////////////////////////////////////////////
+ToCreateListResponse::ToCreateListResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToRemoveListResponse::ToRemoveListResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToRemoveListResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToCreateTaskResponse::ToCreateTaskResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToUpdateTaskResponse::ToUpdateTaskResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToUpdateTaskResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToMoveTaskResponse::ToMoveTaskResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToMoveTaskResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToRemoveTaskResponse::ToRemoveTaskResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void ToRemoveTaskResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}
+////////////////////////////////////////////////////////////////////////////////////////
+SendTaskDataResponse::SendTaskDataResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
+
+void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "Message :" << itemObject["message"].toString() << "\n";
+}

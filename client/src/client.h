@@ -28,6 +28,7 @@ public slots:
 
 private:
     QTcpSocket *m_socket;
+
     std::shared_ptr<AbstractRequest> m_request;
 
     std::shared_ptr<AbstractResponseHandler> m_signUp;
@@ -43,4 +44,11 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_sendStat;
     std::shared_ptr<AbstractResponseHandler> m_sendProfile;
     std::shared_ptr<AbstractResponseHandler> m_updateProfile;
+    std::shared_ptr<AbstractResponseHandler> m_createListResponse;
+    std::shared_ptr<AbstractResponseHandler> m_removeListResponse;
+    std::shared_ptr<AbstractResponseHandler> m_createTaskResponse;
+    std::shared_ptr<AbstractResponseHandler> m_updateTaskResponse;
+    std::shared_ptr<AbstractResponseHandler> m_moveTaskResponse;
+    std::shared_ptr<AbstractResponseHandler> m_removeTaskResponse;
+    std::shared_ptr<AbstractResponseHandler> m_sendTaskDataResponse;
 };

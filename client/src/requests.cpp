@@ -23,6 +23,7 @@ void AbstractRequest::signUp(const QString& login,
                              const QString& email) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_UP);
+    mapa["token"] = m_token;
     mapa["login"] = login;
     mapa["password"] = pass;
     mapa["email"] = email;
@@ -35,26 +36,28 @@ void AbstractRequest::signIn(const QString& email,
                              const QString& pass) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_IN);
+    mapa["token"] = m_token;
     mapa["login"] = login;
     mapa["password"] = pass;
     mapa["email"] = email;
     createJSON(mapa);
 }
-void AbstractRequest::autoSignInWithGoogle(const QString& token) {
+void AbstractRequest::autoSignInWithGoogle() {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::AUTO_OAUTH);
-    mapa["token"] = token;
+    mapa["token"] = m_token;
     createJSON(mapa);
 }
-void AbstractRequest::autoSignIn(const QString& token) {
+void AbstractRequest::autoSignIn() {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::AUTO_AUTH);
-    mapa["token"] = token;
+    mapa["token"] = m_token;
     createJSON(mapa);
 }
 void AbstractRequest::logOut(int userId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::LOG_OUT);
+    mapa["token"] = m_token;
     mapa["userId"] = userId;
     createJSON(mapa);
 }
@@ -63,6 +66,7 @@ void AbstractRequest::logOut(int userId) {
 void AbstractRequest::createWorkflow(const QString& title, const QString& deadline, int ownerId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_WORKFLOW);
+    mapa["token"] = m_token;
     mapa["ownerId"] = ownerId;
     mapa["title"] = title;
     mapa["deadline"] = deadline;
@@ -72,6 +76,7 @@ void AbstractRequest::createWorkflow(const QString& title, const QString& deadli
 void AbstractRequest::updateWorkflow(const QString& title, const QString& deadline, int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
+    mapa["token"] = m_token;
     mapa["title"] = title;
     mapa["deadline"] = deadline;
     mapa["workflowId"] = workflowId;
@@ -80,6 +85,7 @@ void AbstractRequest::updateWorkflow(const QString& title, const QString& deadli
 void AbstractRequest::inviteToWorkflow(int userId, int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::INVITE_TO_WORKFLOW);
+    mapa["token"] = m_token;
     mapa["userId"] = userId;
     mapa["workflowId"] = workflowId;
     createJSON(mapa);
@@ -88,6 +94,7 @@ void AbstractRequest::inviteToWorkflow(int userId, int workflowId) {
 void AbstractRequest::getAllWorkflows(int userId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_ALL_WORKFLOWS);
+    mapa["token"] = m_token;
     mapa["userId"] = userId;
     createJSON(mapa);
 }
@@ -95,6 +102,7 @@ void AbstractRequest::getAllWorkflows(int userId) {
 void AbstractRequest::getSingleWorkflowData(int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
+    mapa["token"] = m_token;
     mapa["workflowId"] = workflowId;
     createJSON(mapa);
 }
@@ -103,6 +111,7 @@ void AbstractRequest::getSingleWorkflowData(int workflowId) {
 void AbstractRequest::getStatistics() {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_STATISTICS);
+    mapa["token"] = m_token;
     createJSON(mapa);
 }
 
@@ -110,6 +119,7 @@ void AbstractRequest::getStatistics() {
 void AbstractRequest::getProfile(int userId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_PROFILE);
+    mapa["token"] = m_token;
     mapa["userId"] = userId;
     createJSON(mapa);
 }
@@ -117,6 +127,7 @@ void AbstractRequest::getProfile(int userId) {
 void AbstractRequest::updateProfile(int userId, const QString& name, const QString& surname) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_PROFILE);
+    mapa["token"] = m_token;
     mapa["userId"] = userId;
     mapa["name"] = name;
     mapa["surname"] = surname;
@@ -126,6 +137,7 @@ void AbstractRequest::updateProfile(int userId, const QString& name, const QStri
 void AbstractRequest::createList(const QString& title, int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_LIST);
+    mapa["token"] = m_token;
     mapa["title"] = title;
     mapa["workflowId"] = workflowId;
     createJSON(mapa);
@@ -134,6 +146,7 @@ void AbstractRequest::createList(const QString& title, int workflowId) {
 void AbstractRequest::removeList(int listId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::REMOVE_LIST);
+    mapa["token"] = m_token;
     mapa["listId"] = listId;
     createJSON(mapa);
 }
@@ -143,6 +156,7 @@ void AbstractRequest::removeList(int listId) {
 void AbstractRequest::createTask(const QString& title, int listId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_TASK);
+    mapa["token"] = m_token;
     mapa["title"] = title;
     mapa["listId"] = listId;
     createJSON(mapa);
@@ -151,6 +165,7 @@ void AbstractRequest::createTask(const QString& title, int listId) {
 void AbstractRequest::updateTask(int taskId, const QString& description, const QStringList& checkList) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
+    mapa["token"] = m_token;
     mapa["taskId"] = taskId;
     mapa["description"] = description;
     mapa["checkList"] = checkList;
@@ -160,6 +175,7 @@ void AbstractRequest::updateTask(int taskId, const QString& description, const Q
 void AbstractRequest::moveTask(int taskId, int listId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::MOVE_TASK);
+    mapa["token"] = m_token;
     mapa["listId"] = listId;
     mapa["taskId"] = taskId;
     createJSON(mapa);
@@ -168,6 +184,7 @@ void AbstractRequest::moveTask(int taskId, int listId) {
 void AbstractRequest::removeTask(int taskId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::REMOVE_TASK);
+    mapa["token"] = m_token;
     mapa["taskId"] = taskId;
     createJSON(mapa);
 }
@@ -175,6 +192,7 @@ void AbstractRequest::removeTask(int taskId) {
 void AbstractRequest::getTaskData(int taskId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
+    mapa["token"] = m_token;
     mapa["taskId"] = taskId;
     createJSON(mapa);
 }

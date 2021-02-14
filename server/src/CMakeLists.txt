@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.17.3)
 
 set(CMAKE_CXX_STANDARD 20)
 set(NAME server_src)
+set(OPENSSL_ROOT_DIR /usr/local/opt/openssl)
 
 find_package(Qt5 COMPONENTS Core Widgets Network Sql REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 add_compile_options(
     -std=c++17
@@ -24,4 +26,5 @@ target_link_libraries(
         Qt5::Widgets
         Qt5::Network
         Qt5::Sql
+        OpenSSL::SSL
 )

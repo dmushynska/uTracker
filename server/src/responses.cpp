@@ -7,15 +7,8 @@ AbstractRequestHandler::AbstractRequestHandler(Connection *connection) : m_conne
 
 void AbstractRequestHandler::responseSend(QJsonObject itemObject) {
     qDebug() << " =========================== TYPE "<< itemObject["type"].toInt() << "=========================\n";
-    if (isValid(itemObject) && isValidToken(itemObject))
+    if (isValid(itemObject))
         emit DataBase::getInstance()->getData(m_connection, itemObject["type"].toInt(), itemObject.toVariantMap());
-}
-
-bool AbstractRequestHandler::isValidToken(QJsonObject itemObject) {
-//    Q_UNUSED(itemObject);
-    if(!itemObject["token"].toString().isEmpty())
-        return true;
-    return false;
 }
 
 ////auth sector//////////////////////////////////////////
@@ -70,10 +63,14 @@ bool ToLogOut::isValid(QJsonObject itemObject) {
 ToCreatedWorkflow::ToCreatedWorkflow(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool ToCreatedWorkflow::isValid(QJsonObject itemObject) {
-    if (!itemObject["title"].toString().isEmpty()
-        && !itemObject["description"].toString().isEmpty()
-        && itemObject["ownerId"].toInt())
-        return true;
+    if (itemObject.contains("title")
+        && itemObject.contains("deadline")
+        && itemObject.contains("userId")) {
+        if (!itemObject["title"].toString().isEmpty()
+            && !itemObject["deadline"].toString().isEmpty()
+            && itemObject["userId"].toInt())
+            return true;
+    }
     return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +121,7 @@ bool SendStatistics::isValid(QJsonObject itemObject) {
 SendProfile::SendProfile(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool SendProfile::isValid(QJsonObject itemObject) {
+    qDebug() << itemObject["userId"].toInt();
     if (itemObject["userId"].toInt())
         return true;
     return false;

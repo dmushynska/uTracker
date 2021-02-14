@@ -130,3 +130,61 @@ public:
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
+
+////list sector//////////////////////////////////////////
+class ToCreateListResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToCreateListResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToRemoveListResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToRemoveListResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+////task sector//////////////////////////////////////////
+class ToCreateTaskResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToCreateTaskResponse(QTcpSocket *socket);
+    public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToUpdateTaskResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToUpdateTaskResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToMoveTaskResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToMoveTaskResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToRemoveTaskResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToRemoveTaskResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class SendTaskDataResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    SendTaskDataResponse(QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
