@@ -3,6 +3,7 @@
 #include <QTcpServer>
 #include <QThreadPool>
 #include <QVector>
+#include <QMap>
 
 #include "runnable.h"
 
@@ -28,5 +29,5 @@ public slots:
 private:
     QMutex *m_mutex;
     QThreadPool *m_pool;
-    QVector<Connection *> m_connections;
+    QMap<Connection *, QString> m_connections;
 };

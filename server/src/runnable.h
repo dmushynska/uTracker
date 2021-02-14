@@ -12,13 +12,16 @@ public:
     ~Runnable() override;
 
     void parseJSON(QJsonDocument itemDoc);
+    
     void setMutex(QMutex *mutex);
     void setTask(QByteArray task);
+    void setVector(QMap<Connection *, QString> *map);
 
 protected:
     void run() override;
 
 private:
+    QMap<Connection *, QString> *m_itr;
     QByteArray m_task;
     QMutex *m_mutex;
     Connection *m_ptr;
