@@ -154,11 +154,12 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_IN);
 
-    if (query.first())
-        qDebug() << "userFound";
+//    if (query.first())
+//        qDebug() << "userFound";
     if (query.first() && (query.value(1).toString() == password)) {
         map["userId"] = query.value(0);
         map["message"] = "Successfully authorized";
+        map["token"] = "0cbc4a221e8b6f00aaa41869529f49405840121b28411dae83429552ac769193";//витягни плез із бази даних токен плез Даша
     } else {
         map["error"] = 1;
         map["message"] = "Invalid email or password";
@@ -186,8 +187,8 @@ DataBase::createUser(const QString &login,
     if (!query.exec()) {
         map["error"] = 1;
         map["message"] = "User with such login already exist";
-        map["token"] = mx_hash(password, login);
     } else {
+        map["token"] = mx_hash(password, login);
         map["userId"] = query.lastInsertId().toInt();
         map["message"] = "User successfully created";
     }
@@ -262,8 +263,8 @@ QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм доп
     query.exec(QString("select workflow_id from WF_connector where user_id = %1;").arg(user_id));
     QMap<QString, QVariant> map;
 
-    qDebug() << "user_id is " << user_id;
-    qDebug() << query.value(0).toInt();
+//    qDebug() << "user_id is " << user_id;
+//    qDebug() << query.value(0).toInt();
     map["type"] = static_cast<int>(RequestType::GET_ALL_WORKFLOWS);
     if (query.first()) {
         QJsonObject jsonObject = QJsonObject::fromVariantMap(getWorkflow(query.value(0).toInt()));
@@ -299,7 +300,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
         map["message"] = "Workflow successfully has gotten";
     } else {
         map["error"] = 1;
-        map["message"] = "External error";
+        map["message"] = "External error in GET_WORKFLOW";// не міняй ніхуя поки що а то коли я дебажу я не ебу що за помилка
     }
     return map;
 }
@@ -309,9 +310,11 @@ QVariantMap DataBase::getProfile(int user_id) {
     query.exec("SELECT login, first_name, last_name FROM usersCredential where id = \"" + QString::number(user_id) + "\";");
     //    QSqlQuery query = select("usersCredential", "login, first_name, last_name", "id = " + QString::number(user_id) + ";");
     // query.exec("select first_name, last_name from WorkFlows where id = " + QString::number(user_id) + ";");
-    QMap<QString, QVariant> map;
+    // QMap<QString, QVariant> map;
 
     qDebug() << "login : " << query.value(0).toString();
+    QMap<QString, QVariant> map;
+
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_PROFILE);
         map["login"] = query.value(0).toString();
@@ -330,7 +333,6 @@ QVariantMap DataBase::getProfile(int user_id) {
     //    byte photo
     //    QString google_token
     //    QString github_token varchar
-    qDebug() << "map is " << map;
     return map;
 }
 

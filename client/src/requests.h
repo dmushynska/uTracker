@@ -6,10 +6,9 @@
 #include <QJsonValue>
 
 #include <QTcpSocket>
-
 #include <QDataStream>
-
 #include <iostream>
+#include "responsehandler.h"
 
 enum class RequestType {
     SIGN_UP = 0,
@@ -42,6 +41,8 @@ public:
 
     void createJSON(QMap<QString, QVariant> map);
 
+    void setToken(const QString& token);
+
     //auth sector
     void signUp(const QString& login, const QString& pass, const QString& name, const QString& surname, const QString& email);
     void signIn(const QString& email, const QString&  login, const QString& pass);
@@ -72,11 +73,7 @@ public:
     void removeTask(int taskId);
     void getTaskData(int taskId);
 
-    QString m_token;
 protected:
     QTcpSocket *m_socket;
-};
-
-class JsonFormat {
-
+    QString m_token;
 };

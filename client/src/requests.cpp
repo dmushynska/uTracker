@@ -15,6 +15,10 @@ void AbstractRequest::createJSON(QMap<QString, QVariant> map) {
     m_socket->write("\n" + json);
 }
 
+void AbstractRequest::setToken(const QString& token) {
+    m_token = token;
+}
+
 ////auth sector/////////////////////////////////////////////////////////////////////////
 void AbstractRequest::signUp(const QString& login,
                              const QString& pass,
@@ -23,7 +27,6 @@ void AbstractRequest::signUp(const QString& login,
                              const QString& email) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_UP);
-    mapa["token"] = m_token;
     mapa["login"] = login;
     mapa["password"] = pass;
     mapa["email"] = email;

@@ -27,16 +27,7 @@ Runnable::Runnable(Connection *socket) {
 }
 
 void Runnable::parseJSON(QJsonDocument itemDoc) {
-    if (true) {
-        m_mutex->lock();
-        //qDebug() << "mutex locked";
-        m_mutex->unlock();
-    }
-    //else
-    //    qDebug() << "mutex unlocked";
-
     QJsonObject itemObject = itemDoc.object();
-
     QVector<std::shared_ptr<AbstractRequestHandler>> funcList;
     funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createWorkFlow});
     funcList.append({m_updateWorkFlow, m_inviteToWorkFlow, m_sendAllWorkFlows, m_sendSingleWorkFlow});
@@ -64,12 +55,23 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::MOVE_TASK);
     types.append(RequestType::REMOVE_TASK);
     types.append(RequestType::GET_TASK_DATA);
+    if (static_cast<int>(RequestType::SIGN_UP) == itemObject["type"].toInt()
+        || static_cast<int>(RequestType::SIGN_IN) == itemObject["type"].toInt()) {
+        m_mutex->lock();
+        if(!itemObject["login"].toString().isEmpty())
+            m_itr->find(m_ptr).value() = itemObject["login"].toString();
+        else
+            m_itr->find(m_ptr).value() = itemObject["email"].toString();
+        m_mutex->unlock();
+    }
     for (auto i : types)
         if (static_cast<int>(i) == itemObject["type"].toInt())
             emit funcList[types.indexOf(i)]->responseInited(itemObject);
 }
 
-Runnable::~Runnable() {}
+Runnable::~Runnable() {
+    
+}
 
 void Runnable::setMutex(QMutex *mutex) {
     m_mutex = mutex;
@@ -77,6 +79,10 @@ void Runnable::setMutex(QMutex *mutex) {
 
 void Runnable::setTask(QByteArray task) {
     m_task = task;
+}
+
+void Runnable::setMap(QMap<Connection *, QString> *map) {
+    m_itr = map;
 }
 
 void Runnable::run() {

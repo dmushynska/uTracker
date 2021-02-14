@@ -24,11 +24,11 @@ void Server::incomingConnection(qintptr handle) {
     Connection *newConnection = new Connection(this);
     newConnection->doConnect(handle);
 
-    m_connections.push_back(newConnection);
+    m_connections.insert(newConnection, nullptr);
 }
 
 void Server::deleteConnection(Connection *ptr) {
-    m_connections.erase(m_connections.begin() + m_connections.indexOf(ptr));
+    m_connections.erase(m_connections.find(ptr));
 }
 
 void Server::setNewTask(Connection *ptr) {
@@ -37,5 +37,6 @@ void Server::setNewTask(Connection *ptr) {
     task->setAutoDelete(true);
     task->setMutex(m_mutex);
     task->setTask(ptr->getTask());
+    task->setMap(&m_connections);
     m_pool->start(task);
 }
