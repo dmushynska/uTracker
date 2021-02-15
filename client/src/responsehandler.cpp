@@ -103,7 +103,13 @@ void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "workflows" << itemObject["workflows"] << "\n";
+        QJsonArray bigArray = itemObject["workflows"].toArray();
+        for (auto arr : bigArray) {
+            qDebug() << arr << "\n";
+//            qDebug() << "ownerId :" << arr["owner_id"].toInt() << "\n";
+//            qDebug() << "title :" << arr["title"].toString() << "\n";
+//            qDebug() << "deadline :" << arr["deadline"].toString() << "\n";
+        }
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +120,9 @@ void SingleWorkflowDataResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "ownerId :" << itemObject["owner_id"].toInt() << "\n";
+        qDebug() << "title :" << itemObject["title"].toString() << "\n";
+        qDebug() << "deadline :" << itemObject["deadline"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
