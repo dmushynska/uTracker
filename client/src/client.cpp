@@ -42,36 +42,36 @@ void Client::doConnect(char *ip, int port) {
 }
 
 void Client::testRequestLoop() {
-     m_request->m_token = mx_hash("const QString& pass", "salt");
+    //  m_request->m_token = mx_hash("const QString& pass", "salt");
 ////            ////auth sector
-     m_request->signUp("ndykyy1", "21453#gs8kFSdfD1F244iuSn1", "Nazar1", "Dykyy1", "NazarDykyy1@gmail.com");
-     m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
+    //  m_request->signUp("ndykyy1", "21453#gs8kFSdfD1F244iuSn1", "Nazar1", "Dykyy1", "NazarDykyy1@gmail.com");
+    //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
      //m_request->autoSignIn();//-
      //m_request->autoSignInWithGoogle();//-
      //m_request->logOut(1);//+
 
 //            ////workdflow (desk) sector
-     m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
-     m_request->updateWorkflow("QString title", "QString description", 1);
-     m_request->inviteToWorkflow(1, 1);
-     m_request->getAllWorkflows(1);
+    //  m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
+    //  m_request->updateWorkflow("QString title", "QString description", 1);
+    //  m_request->inviteToWorkflow(1, 1);
+    //  m_request->getAllWorkflows(1);
      m_request->getSingleWorkflowData(1);
 
      //m_request->getStatistics();//-
 
 //            ////profile sector
-     m_request->getProfile(1);
-     m_request->updateProfile(1, "Nazar", "Dykyy");
+    //  m_request->getProfile(1);
+    //  m_request->updateProfile(1, "Nazar", "Dykyy");
 
             ////list sector
-    m_request->createList("ListName", 1);
-    m_request->removeList(1);
+    // m_request->createList("ListName", 1);
+    // m_request->removeList(1);
             ////task sector
-    m_request->createTask("Task name", 1);
-    m_request->updateTask(1, "description", {"One", "Two", "Three"});
-    m_request->moveTask(1, 1);
-    m_request->removeTask(1);
-    m_request->getTaskData(1);
+    // m_request->createTask("Task name", 1);
+    // m_request->updateTask(1, "description", {"One", "Two", "Three"});
+    // m_request->moveTask(1, 1);
+    // m_request->removeTask(1);
+    // m_request->getTaskData(1);
 }
 
 void Client::parseJSON(QJsonDocument itemDoc) {

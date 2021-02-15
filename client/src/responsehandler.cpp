@@ -70,8 +70,10 @@ CreatedWorkflowResponse::CreatedWorkflowResponse(QTcpSocket *socket) :  Abstract
 void CreatedWorkflowResponse::responseHandle(QJsonObject itemObject) {
     if (itemObject["Error"].toInt() == 1)
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
-    else
+    else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "workflowId :" << itemObject["workflowId"].toInt() << "\n";
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 UpdateWorkflowResponse::UpdateWorkflowResponse(QTcpSocket *socket) :  AbstractResponseHandler(socket){}
@@ -101,6 +103,7 @@ void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "workflows" << itemObject["workflows"] << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
