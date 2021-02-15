@@ -47,7 +47,7 @@ public:
 public:
     static DataBase *getInstance();
     void create_tables();
-    bool isValidToken(const QString &token) ;
+    bool isValidToken(const QString &token, int type) ;
 
 
     void sendData(Connection *m_connection, int type, const QMap<QString, QVariant> &map);
