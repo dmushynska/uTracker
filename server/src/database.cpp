@@ -320,15 +320,15 @@ QVariantMap DataBase::getProfile(int user_id) {
     //    QSqlQuery query = select("usersCredential", "login, first_name, last_name", "id = " + QString::number(user_id) + ";");
     // query.exec("select first_name, last_name from WorkFlows where id = " + QString::number(user_id) + ";");
     // QMap<QString, QVariant> map;
-
-    qDebug() << "login : " << query.value(0).toString();
+    // query.first();
+    // qDebug() << "login : " << query.value(0).toString();
     QMap<QString, QVariant> map;
 
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_PROFILE);
         map["login"] = query.value(0).toString();
-        map["first_name"] = query.value(1).toString();
-        map["last_name"] = query.value(2).toString();
+        map["name"] = query.value(1).toString();
+        map["surname"] = query.value(2).toString();
         map["message"] = "Profile data has successfully gotten";
     } else {
         map["error"] = 1;
@@ -378,7 +378,7 @@ QVariantMap DataBase::removeList(int listId) {
     Q_UNUSED(listId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::REMOVE_LIST);
-    map["message"] = "List removed";
+    // map["message"] = "List removed";
     QSqlQuery query;
     if (query.exec("DELETE from Lists where id = " + QString::number(listId) + ";")) {
         query.exec("DELETE from Tasks where list_id = " + QString::number(listId) + ";");
@@ -490,7 +490,7 @@ QVariantMap DataBase::removeTask(int taskId) {
     return map;
 }
 
-QVariantMap DataBase::getTaskData(int taskId) {
+QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
     Q_UNUSED(taskId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
@@ -499,7 +499,7 @@ QVariantMap DataBase::getTaskData(int taskId) {
         map["message"] = "Take your task data bitch";
         query.first();
         map["description"] = query.value(0).toString();
-        map["checkList"] = query.value(1).toJsonObject();
+        // map["checkList"] = query.value(1).toJsonObject();
     } else {
         map["message"] = "i dont now wtf";
         map["error"] = 1;

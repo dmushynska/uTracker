@@ -143,6 +143,9 @@ void SendProfileResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "login :" << itemObject["login"].toString() << "\n";
+        qDebug() << "name :" << itemObject["name"].toString() << "\n";
+        qDebug() << "surname :" << itemObject["surname"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +166,7 @@ void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "listId :" << itemObject["listId"].toInt() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +187,7 @@ void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "Error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "taskId :" << itemObject["taskId"].toInt() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
