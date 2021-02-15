@@ -309,7 +309,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
         map["message"] = "Workflow successfully has gotten";
     } else {
         map["error"] = 1;
-        map["message"] = "External error in GET_WORKFLOW";  // не міняй ніхуя поки що а то коли я дебажу я не ебу що за помилка
+        map["message"] = "External error in GET_WORKFLOW";
     }
     return map;
 }
