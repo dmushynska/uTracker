@@ -37,7 +37,7 @@ void DataBase::create_tables() {
         "google_token varchar,"
         "github_token varchar)");
     query.exec("create table IF NOT EXISTS WorkFlows (id integer primary key AUTOINCREMENT, owner_id int, title varchar, deadline datetime)");
-    query.exec("create table IF NOT EXISTS KanbanPanels (id integer primary key AUTOINCREMENT, workflow_id integer, title varchar)");
+    // query.exec("create table IF NOT EXISTS KanbanPanels (id integer primary key AUTOINCREMENT, workflow_id integer, title varchar)");
     query.exec("create table IF NOT EXISTS Tasks (id integer primary key AUTOINCREMENT, list_id int, panel_id int, title varchar, creation_time datetime, deadline_time datetime, creator_id int, description varchar, checklist json, files blob)");
     query.exec(
         "create table IF NOT EXISTS T_connector ("

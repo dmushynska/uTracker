@@ -55,7 +55,7 @@ void Client::testRequestLoop() {
     //  m_request->updateWorkflow("QString title", "QString description", 1);
     //  m_request->inviteToWorkflow(1, 1);
     //  m_request->getAllWorkflows(1);
-     m_request->getSingleWorkflowData(1);
+    //  m_request->getSingleWorkflowData(1);
 
      //m_request->getStatistics();//-
 
