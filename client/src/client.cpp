@@ -71,7 +71,7 @@ void Client::testRequestLoop() {
     // m_request->updateTask(1, "description", {"One", "Two", "Three"});
     // m_request->moveTask(1, 2);
     // m_request->removeTask(1);
-    m_request->getTaskData(1);
+    // m_request->getTaskData(1);
 }
 
 void Client::parseJSON(QJsonDocument itemDoc) {

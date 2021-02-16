@@ -430,7 +430,7 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     QSqlQuery query;
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
-    query.bindValue(":checklist", checkList);
+    // query.bindValue(":checklist", checkList);
     if (query.exec()) {
         map["message"] = "Task updated";
     } else {
