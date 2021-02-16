@@ -8,7 +8,7 @@ void AbstractRequest::createJSON(QMap<QString, QVariant> map) {
     QJsonObject jsonObject =  QJsonObject::fromVariantMap(map);
     QJsonDocument *jsonDoc = new QJsonDocument(jsonObject);
     QByteArray json = jsonDoc->toJson();
-    qDebug() << json;
+    // qDebug() << json;
 
     QByteArray buffer;
     m_socket->write(buffer.setNum(json.size()));

@@ -44,7 +44,7 @@ void Client::doConnect(char *ip, int port) {
 void Client::testRequestLoop() {
     //  m_request->m_token = mx_hash("const QString& pass", "salt");
 ////            ////auth sector
-//      m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
+    //  m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
     //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
      //m_request->autoSignIn();//-
      //m_request->autoSignInWithGoogle();//-
@@ -66,8 +66,8 @@ void Client::testRequestLoop() {
     // m_request->createList("ListName", 1);
     // m_request->removeList(1);
             ////task sector
-//     m_request->createTask("Task name", 1);
-//     m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
+    // m_request->createTask("Task name", 1);
+    m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
     // m_request->moveTask(1, 2);
     // m_request->removeTask(1);
         m_request->getTaskData(1);
@@ -117,9 +117,9 @@ void Client::disconnected() {
 void Client::readyRead() {
     while (!m_socket->atEnd()) {
         QByteArray size = m_socket->readLine();
-        qDebug() << m_socket->read(size.toInt());
-//        QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
-//        if (!itemDoc.isNull())
-//            parseJSON(itemDoc);
+        // qDebug() << m_socket->read(size.toInt());
+       QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
+       if (!itemDoc.isNull())
+           parseJSON(itemDoc);
     }
 }

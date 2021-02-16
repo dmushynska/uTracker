@@ -229,6 +229,13 @@ void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
-        qDebug() << "checkList :" << itemObject["checkList"].toArray() << "\n";
+                QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
+        QJsonObject itemObject = itemDoc.object();
+        QJsonArray arr = itemObject["array"].toArray();
+        qDebug() << "CHECK_LIST :\n";
+        for(int i = 0; i < arr.count(); i++) {
+            qDebug() << arr.at(i)["str"].toString();
+            qDebug() << arr.at(i)["isDone"].toBool();
+        }
     }
 }

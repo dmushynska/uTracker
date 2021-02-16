@@ -38,7 +38,7 @@ void DataBase::create_tables() {
         "github_token varchar)");
     query.exec("create table IF NOT EXISTS WorkFlows (id integer primary key AUTOINCREMENT, owner_id int, title varchar, deadline datetime)");
     // query.exec("create table IF NOT EXISTS KanbanPanels (id integer primary key AUTOINCREMENT, workflow_id integer, title varchar)");
-    query.exec("create table IF NOT EXISTS Tasks (id integer primary key AUTOINCREMENT, list_id int, panel_id int, title varchar, creation_time datetime, deadline_time datetime, creator_id int, description varchar, checklist json, files blob)");
+    query.exec("create table IF NOT EXISTS Tasks (id integer primary key AUTOINCREMENT, list_id int, panel_id int, title varchar, creation_time datetime, deadline_time datetime, creator_id int, description varchar, checklist varchar, files blob)");
     query.exec(
         "create table IF NOT EXISTS T_connector ("
         "id integer primary key AUTOINCREMENT,"
@@ -131,7 +131,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::UPDATE_TASK:
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
-                                    map.value("checkList").toJsonObject());
+                                    map.value("checkList"));
                 break;
             case RequestType::MOVE_TASK:
                 result = moveTask(map.value("taskId").toInt(),
@@ -424,16 +424,26 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
     return map;
 }
 
-QVariantMap DataBase::updateTask(int taskId, const QString &description, const QJsonObject& checkList) {
-    Q_UNUSED(taskId);
-    Q_UNUSED(description);
-    Q_UNUSED(checkList);
+QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant& checkList) {
+    QJsonObject obj {
+        {"array", checkList.toJsonArray()}  
+    };
+    QJsonDocument *jsonDoc = new QJsonDocument(obj);
+    QByteArray json = jsonDoc->toJson();
+
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     QSqlQuery query;
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
-     query.bindValue(":checklist", checkList);
+    query.bindValue(":checklist", json);
+    // qDebug() << obj;
+    // QJsonArray ll = checkList.toJsonArray();
+    // qDebug() << "CHECK_LIST :\n";
+    // for(int i = 0; i < ll.count(); i++) {
+    //     qDebug() << ll.at(i)["str"].toString();
+    //     qDebug() << ll.at(i)["isDone"].toBool();
+    // }   
     if (query.exec()) {
         map["message"] = "Task updated";
     } else {
@@ -452,8 +462,6 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
 }
 
 QVariantMap DataBase::moveTask(int taskId, int listId) {
-    Q_UNUSED(taskId);
-    Q_UNUSED(listId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::MOVE_TASK);
     if (update("Tasks", "list_id = " + QString::number(listId), "id = " + QString::number(taskId))) {
@@ -502,7 +510,7 @@ QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
         map["message"] = "Take your task data bitch";
         query.first();
         map["description"] = query.value(0).toString();
-        map["checkList"] = query.value(1).toJsonObject();
+        map["checkList"] = query.value(1).toString();
     } else {
         map["message"] = "i dont now wtf";
         map["error"] = 1;
@@ -549,8 +557,9 @@ QSqlQuery DataBase::select(const QString &table, const QString &select, const QS
 // //npcArray.append(npcObject);
 // //}
 
-//QJsonArray array = itemObject["checkList"].toArray();
-//qDebug() << "CHECK_LIST :\n";
-//for(int i = 0; i < array.count(); i++)
-//qDebug() << array.at(i).toString();
-//qDebug() << "\n";
+    //QJsonArray array = itemObject["checkList"].toArray();
+    // qDebug() << "CHECK_LIST :\n";
+    // for(int i = 0; i < checkList.count(); i++) {
+    // qDebug() << checkList.at(i)["str"].toString();
+    // qDebug() << checkList.at(i)["isDone"].toBool();
+    // }
