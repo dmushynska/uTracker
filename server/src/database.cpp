@@ -433,7 +433,7 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     QSqlQuery query;
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
-    query.bindValue(":checklist", checkList);
+    // query.bindValue(":checklist", checkList);
     if (query.exec()) {
         map["message"] = "Task updated";
     } else {
@@ -494,7 +494,7 @@ QVariantMap DataBase::removeTask(int taskId) {
 }
 
 QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
-    Q_UNUSED(taskId);
+//    Q_UNUSED(taskId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     QSqlQuery query;
@@ -502,7 +502,7 @@ QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
         map["message"] = "Take your task data bitch";
         query.first();
         map["description"] = query.value(0).toString();
-        // map["checkList"] = query.value(1).toJsonObject();
+        map["checkList"] = query.value(1).toJsonObject();
     } else {
         map["message"] = "i dont now wtf";
         map["error"] = 1;

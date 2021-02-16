@@ -50,7 +50,7 @@ void Client::testRequestLoop() {
      //m_request->autoSignInWithGoogle();//-
      //m_request->logOut(1);//+
 
-//            ////workdflow (desk) sector
+////            ////workdflow (desk) sector
 //      m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
     //  m_request->updateWorkflow("QString title", "QString description", 1);
     //  m_request->inviteToWorkflow(1, 1);
@@ -58,20 +58,19 @@ void Client::testRequestLoop() {
         // m_request->getSingleWorkflowData(1);
 
      //m_request->getStatistics();//-
-
-//            ////profile sector
-//    m_request->getProfile(1);
+    //// // profile sector
+    //  m_request->getProfile(1);
     //  m_request->updateProfile(1, "Nazar", "Dykyy");
 
             ////list sector
     // m_request->createList("ListName", 1);
     // m_request->removeList(1);
             ////task sector
-    // m_request->createTask("Task name", 1);
-    // m_request->updateTask(1, "description", {"One", "Two", "Three"});
+//     m_request->createTask("Task name", 1);
+//     m_request->updateTask(1, "description", {"One", "Two", "Three"});
     // m_request->moveTask(1, 2);
     // m_request->removeTask(1);
-//    m_request->getTaskData(1);
+        m_request->getTaskData(1);
 }
 
 void Client::parseJSON(QJsonDocument itemDoc) {
