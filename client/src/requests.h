@@ -68,7 +68,7 @@ public:
     void removeList(int listId);
     //task sector
     void createTask(const QString& title, int listId);
-    void updateTask(int taskId, const QString& description, const QStringList& checkList);
+    void updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList);
     void moveTask(int taskId, int listId);
     void removeTask(int taskId);
     void getTaskData(int taskId);

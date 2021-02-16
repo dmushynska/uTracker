@@ -67,7 +67,7 @@ void Client::testRequestLoop() {
     // m_request->removeList(1);
             ////task sector
 //     m_request->createTask("Task name", 1);
-//     m_request->updateTask(1, "description", {"One", "Two", "Three"});
+//     m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
     // m_request->moveTask(1, 2);
     // m_request->removeTask(1);
         m_request->getTaskData(1);
@@ -117,9 +117,9 @@ void Client::disconnected() {
 void Client::readyRead() {
     while (!m_socket->atEnd()) {
         QByteArray size = m_socket->readLine();
-//        qDebug() << m_socket->read(size.toInt());
-        QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
-        if (!itemDoc.isNull())
-            parseJSON(itemDoc);
+        qDebug() << m_socket->read(size.toInt());
+//        QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
+//        if (!itemDoc.isNull())
+//            parseJSON(itemDoc);
     }
 }

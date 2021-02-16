@@ -229,6 +229,6 @@ void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
-        qDebug() << "checkList :" << itemObject["checkList"]<< "\n";
+        qDebug() << "checkList :" << itemObject["checkList"].toArray() << "\n";
     }
 }

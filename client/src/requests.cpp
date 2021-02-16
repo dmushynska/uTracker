@@ -165,13 +165,22 @@ void AbstractRequest::createTask(const QString& title, int listId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::updateTask(int taskId, const QString& description, const QStringList& checkList) {
+void AbstractRequest::updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     mapa["token"] = m_token;
     mapa["taskId"] = taskId;
     mapa["description"] = description;
-    mapa["checkList"] = checkList;
+    QJsonArray array;
+//    for (auto item : checkList) {
+    for (auto item = checkList.begin(); item != checkList.end(); item++) {
+        QJsonObject npcObject {
+            {"str", item.key()},
+            {"isDone", item.value()}
+        };
+        array.append(npcObject);
+    }
+    mapa["checkList"] = array;
     createJSON(mapa);
 }
 

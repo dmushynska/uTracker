@@ -131,7 +131,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::UPDATE_TASK:
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
-                                    map.value("checkList").toStringList());
+                                    map.value("checkList").toJsonObject());
                 break;
             case RequestType::MOVE_TASK:
                 result = moveTask(map.value("taskId").toInt(),
@@ -424,7 +424,7 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
     return map;
 }
 
-QVariantMap DataBase::updateTask(int taskId, const QString &description, const QStringList &checkList) {
+QVariantMap DataBase::updateTask(int taskId, const QString &description, const QJsonObject& checkList) {
     Q_UNUSED(taskId);
     Q_UNUSED(description);
     Q_UNUSED(checkList);
@@ -433,7 +433,7 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     QSqlQuery query;
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
-    // query.bindValue(":checklist", checkList);
+     query.bindValue(":checklist", checkList);
     if (query.exec()) {
         map["message"] = "Task updated";
     } else {
