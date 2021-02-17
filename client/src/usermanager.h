@@ -24,6 +24,8 @@ public:
     ~UserManager() = default;
 
     void initModules() const;
+    Authorization *getAuthor();
+
     // Sing* page
 
     //
@@ -35,7 +37,7 @@ signals:
 private:
 //    QQuickView view;
     User m_user;
-    Authorization m_author;
+    Authorization *m_author;
     // Models
     CardListsModel m_cardListModel;
 

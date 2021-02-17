@@ -32,14 +32,12 @@ Page {
     Connections {
         target: mAuthor
         onServerResponseSignUp: {
-            switch (err) {
-            case Authorization.LOGIN_EX:
-                snackbar.open("Login already exist"); break;
-            case Authorization.MAIL_EX:
-                snackbar.open("Mail already exist"); break;
-            case Authorization.NO_ERR:
-                snackbar.open("Account created successfully");
+            if(err == 0) {
+                snackbar.open("Account created successfuly");
                 signUpPage.pop();
+            }
+            else if(err == 1) {
+                snackbar.open(strErr);
             }
         }
     }

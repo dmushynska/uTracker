@@ -4,28 +4,34 @@
 class AES;
 
 Client::Client(QObject *parent) : QObject(parent) {
-    m_socket = new QTcpSocket(this);
+    m_socket = new QTcpSocket();
     m_request = std::make_shared<AbstractRequest>(m_socket);
-    m_signUp = std::make_shared<SignUpResponse>(m_socket);
-    m_signIn = std::make_shared<SignInResponse>(m_socket);
-    m_autoSignIn = std::make_shared<AutoSignInResponse>(m_socket);
-    m_googleSignIn = std::make_shared<SignInWithGoogleResponse>(m_socket);
-    m_logOut = std::make_shared<LogOutResponse>(m_socket);
-    m_createdWorkflow = std::make_shared<CreatedWorkflowResponse>(m_socket);
-    m_updateWorkflow = std::make_shared<UpdateWorkflowResponse>(m_socket);
-    m_inviteToWorkflow = std::make_shared<InvitedToWorkflowResponse>(m_socket);
-    m_allWorkflow = std::make_shared<AllWorkflowsResponse>(m_socket);
-    m_singleWorkflow = std::make_shared<SingleWorkflowDataResponse>(m_socket);
-    m_sendStat = std::make_shared<SendStatistics>(m_socket);
-    m_sendProfile = std::make_shared<SendProfileResponse>(m_socket);
-    m_updateProfile = std::make_shared<ToUpdateProfileResponse>(m_socket);
-    m_createListResponse = std::make_shared<ToCreateListResponse>(m_socket);
-    m_removeListResponse = std::make_shared<ToRemoveListResponse>(m_socket);
-    m_createTaskResponse = std::make_shared<ToCreateTaskResponse>(m_socket);
-    m_updateTaskResponse = std::make_shared<ToUpdateTaskResponse>(m_socket);
-    m_moveTaskResponse = std::make_shared<ToMoveTaskResponse>(m_socket);
-    m_removeTaskResponse = std::make_shared<ToRemoveTaskResponse>(m_socket);
-    m_sendTaskDataResponse = std::make_shared<SendTaskDataResponse>(m_socket);
+    m_manager = new UserManager(this);
+    m_manager->getAuthor()->setRequest(m_request.get());
+    initResponses();
+}
+
+void Client::initResponses() {
+    m_signUp = std::make_shared<SignUpResponse>(this, m_socket);
+    m_signIn = std::make_shared<SignInResponse>(this, m_socket);
+    m_autoSignIn = std::make_shared<AutoSignInResponse>(this, m_socket);
+    m_googleSignIn = std::make_shared<SignInWithGoogleResponse>(this, m_socket);
+    m_logOut = std::make_shared<LogOutResponse>(this, m_socket);
+    m_createdWorkflow = std::make_shared<CreatedWorkflowResponse>(this, m_socket);
+    m_updateWorkflow = std::make_shared<UpdateWorkflowResponse>(this, m_socket);
+    m_inviteToWorkflow = std::make_shared<InvitedToWorkflowResponse>(this, m_socket);
+    m_allWorkflow = std::make_shared<AllWorkflowsResponse>(this, m_socket);
+    m_singleWorkflow = std::make_shared<SingleWorkflowDataResponse>(this, m_socket);
+    m_sendStat = std::make_shared<SendStatistics>(this, m_socket);
+    m_sendProfile = std::make_shared<SendProfileResponse>(this, m_socket);
+    m_updateProfile = std::make_shared<ToUpdateProfileResponse>(this, m_socket);
+    m_createListResponse = std::make_shared<ToCreateListResponse>(this, m_socket);
+    m_removeListResponse = std::make_shared<ToRemoveListResponse>(this, m_socket);
+    m_createTaskResponse = std::make_shared<ToCreateTaskResponse>(this, m_socket);
+    m_updateTaskResponse = std::make_shared<ToUpdateTaskResponse>(this, m_socket);
+    m_moveTaskResponse = std::make_shared<ToMoveTaskResponse>(this, m_socket);
+    m_removeTaskResponse = std::make_shared<ToRemoveTaskResponse>(this, m_socket);
+    m_sendTaskDataResponse = std::make_shared<SendTaskDataResponse>(this, m_socket);
 }
 
 Client::~Client() {
@@ -44,7 +50,7 @@ void Client::doConnect(char *ip, int port) {
 void Client::testRequestLoop() {
     //  m_request->m_token = mx_hash("const QString& pass", "salt");
 ////            ////auth sector
-    m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
+//    m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
     //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
      //m_request->autoSignIn();//-
      //m_request->autoSignInWithGoogle();//-
@@ -67,10 +73,10 @@ void Client::testRequestLoop() {
     // m_request->removeList(1);
             ////task sector
     // m_request->createTask("Task name", 1);
-    m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
-    // m_request->moveTask(1, 2);
+//    m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
+//     m_request->moveTask(1, 2);
     // m_request->removeTask(1);
-        m_request->getTaskData(1);
+//        m_request->getTaskData(1);
 }
 
 void Client::parseJSON(QJsonDocument itemDoc) {
@@ -78,7 +84,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
 
     QVector<std::shared_ptr<AbstractResponseHandler>> funcList;
 
-    funcList.append({m_signIn, m_signUp, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
+    funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
     funcList.append({m_updateWorkflow, m_inviteToWorkflow, m_allWorkflow, m_singleWorkflow});
     funcList.append({m_sendStat, m_sendProfile, m_updateProfile, m_createListResponse});
     funcList.append({m_removeListResponse, m_createTaskResponse, m_updateTaskResponse});

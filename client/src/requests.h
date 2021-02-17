@@ -8,7 +8,6 @@
 #include <QTcpSocket>
 #include <QDataStream>
 #include <iostream>
-#include "responsehandler.h"
 
 enum class RequestType {
     SIGN_UP = 0,
