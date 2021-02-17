@@ -44,7 +44,7 @@ void Client::doConnect(char *ip, int port) {
 void Client::testRequestLoop() {
     //  m_request->m_token = mx_hash("const QString& pass", "salt");
 ////            ////auth sector
-    //  m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
+    m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
     //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
      //m_request->autoSignIn();//-
      //m_request->autoSignInWithGoogle();//-

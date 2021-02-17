@@ -18,7 +18,7 @@ UserManager::UserManager(QObject *parent) : QObject(parent), m_user(this), m_aut
     if (engine.rootObjects().isEmpty())
         exit(-1);
     initModules();
-    //    connect(this, UserManager::doRequestToServer, reuester) // after request_class connection
+    //    connect(this, UserManager::doRequestToServer, requester) // after request_class connection
 }
 
 void UserManager::initModules() const
