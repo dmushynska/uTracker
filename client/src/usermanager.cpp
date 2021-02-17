@@ -1,12 +1,19 @@
 #include "usermanager.h"
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include "material/src/plugin.h"
+
 
 
 UserManager::UserManager(QObject *parent) : QObject(parent), m_user(this), m_author(this)
 {
 //view.engine();
     QPM_INIT(engine)
+    MaterialPlugin qmlMaterial;
+    qmlMaterial.registerTypes("Material");
+    engine.addImportPath("qrc:/");
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         exit(-1);
