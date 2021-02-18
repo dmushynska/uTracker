@@ -171,14 +171,17 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
         map["userId"] = query.value(0);
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
-        query1.exec("select auth_token from UsersCredential where id = " + query.value(0).toString());
+        query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
-            map["userId"] = query.value(0).toString();//userId
-            map["token"] = query1.value(0).toString();//token
+            map["userId"] = query.value(0).toString();  //userId
+            map["token"] = query1.value(0).toString();  //token
             map["login"] = login;
-//            map["email"] = ;
-//            map["name"] = ;
-//            map["surname"] = ;
+            map["email"] = query1.value(3).toString();
+            ;
+            map["name"] = query1.value(1).toString();
+            ;
+            map["surname"] = query1.value(2).toString();
+            ;
         }
     } else {
         map["error"] = 1;
@@ -277,12 +280,14 @@ DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
     Q_UNUSED(workflow_id);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
-//    if (insert("WF_connector", "workflow_id, login", QString::number(workflow_id) + ", " + QString::number(user_id))) {
-//        map["message"] = "User succesfully invited to Workflow";
-//    } else {
-//        map["error"] = 1;
-//        map["message"] = "Invite canceled";
-//    }
+    QSqlQuery query;
+    query.exec(QString("select id from UsersCredential where login = '%1';").arg(login));
+    if (query.first() && insert("WF_connector", "workflow_id, login", QString::number(workflow_id) + ", " + query.value(0).toString())) {
+        map["message"] = "User succesfully invited to Workflow";
+    } else {
+        map["error"] = 1;
+        map["message"] = "Invite canceled";
+    }
     return map;
 }
 
@@ -292,8 +297,6 @@ QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм доп
     query.exec(QString("select workflow_id from WF_connector where user_id = %1;").arg(user_id));
     QMap<QString, QVariant> map;
 
-    //    qDebug() << "user_id is " << user_id;
-    //    qDebug() << query.value(0).toInt();
     map["type"] = static_cast<int>(RequestType::GET_ALL_WORKFLOWS);
     if (query.first()) {
         QJsonObject jsonObject = QJsonObject::fromVariantMap(getWorkflow(query.value(0).toInt()));
