@@ -193,12 +193,13 @@ void AbstractRequest::updateTask(int taskId, const QString& description, const Q
     createJSON(mapa);
 }
 
-void AbstractRequest::moveTask(int taskId, int listId) {
+void AbstractRequest::moveTask(int taskId, int listId, int indexId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::MOVE_TASK);
     mapa["token"] = m_token;
     mapa["listId"] = listId;
     mapa["taskId"] = taskId;
+    mapa["indexId"] = indexId;
     createJSON(mapa);
 }
 
