@@ -92,6 +92,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                                     map.value("deadline").toString());
             break;
         case RequestType::ARCHIVE_WORKFLOW:
+            removeWorkflow(map.value("workflowId").toInt());
             break;
         case RequestType::UPDATE_WORKFLOW:
             result = updateWorkflow(map.value("workflowId").toInt(),
@@ -324,14 +325,17 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
 }
 
 QVariantMap DataBase::removeWorkflow(int workflow_id) {
+    QMap<QString, QVariant> map;
     QSqlQuery query;
     if (query.exec("DELETE from WF_connector where id = " + QString::number(workflow_id) + ";")) {
         query.exec("DELETE from WorkFlows where id = " + QString::number(workflow_id) + ";");
+        query.exec("DELETE from Lists where id = " + QString::number(workflow_id) + ";");
         map["message"] = "WorkFlow removed";
     } else {
         map["message"] = "WorkFlow wasn't removed";
         map["error"] = 1;
     }
+    return map;
 }
 
 QVariantMap DataBase::getProfile(int user_id) {
