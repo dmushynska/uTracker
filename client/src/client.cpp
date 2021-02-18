@@ -3,14 +3,8 @@
 class AES;
 
 Client::Client(QObject *parent) : QObject(parent) {
-    m_socket = new QTcpSocket();
+    m_socket = new QTcpSocket(this);
     m_request = std::make_shared<AbstractRequest>(m_socket);
-    m_manager = new UserManager(this);
-    m_manager->getAuthor()->setRequest(m_request.get());
-    initResponses();
-}
-
-void Client::initResponses() {
     m_signUp = std::make_shared<SignUpResponse>(this, m_socket);
     m_signIn = std::make_shared<SignInResponse>(this, m_socket);
     m_autoSignIn = std::make_shared<AutoSignInResponse>(this, m_socket);
@@ -82,7 +76,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
 
     QVector<std::shared_ptr<AbstractResponseHandler>> funcList;
 
-    funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
+    funcList.append({m_signIn, m_signUp, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
     funcList.append({m_updateWorkflow, m_inviteToWorkflow, m_allWorkflow, m_singleWorkflow});
     funcList.append({m_sendStat, m_sendProfile, m_updateProfile, m_createListResponse});
     funcList.append({m_removeListResponse, m_createTaskResponse, m_updateTaskResponse});

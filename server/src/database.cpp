@@ -136,7 +136,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                                     map.value("checkList"));
                 break;
             case RequestType::MOVE_TASK:
-                result = moveTask(map.value("taskId").toInt(),
+                result = moveTask(map.value("taskId").toInt(), 
                                   map.value("listId").toInt(),
                                   map.value("indexId").toInt());
                 break;
@@ -540,7 +540,7 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QJsonArray Users;
     QSqlQuery query;
     QVariantMap map;
-    qDebug() << query.exec("select first_name, last_name from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
+    qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
         map["name"] = query.value(0).toString();
         map["surname"] = query.value(1).toString();
