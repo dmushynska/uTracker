@@ -38,7 +38,7 @@ void DataBase::create_tables() {
         "github_token varchar)");
     query.exec("create table IF NOT EXISTS WorkFlows (id integer primary key AUTOINCREMENT, owner_id int, title varchar, deadline datetime)");
     // query.exec("create table IF NOT EXISTS KanbanPanels (id integer primary key AUTOINCREMENT, workflow_id integer, title varchar)");
-    query.exec("create table IF NOT EXISTS Tasks (id integer primary key AUTOINCREMENT, list_id int, panel_id int, title varchar, creation_time datetime, deadline_time datetime, creator_id int, description varchar, checklist varchar, files blob)");
+    query.exec("create table IF NOT EXISTS Tasks (id integer primary key AUTOINCREMENT, list_id int, index_id int, title varchar, creation_time datetime, deadline_time datetime, creator_id int, description varchar, checklist varchar, files blob)");
     query.exec(
         "create table IF NOT EXISTS T_connector ("
         "id integer primary key AUTOINCREMENT,"
@@ -66,88 +66,90 @@ bool DataBase::isValidToken(const QString &token, int type) {
 
 void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &map) {
     QVariantMap result;
-    if (isValidToken(mx_hash("21453#gs8kFSdfD1F244iuSn1", "NazarDykyy@gmail.com"),
-                     map.value("type").toInt())) {
-        switch (static_cast<RequestType>(type)) {
-            case RequestType::AUTO_AUTH:
-                break;
-            case RequestType::SIGN_UP:
-                result = createUser(map.value("email").toString(),
-                                    map.value("password").toString(),
-                                    map.value("name").toString(),
-                                    map.value("surname").toString());
-                break;
-            case RequestType::SIGN_IN:
-                result = containsUser(map.value("email").toString(),
-                                      map.value("password").toString());
-                break;
-            case RequestType::AUTO_OAUTH:
-                break;
-            case RequestType::LOG_OUT:
-                break;
-            case RequestType::CREATE_WORKFLOW:
-                result = createWorkflow(map.value("userId").toInt(),
-                                        map.value("title").toString(),
-                                        map.value("deadline").toString());
-                break;
-            case RequestType::ARCHIVE_WORKFLOW:
-                break;
-            case RequestType::UPDATE_WORKFLOW:
-                result = updateWorkflow(map.value("workflowId").toInt(),
-                                        map.value("title").toString(),
-                                        map.value("deadline").toString());
-                break;
-            case RequestType::INVITE_TO_WORKFLOW:
-                result = inviteToWorkflow(map.value("userId").toInt(),
-                                          map.value("workflowId").toInt());
-                break;
-            case RequestType::GET_ALL_WORKFLOWS:
-                result = getWorkflows(map.value("userId").toInt());
-                break;
-            case RequestType::GET_SINGLE_WORKFLOW_DATA:
-                result = getWorkflow(map.value("workflowId").toInt());
-                break;
-            case RequestType::GET_STATISTICS:
-                break;
-            case RequestType::GET_PROFILE:
-                result = getProfile(map.value("userId").toInt());
-                break;
-            case RequestType::UPDATE_PROFILE:
-                result = updateProfile(map.value("userId").toInt(),
-                                       map.value("name").toString(),
-                                       map.value("surname").toString());
-                break;
-            case RequestType::CREATE_LIST:
-                result = createList(map.value("title").toString(),
-                                    map.value("workdlowId").toInt());
-                break;
-            case RequestType::REMOVE_LIST:
-                result = removeList(map.value("listId").toInt());
-                break;
-            case RequestType::CREATE_TASK:
-                result = createTask(map.value("title").toString(),
-                                    map.value("listId").toInt());
-                break;
-            case RequestType::UPDATE_TASK:
-                result = updateTask(map.value("taskId").toInt(),
-                                    map.value("description").toString(),
-                                    map.value("checkList"));
-                break;
-            case RequestType::MOVE_TASK:
-                result = moveTask(map.value("taskId").toInt(),
-                                  map.value("listId").toInt());
-                break;
-            case RequestType::REMOVE_TASK:
-                result = removeTask(map.value("taskId").toInt());
-                break;
-            case RequestType::GET_TASK_DATA:
-                result = getTaskData(map.value("taskId").toInt());
-        }
-    } else {
-        result["type"] = map.value("type").toInt();
-        result["error"] = 1;
-        result["message"] = "Invalid token";
+    // if (isValidToken(mx_hash("21453#gs8kFSdfD1F244iuSn1", "NazarDykyy@gmail.com"),
+    //  map.value("type").toInt())) {
+    switch (static_cast<RequestType>(type)) {
+        case RequestType::AUTO_AUTH:
+            break;
+        case RequestType::SIGN_UP:
+            result = createUser(map.value("login").toString(),
+                                map.value("password").toString(),
+                                map.value("name").toString(),
+                                map.value("surname").toString(),
+                                map.value("email").toString());
+            break;
+        case RequestType::SIGN_IN:
+            result = containsUser(map.value("email").toString(),
+                                  map.value("password").toString());
+            break;
+        case RequestType::AUTO_OAUTH:
+            break;
+        case RequestType::LOG_OUT:
+            break;
+        case RequestType::CREATE_WORKFLOW:
+            result = createWorkflow(map.value("ownerId").toInt(),
+                                    map.value("title").toString(),
+                                    map.value("deadline").toString());
+            break;
+        case RequestType::ARCHIVE_WORKFLOW:
+            break;
+        case RequestType::UPDATE_WORKFLOW:
+            result = updateWorkflow(map.value("workflowId").toInt(),
+                                    map.value("title").toString(),
+                                    map.value("deadline").toString());
+            break;
+        case RequestType::INVITE_TO_WORKFLOW:
+            result = inviteToWorkflow(map.value("userId").toInt(),
+                                      map.value("workflowId").toInt());
+            break;
+        case RequestType::GET_ALL_WORKFLOWS:
+            result = getWorkflows(map.value("userId").toInt());
+            break;
+        case RequestType::GET_SINGLE_WORKFLOW_DATA:
+            result = getWorkflow(map.value("workflowId").toInt());
+            break;
+        case RequestType::GET_STATISTICS:
+            break;
+        case RequestType::GET_PROFILE:
+            result = getProfile(map.value("userId").toInt());
+            break;
+        case RequestType::UPDATE_PROFILE:
+            result = updateProfile(map.value("userId").toInt(),
+                                   map.value("name").toString(),
+                                   map.value("surname").toString());
+            break;
+        case RequestType::CREATE_LIST:
+            result = createList(map.value("title").toString(),
+                                map.value("workdlowId").toInt());
+            break;
+        case RequestType::REMOVE_LIST:
+            result = removeList(map.value("listId").toInt());
+            break;
+        case RequestType::CREATE_TASK:
+            result = createTask(map.value("title").toString(),
+                                map.value("listId").toInt());
+            break;
+        case RequestType::UPDATE_TASK:
+            result = updateTask(map.value("taskId").toInt(),
+                                map.value("description").toString(),
+                                map.value("checkList"));
+            break;
+        case RequestType::MOVE_TASK:
+            // result = moveTask(map.value("taskId").toInt(),
+            //                   map.value("listId").toInt());
+            result = moveTask(3, 2, 1, 2, 3);
+            break;
+        case RequestType::REMOVE_TASK:
+            result = removeTask(map.value("taskId").toInt());
+            break;
+        case RequestType::GET_TASK_DATA:
+            result = getTaskData(map.value("taskId").toInt());
     }
+    // } else {
+    //     result["type"] = map.value("type").toInt();
+    //     result["error"] = 1;
+    //     result["message"] = "Invalid token";
+    // }
     if (!result.isEmpty()) {
         QJsonObject jsonObject = QJsonObject::fromVariantMap(result);
         QJsonDocument jsonDoc = QJsonDocument(jsonObject);
@@ -183,17 +185,19 @@ QVariantMap
 DataBase::createUser(const QString &login,
                      const QString &password,
                      const QString &name,
-                     const QString &surname) {
+                     const QString &surname,
+                     const QString &email) {
     QSqlQuery query;
     QString hash = mx_hash(password, login);
     query.prepare(
-        "INSERT INTO UsersCredential (login, password, first_name, last_name, auth_token) "
-        "VALUES (:login, :password, :first_name, :last_name, :auth_token);");
+        "INSERT INTO UsersCredential (login, password, first_name, last_name, auth_token, email) "
+        "VALUES (:login, :password, :first_name, :last_name, :auth_token, :email);");
     query.bindValue(":login", login);
     query.bindValue(":password", password);
     query.bindValue(":first_name", name);
     query.bindValue(":last_name", surname);
     query.bindValue(":auth_token", hash);
+    query.bindValue(":email", email);
 
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_UP);
@@ -237,15 +241,20 @@ DataBase::createWorkflow(int owner_id, const QString &title, const QString &dead
 
 QVariantMap
 DataBase::updateWorkflow(int workflow_id, const QString &title, const QString &deadline) {
+    QVariantMap map;
     bool is_ok = false;
     if (!title.isEmpty() && !deadline.isEmpty()) {
         is_ok = update("WorkFlows", "title = '" + title + "', deadline = '" + deadline + "'", "id = " + QString::number(workflow_id));
+        map["title"] = title;
+        map["deadline"] = deadline;
     } else if (deadline.isEmpty()) {
         is_ok = update("WorkFlows", "title = '" + title + "'", "id = " + QString::number(workflow_id));
+        map["title"] = title;
     } else if (title.isEmpty()) {
         is_ok = update("WorkFlows", "deadline = '" + deadline + "'", "id = " + QString::number(workflow_id));
+        map["deadline"] = deadline;
     }
-    QVariantMap map;
+
     map["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
     if (is_ok)
         map["message"] = "Workflow successfully updated";
@@ -319,7 +328,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
 
 QVariantMap DataBase::getProfile(int user_id) {
     QSqlQuery query;
-    query.exec("SELECT login, first_name, last_name FROM usersCredential where id = \"" + QString::number(user_id) + "\";");
+    query.exec("SELECT login, first_name, last_name FROM UsersCredential where id = \"" + QString::number(user_id) + "\";");
     //    QSqlQuery query = select("usersCredential", "login, first_name, last_name", "id = " + QString::number(user_id) + ";");
     // query.exec("select first_name, last_name from WorkFlows where id = " + QString::number(user_id) + ";");
     // QMap<QString, QVariant> map;
@@ -353,6 +362,8 @@ QVariantMap DataBase::updateProfile(int user_id, const QString &name, const QStr
     map["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
     if (update("UsersCredential", "first_name = '" + name + "', last_name = '" + surname + "'", "id = " + QString::number(user_id))) {
         map["message"] = "Profile was succesfully updated";
+        map["name"] = name;
+        map["surname"] = surname;
     } else {
         map["error"] = 1;
         map["message"] = "Profile hasn't beed updated";
@@ -366,7 +377,6 @@ QVariantMap DataBase::createList(const QString &title, int workflowId) {
     QVariantMap map;
     int lastId;
     map["type"] = static_cast<int>(RequestType::CREATE_LIST);
-    // map["message"] = "List created";
     if (insert("Lists", "workflow_id, title", QString::number(workflowId) + ", '" + title + "'", lastId)) {
         map["message"] = "List created";
         map["listId"] = lastId;
@@ -378,10 +388,8 @@ QVariantMap DataBase::createList(const QString &title, int workflowId) {
 }
 
 QVariantMap DataBase::removeList(int listId) {
-    Q_UNUSED(listId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::REMOVE_LIST);
-    // map["message"] = "List removed";
     QSqlQuery query;
     if (query.exec("DELETE from Lists where id = " + QString::number(listId) + ";")) {
         query.exec("DELETE from Tasks where list_id = " + QString::number(listId) + ";");
@@ -390,44 +398,32 @@ QVariantMap DataBase::removeList(int listId) {
         map["message"] = "List wasn't removed";
         map["error"] = 1;
     }
-    //додать до бд і поставить перевірки типу
-    //if(видалилось == тру)
-    //map["message"] = "List removed";
-    //else {
-    //map["message"] = "List wasn't removed";
-    //map["error"] = 1;
-    //}
     return map;
 }
 
 QVariantMap DataBase::createTask(const QString &title, int listId) {
-    Q_UNUSED(listId);
-    Q_UNUSED(title);
+    QSqlQuery query;
+    int index_id = 1;
+    query.exec("select index_id from Tasks where list_id = " + QString::number(listId) + " order by index_id DESC limit 1");
+    if (query.first()) {
+        index_id = query.value(0).toInt() + 1;
+    }
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::CREATE_TASK);
-    // map["message"] = "Task created";
     int lastid;
-    if (insert("Tasks", "title, list_id", "'" + title + "', " + QString::number(listId), lastid)) {
+    if (insert("Tasks", "title, list_id, index_id", "'" + title + "', " + QString::number(listId) + ", " + QString::number(index_id), lastid)) {
         map["message"] = "Task created";
         map["taskId"] = lastid;
     } else {
         map["message"] = "Task wasn't created";
         map["error"] = 1;
     }
-    //додать до бд і поставить перевірки типу
-    //if(створилось == тру)
-    //map["message"] = "Task created";
-    //else {
-    //map["message"] = "Task wasn't created";
-    //map["error"] = 1;
-    //}
     return map;
 }
 
-QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant& checkList) {
-    QJsonObject obj {
-        {"array", checkList.toJsonArray()}  
-    };
+QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList) {
+    QJsonObject obj{
+        {"array", checkList.toJsonArray()}};
     QJsonDocument *jsonDoc = new QJsonDocument(obj);
     QByteArray json = jsonDoc->toJson();
 
@@ -443,40 +439,48 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     // for(int i = 0; i < ll.count(); i++) {
     //     qDebug() << ll.at(i)["str"].toString();
     //     qDebug() << ll.at(i)["isDone"].toBool();
-    // }   
+    // }
     if (query.exec()) {
         map["message"] = "Task updated";
+        map["description"] = description;
+        map["checkList"] = checkList;
     } else {
         map["message"] = "Task wasn't updated";
         map["error"] = 1;
     }
-    //додать до бд // поки що я ебу як додать чек лист( там має бути типа масив даних в парі (булевське значення і інфа(стрінг))) тому поки що передаю чисто стрінгліст із інфою і буль поки не даю
-    //поставить перевірки типу
-    //if(оновились дані  == тру)
-    //map["message"] = "Task updated";
-    //else {
-    //map["message"] = "Task wasn't updated";
-    //map["error"] = 1;
-    //}
     return map;
 }
 
-QVariantMap DataBase::moveTask(int taskId, int listId) {
+QVariantMap DataBase::moveTask(int taskId, int listId, int newListId, int indexId, int newIndexId) {
+    Q_UNUSED(taskId);
+    Q_UNUSED(listId);
+    Q_UNUSED(newListId);
+    Q_UNUSED(indexId);
+    Q_UNUSED(newIndexId);
     QVariantMap map;
+    QSqlQuery query;
+    qDebug() << query.exec("select index_id from Tasks where list_id = " + QString::number(newListId) + " and index_id > " + QString::number(newIndexId - 1) + " order by index_id desc");
+    if (query.first()) {
+        qDebug() << "first" << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        while (query.next()) {
+            qDebug() << "first" << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        }
+    }
+    // update("Tasks", "list_id = " + QString::number(newListId) + ", index_id = " + QString::number(newIndexId), "id = " + QString::number(taskId));
+    query.exec("select index_id from Tasks where list_id = " + QString::number(listId) + " and index_id > " + QString::number(indexId) + " order by index_id asc");
+    if (query.first()) {
+        qDebug() << "second " << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        while (query.next()) {
+            qDebug() << "second " << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        }
+    }
     map["type"] = static_cast<int>(RequestType::MOVE_TASK);
-    if (update("Tasks", "list_id = " + QString::number(listId), "id = " + QString::number(taskId))) {
+    if (update("Tasks", "list_id = " + QString::number(newListId) + ", index_id = " + QString::number(newIndexId), "id = " + QString::number(taskId))) {
         map["message"] = "Task moved";
     } else {
         map["message"] = "Task wasn't moved";
         map["error"] = 1;
     }
-    //додать до бд і поставить перевірки типу
-    //if(змінила приналежність таски з листа попередньго айді на нове лістІд  == тру)
-    //map["message"] = "Task moved";
-    //else {
-    //map["message"] = "Task wasn't moved";
-    //map["error"] = 1;
-    //}
     return map;
 }
 
@@ -491,18 +495,11 @@ QVariantMap DataBase::removeTask(int taskId) {
         map["message"] = "Task wasn't removed";
         map["error"] = 1;
     }
-    //додать до бд і поставить перевірки типу
-    //if(видалила таску  == тру)
-    //map["message"] = "Task removed";
-    //else {
-    //map["message"] = "Task wasn't removed";
-    //map["error"] = 1;
-    //}
     return map;
 }
 
-QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
-//    Q_UNUSED(taskId);
+QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
+                                                 //    Q_UNUSED(taskId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     QSqlQuery query;
@@ -515,15 +512,35 @@ QVariantMap DataBase::getTaskData(int taskId) { //я подивлюся
         map["message"] = "i dont now wtf";
         map["error"] = 1;
     }
-    //витягнуть дані з бд і поставить перевірки типу
-    //if(видалила таску  == тру) {
-    //map["description"] = //витягни з бд, якщо пусто то відправляй пусте;
-    //map["checkList"] = //витягни з бд, якщо пусто то відправляй пусте;
-    //}
-    //else {
-    //map["message"] = "i dont now wtf";
-    //map["error"] = 1;
-    //}
+    return map;
+}
+
+QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
+    QJsonArray Users;
+    QSqlQuery query;
+    QVariantMap map;
+    qDebug() << query.exec("select first_name, last_name from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
+    if (query.first()) {
+        QMap<QString, QVariant> map;
+        map["name"] = query.value(0).toString();
+        map["surname"] = query.value(1).toString();
+        // qDebug() << query.value(0).toString() << query.value(1).toString();
+        Users.append(QJsonObject::fromVariantMap(map));
+    } else {
+        map["error"] = 1;
+        map["message"] = "Workflows don't exist";
+    }
+    while (query.next()) {
+        QMap<QString, QVariant> map;
+        map["name"] = query.value(0).toString();
+        map["surname"] = query.value(1).toString();
+        // qDebug() << query.value(0).toString() << query.value(1).toString();
+        Users.append(QJsonObject::fromVariantMap(map));
+    }
+    if (!map.contains("error")) {
+        map["users"] = Users;
+        map["message"] = "Users successfully have gotten";
+    }
     return map;
 }
 
@@ -540,6 +557,7 @@ bool DataBase::insert(const QString &table, const QString &insert, const QString
 }
 bool DataBase::update(const QString &table, const QString &update, const QString &where) {
     QSqlQuery query;
+    // qDebug() << "UPDATE " + table + " SET " + update + " WHERE " + where + ";";
     return query.exec("UPDATE " + table + " SET " + update + " WHERE " + where + ";");
 }
 QSqlQuery DataBase::select(const QString &table, const QString &select, const QString &where) {
@@ -557,9 +575,9 @@ QSqlQuery DataBase::select(const QString &table, const QString &select, const QS
 // //npcArray.append(npcObject);
 // //}
 
-    //QJsonArray array = itemObject["checkList"].toArray();
-    // qDebug() << "CHECK_LIST :\n";
-    // for(int i = 0; i < checkList.count(); i++) {
-    // qDebug() << checkList.at(i)["str"].toString();
-    // qDebug() << checkList.at(i)["isDone"].toBool();
-    // }
+//QJsonArray array = itemObject["checkList"].toArray();
+// qDebug() << "CHECK_LIST :\n";
+// for(int i = 0; i < checkList.count(); i++) {
+// qDebug() << checkList.at(i)["str"].toString();
+// qDebug() << checkList.at(i)["isDone"].toBool();
+// }
