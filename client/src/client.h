@@ -21,6 +21,8 @@ public:
     void parseJSON(QJsonDocument itemDoc);
 
     UserManager *getManager();
+    std::shared_ptr<AbstractRequest> getRequest();
+
 public slots:
 
     void disconnected();
@@ -54,6 +56,4 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_moveTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_removeTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_sendTaskDataResponse;
-
-
 };

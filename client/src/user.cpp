@@ -1,6 +1,9 @@
-#include "user.h"
+//#include "user.h"
+#include "usermanager.h"
 
-User::User(QObject *parent) : QObject(parent), m_userId(-1) {}
+User::User(QObject *parent) : QObject(parent), m_userId(-1) {
+    qobject_cast<UserManager *>(parent)->getAuthor();
+}
 
 void User::setUserId(int id) {
     m_userId = id;

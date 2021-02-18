@@ -8,6 +8,7 @@ Client::Client(QObject *parent) : QObject(parent) {
     m_request = std::make_shared<AbstractRequest>(m_socket);
     m_manager = new UserManager(this);
     m_manager->getAuthor()->setRequest(m_request.get());
+    m_manager->getWorkflow()->setRequest(m_request.get());
     initResponses();
 }
 
@@ -132,4 +133,8 @@ void Client::readyRead() {
 
 UserManager *Client::getManager() {
     return m_manager;
+}
+
+std::shared_ptr<AbstractRequest> Client::getRequest() {
+    return m_request;
 }

@@ -17,9 +17,10 @@ public:
     ~Workflow() = default;
 
     Q_INVOKABLE void getAllListWorkflow() const;
-    Q_INVOKABLE void signInHandler(QString ident, QString password);
+    Q_INVOKABLE void createWorkflow(QString title);
 
-    CardListsModel *getcardListModel();
+    CardListsModel *getCardListModel();
+    WorkflowsModel *getWorkflowsModel();
 
     void setRequest(AbstractRequest *request);
 
@@ -36,7 +37,7 @@ private:
     void doServerRequest();
 private:
     AbstractRequest *m_request;
-    WorkflowsModel *m_workflows;
+    WorkflowsModel *m_workflowsModel;
     CardListsModel *m_currCardListModel;
     int idCurrentForkflow;
 };

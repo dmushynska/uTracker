@@ -12,7 +12,7 @@ Page {
         console.log("Request to create new desk");
         console.log("!!!!!" + (rootAccount.height - userSection.count * (48 * Units.dp + 3) - dp(200)))
         mWorkflowList.append("Desk " + (mWorkflowList.rowCount + 1))
-        mWorkflow
+        mWorkflow.
         control.position = 1.0
 //        sectionItems.model.dataChanged()
     }

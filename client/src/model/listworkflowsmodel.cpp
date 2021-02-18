@@ -71,6 +71,7 @@ bool WorkflowsModel::append(QString text)
 {
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), text, TitleRole);
+    setData(createIndex(rowCount() - 1, 0), rowCount(), IdRole);
     return true;
 }
 
@@ -86,7 +87,11 @@ bool WorkflowsModel::removeRows(int row, int count, const QModelIndex &parent)
 QHash<int, QByteArray> WorkflowsModel::roleNames() const
 {
     QHash<int, QByteArray> roleName;
-    roleName[TitleRole] = "title";
+    roleName[TitleRole] = "titleWorkflow";
     roleName[IdRole] = "idWorkflow";
     return  roleName;
+}
+
+QModelIndex WorkflowsModel::createModelIndex(int row) {
+    return createIndex(row, 0);
 }

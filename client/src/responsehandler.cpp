@@ -39,9 +39,12 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
-        qDebug() << "userId :" << itemObject["userId"].toString();
+        qDebug() << "userId :" << itemObject["userId"].toInt();
         m_token = itemObject["token"].toString();
+//        qDebug() << "FUCKING TOKEN"
         emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
+        m_parent->getManager()->getUser()->setUserId(itemObject["userId"].toInt());
+        m_parent->getManager()->getWorkflow()->getAllListWorkflow();
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
