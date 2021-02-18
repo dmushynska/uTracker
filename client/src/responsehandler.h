@@ -10,6 +10,9 @@
 
 #include <QObject>
 
+#include "usermanager.h"
+
+class Client;
 
 class AbstractResponseHandler : public QObject{
 Q_OBJECT
@@ -28,12 +31,13 @@ protected:
     QTcpSocket *m_socket;
     QByteArray m_json;
     QString m_token;
+    Client *m_parent;
 };
 
 class SignUpResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignUpResponse(QTcpSocket *socket);
+    SignUpResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -41,7 +45,7 @@ public slots:
 class SignInResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignInResponse(QTcpSocket *socket);
+    SignInResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -49,7 +53,7 @@ public slots:
 class SignInWithGoogleResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignInWithGoogleResponse(QTcpSocket *socket);
+    SignInWithGoogleResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -57,7 +61,7 @@ public slots:
 class AutoSignInResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    AutoSignInResponse(QTcpSocket *socket);
+    AutoSignInResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -65,7 +69,7 @@ public slots:
 class LogOutResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    LogOutResponse(QTcpSocket *socket);
+    LogOutResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -73,7 +77,7 @@ public slots:
 class CreatedWorkflowResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    CreatedWorkflowResponse(QTcpSocket *socket);
+    CreatedWorkflowResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -81,7 +85,7 @@ public slots:
 class UpdateWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    UpdateWorkflowResponse(QTcpSocket *socket);
+    UpdateWorkflowResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -89,7 +93,7 @@ public slots:
 class InvitedToWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    InvitedToWorkflowResponse(QTcpSocket *socket);
+    InvitedToWorkflowResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -97,7 +101,7 @@ public slots:
 class AllWorkflowsResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    AllWorkflowsResponse(QTcpSocket *socket);
+    AllWorkflowsResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -105,7 +109,7 @@ public slots:
 class SingleWorkflowDataResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SingleWorkflowDataResponse(QTcpSocket *socket);
+    SingleWorkflowDataResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -113,7 +117,7 @@ public slots:
 class SendStatistics : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SendStatistics(QTcpSocket *socket);
+    SendStatistics(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -121,7 +125,7 @@ public slots:
 class SendProfileResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SendProfileResponse(QTcpSocket *socket);
+    SendProfileResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -129,7 +133,7 @@ public slots:
 class ToUpdateProfileResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    ToUpdateProfileResponse(QTcpSocket *socket);
+    ToUpdateProfileResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -138,7 +142,7 @@ public slots:
 class ToCreateListResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToCreateListResponse(QTcpSocket *socket);
+    ToCreateListResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -146,7 +150,7 @@ public slots:
 class ToRemoveListResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToRemoveListResponse(QTcpSocket *socket);
+    ToRemoveListResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -155,7 +159,7 @@ public slots:
 class ToCreateTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToCreateTaskResponse(QTcpSocket *socket);
+    ToCreateTaskResponse(Client *parent, QTcpSocket *socket);
     public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -163,7 +167,7 @@ public:
 class ToUpdateTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToUpdateTaskResponse(QTcpSocket *socket);
+    ToUpdateTaskResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -171,7 +175,7 @@ public slots:
 class ToMoveTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToMoveTaskResponse(QTcpSocket *socket);
+    ToMoveTaskResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -179,7 +183,7 @@ public slots:
 class ToRemoveTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToRemoveTaskResponse(QTcpSocket *socket);
+    ToRemoveTaskResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -187,7 +191,7 @@ public slots:
 class SendTaskDataResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    SendTaskDataResponse(QTcpSocket *socket);
+    SendTaskDataResponse(Client *parent, QTcpSocket *socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };

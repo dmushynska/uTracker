@@ -66,91 +66,90 @@ bool DataBase::isValidToken(const QString &token, int type) {
 
 void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &map) {
     QVariantMap result;
-    // if (isValidToken(mx_hash("21453#gs8kFSdfD1F244iuSn1", "NazarDykyy@gmail.com"),
-    //  map.value("type").toInt())) {
-    switch (static_cast<RequestType>(type)) {
-        case RequestType::AUTO_AUTH:
-            break;
-        case RequestType::SIGN_UP:
-            result = createUser(map.value("login").toString(),
-                                map.value("password").toString(),
-                                map.value("name").toString(),
-                                map.value("surname").toString(),
-                                map.value("email").toString());
-            break;
-        case RequestType::SIGN_IN:
-            result = containsUser(map.value("email").toString(),
-                                  map.value("password").toString());
-            break;
-        case RequestType::AUTO_OAUTH:
-            break;
-        case RequestType::LOG_OUT:
-            break;
-        case RequestType::CREATE_WORKFLOW:
-            result = createWorkflow(map.value("ownerId").toInt(),
-                                    map.value("title").toString(),
-                                    map.value("deadline").toString());
-            break;
-        case RequestType::ARCHIVE_WORKFLOW:
-            removeWorkflow(map.value("workflowId").toInt());
-            break;
-        case RequestType::UPDATE_WORKFLOW:
-            result = updateWorkflow(map.value("workflowId").toInt(),
-                                    map.value("title").toString(),
-                                    map.value("deadline").toString());
-            break;
-        case RequestType::INVITE_TO_WORKFLOW:
-            result = inviteToWorkflow(map.value("userId").toInt(),
-                                      map.value("workflowId").toInt());
-            break;
-        case RequestType::GET_ALL_WORKFLOWS:
-            result = getWorkflows(map.value("userId").toInt());
-            break;
-        case RequestType::GET_SINGLE_WORKFLOW_DATA:
-            result = getWorkflow(map.value("workflowId").toInt());
-            break;
-        case RequestType::GET_STATISTICS:
-            break;
-        case RequestType::GET_PROFILE:
-            result = getProfile(map.value("userId").toInt());
-            break;
-        case RequestType::UPDATE_PROFILE:
-            result = updateProfile(map.value("userId").toInt(),
-                                   map.value("name").toString(),
-                                   map.value("surname").toString());
-            break;
-        case RequestType::CREATE_LIST:
-            result = createList(map.value("title").toString(),
-                                map.value("workdlowId").toInt());
-            break;
-        case RequestType::REMOVE_LIST:
-            result = removeList(map.value("listId").toInt());
-            break;
-        case RequestType::CREATE_TASK:
-            result = createTask(map.value("title").toString(),
-                                map.value("listId").toInt());
-            break;
-        case RequestType::UPDATE_TASK:
-            result = updateTask(map.value("taskId").toInt(),
-                                map.value("description").toString(),
-                                map.value("checkList"));
-            break;
-        case RequestType::MOVE_TASK:
-            // result = moveTask(map.value("taskId").toInt(),
-            //                   map.value("listId").toInt());
-            result = moveTask(3, 2, 2);
-            break;
-        case RequestType::REMOVE_TASK:
-            result = removeTask(map.value("taskId").toInt());
-            break;
-        case RequestType::GET_TASK_DATA:
-            result = getTaskData(map.value("taskId").toInt());
+    if (isValidToken(map.value("token").toString(),
+                     map.value("type").toInt())) {
+        switch (static_cast<RequestType>(type)) {
+            case RequestType::AUTO_AUTH:
+                break;
+            case RequestType::SIGN_UP:
+                result = createUser(map.value("email").toString(),
+                                    map.value("password").toString(),
+                                    map.value("name").toString(),
+                                    map.value("surname").toString());
+                break;
+            case RequestType::SIGN_IN:
+                result = containsUser(map.value("email").toString(),
+                                      map.value("password").toString());
+                break;
+            case RequestType::AUTO_OAUTH:
+                break;
+            case RequestType::LOG_OUT:
+                break;
+            case RequestType::CREATE_WORKFLOW:
+                result = createWorkflow(map.value("userId").toInt(),
+                                        map.value("title").toString(),
+                                        map.value("deadline").toString());
+                break;
+            case RequestType::ARCHIVE_WORKFLOW:
+                result = removeWorkflow(map.value("workflowId").toInt());
+                break;
+            case RequestType::UPDATE_WORKFLOW:
+                result = updateWorkflow(map.value("workflowId").toInt(),
+                                        map.value("title").toString(),
+                                        map.value("deadline").toString());
+                break;
+            case RequestType::INVITE_TO_WORKFLOW:
+                result = inviteToWorkflow(map.value("login").toString(),
+                                          map.value("workflowId").toInt());
+                break;
+            case RequestType::GET_ALL_WORKFLOWS:
+                result = getWorkflows(map.value("userId").toInt());
+                break;
+            case RequestType::GET_SINGLE_WORKFLOW_DATA:
+                result = getWorkflow(map.value("workflowId").toInt());
+                break;
+            case RequestType::GET_STATISTICS:
+                break;
+            case RequestType::GET_PROFILE:
+                result = getProfile(map.value("userId").toInt());
+                break;
+            case RequestType::UPDATE_PROFILE:
+                result = updateProfile(map.value("userId").toInt(),
+                                       map.value("name").toString(),
+                                       map.value("surname").toString());
+                break;
+            case RequestType::CREATE_LIST:
+                result = createList(map.value("title").toString(),
+                                    map.value("workdlowId").toInt());
+                break;
+            case RequestType::REMOVE_LIST:
+                result = removeList(map.value("listId").toInt());
+                break;
+            case RequestType::CREATE_TASK:
+                result = createTask(map.value("title").toString(),
+                                    map.value("listId").toInt());
+                break;
+            case RequestType::UPDATE_TASK:
+                result = updateTask(map.value("taskId").toInt(),
+                                    map.value("description").toString(),
+                                    map.value("checkList"));
+                break;
+            case RequestType::MOVE_TASK:
+                result = moveTask(map.value("taskId").toInt(), 
+                                  map.value("listId").toInt(), 
+                                  map.value("indexId").toInt());
+                break;
+            case RequestType::REMOVE_TASK:
+                result = removeTask(map.value("taskId").toInt());
+                break;
+            case RequestType::GET_TASK_DATA:
+                result = getTaskData(map.value("taskId").toInt());
+        }
+    } else {
+        result["type"] = map.value("type").toInt();
+        result["error"] = 1;
+        result["message"] = "Invalid token";
     }
-    // } else {
-    //     result["type"] = map.value("type").toInt();
-    //     result["error"] = 1;
-    //     result["message"] = "Invalid token";
-    // }
     if (!result.isEmpty()) {
         QJsonObject jsonObject = QJsonObject::fromVariantMap(result);
         QJsonDocument jsonDoc = QJsonDocument(jsonObject);
@@ -173,7 +172,12 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
         QSqlQuery query1;
         query1.exec("select auth_token from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
-            map["token"] = query1.value(0).toString();
+            map["userId"] = query.value(0).toString();//userId
+            map["token"] = query1.value(0).toString();//token
+            map["login"] = login;
+//            map["email"] = ;
+//            map["name"] = ;
+//            map["surname"] = ;
         }
     } else {
         map["error"] = 1;
@@ -267,15 +271,17 @@ DataBase::updateWorkflow(int workflow_id, const QString &title, const QString &d
 }
 
 QVariantMap
-DataBase::inviteToWorkflow(int user_id, int workflow_id) {
+DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
+    Q_UNUSED(login);
+    Q_UNUSED(workflow_id);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
-    if (insert("WF_connector", "workflow_id, user_id", QString::number(workflow_id) + ", " + QString::number(user_id))) {
-        map["message"] = "User succesfully invited to Workflow";
-    } else {
-        map["error"] = 1;
-        map["message"] = "Invite canceled";
-    }
+//    if (insert("WF_connector", "workflow_id, login", QString::number(workflow_id) + ", " + QString::number(user_id))) {
+//        map["message"] = "User succesfully invited to Workflow";
+//    } else {
+//        map["error"] = 1;
+//        map["message"] = "Invite canceled";
+//    }
     return map;
 }
 
@@ -532,22 +538,16 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
 QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QJsonArray Users;
     QSqlQuery query;
-    QVariantMap map;
-    qDebug() << query.exec("select first_name, last_name from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
+    QVariantMap maxi_map;
+    qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
-        QMap<QString, QVariant> map;
-        map["name"] = query.value(0).toString();
-        map["surname"] = query.value(1).toString();
-        Users.append(QJsonObject::fromVariantMap(map));
+        Users.append(QJsonObject::fromVariantMap({{"name", query.value(0).toString()}, {"surname", query.value(1).toString()}, {"userId", query.value(2).toString()}}));
     } else {
         map["error"] = 1;
         map["message"] = "Workflows don't exist";
     }
     while (query.next()) {
-        QMap<QString, QVariant> map;
-        map["name"] = query.value(0).toString();
-        map["surname"] = query.value(1).toString();
-        Users.append(QJsonObject::fromVariantMap(map));
+        Users.append(QJsonObject::fromVariantMap({{"name", query.value(0).toString()}, {"surname", query.value(1).toString()}, {"userId", query.value(2).toString()}}));
     }
     if (!map.contains("error")) {
         map["users"] = Users;

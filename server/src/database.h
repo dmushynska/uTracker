@@ -29,7 +29,7 @@ public:
     QVariantMap containsUser(const QString &user, const QString &password);
     QVariantMap createWorkflow(int owner_id, const QString &title, const QString &deadline);
     QVariantMap updateWorkflow(int workflow_id, const QString &title, const QString &deadline);
-    QVariantMap inviteToWorkflow(int user_id, int workflow_id);
+    QVariantMap inviteToWorkflow(const QString &login, int workflow_id);
 
     QVariantMap getWorkflows(int user_id);
     QVariantMap getWorkflow(int workflow_id);

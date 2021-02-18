@@ -85,11 +85,20 @@ void AbstractRequest::updateWorkflow(const QString& title, const QString& deadli
     mapa["workflowId"] = workflowId;
     createJSON(mapa);
 }
-void AbstractRequest::inviteToWorkflow(int userId, int workflowId) {
+
+void AbstractRequest::archieveWorkflow(int workflowId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::ARCHIVE_WORKFLOW);
+    mapa["token"] = m_token;
+    mapa["workflowId"] = workflowId;
+    createJSON(mapa);
+}
+
+void AbstractRequest::inviteToWorkflow(const QString& login, int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::INVITE_TO_WORKFLOW);
     mapa["token"] = m_token;
-    mapa["userId"] = userId;
+    mapa["login"] = login;
     mapa["workflowId"] = workflowId;
     createJSON(mapa);
 }

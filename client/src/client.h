@@ -5,7 +5,8 @@
 #include <QAbstractSocket>
 #include <QDebug>
 
-#include "requests.h"
+#include "responsehandler.h"
+#include "usermanager.h"
 #include "hash.h"
 
 
@@ -19,12 +20,15 @@ public:
     void testRequestLoop();
     void parseJSON(QJsonDocument itemDoc);
 //signals:
+    UserManager *m_manager;
 
 public slots:
     void disconnected();
     void readyRead();
 
 private:
+    void initResponses();
+
     QTcpSocket *m_socket;
 
     std::shared_ptr<AbstractRequest> m_request;
@@ -49,4 +53,6 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_moveTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_removeTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_sendTaskDataResponse;
+
+
 };

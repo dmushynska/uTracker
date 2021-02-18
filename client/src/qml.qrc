@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Windows/SignUp.qml</file>
+        <file>Windows/SignIn.qml</file>
+        <file>Windows/MainAccountWindow.qml</file>
+        <file>Windows/InfoSidebar.qml</file>
+        <file>Windows/DeskItem.qml</file>
+        <file>Windows/CardItem.qml</file>
+        <file>Windows/CardListItem.qml</file>
+        <file>Components/UserForms.qml</file>
+        <file>Components/S_Button_1.qml</file>
+        <file>Components/S_Input_1.qml</file>
+        <file>Windows/CardView.qml</file>
+        <file>Windows/MoveToDialog.qml</file>
+    </qresource>
+</RCC>
