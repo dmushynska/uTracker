@@ -62,9 +62,9 @@ bool DataBase::isValidToken(const QString &token, int type) {
     QSqlQuery query;
     query.exec("select * from UsersCredential where auth_token = '" + token + "';");
     qDebug() << " TOKEN FROM DB :" << query.value(0).toString() << "  TOKEN FROM CLIENT :" << token;
-//    if (type == static_cast<int>(RequestType::SIGN_UP) || (!token.isEmpty() && query.first()))
-        return true;
-//    return false;
+    //    if (type == static_cast<int>(RequestType::SIGN_UP) || (!token.isEmpty() && query.first()))
+    return true;
+    //    return false;
 }
 
 void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &map) {
@@ -139,7 +139,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                                     map.value("checkList"));
                 break;
             case RequestType::MOVE_TASK:
-                result = moveTask(map.value("taskId").toInt(), 
+                result = moveTask(map.value("taskId").toInt(),
                                   map.value("listId").toInt(),
                                   map.value("indexId").toInt());
                 break;
@@ -163,7 +163,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
 
 QVariantMap DataBase::containsUser(const QString &login, const QString &password) {
     QSqlQuery query;
-    query.exec("SELECT id, password FROM UsersCredential where login = \"" + login + "\";");
+    query.exec("SELECT id, password FROM UsersCredential where email = '" + login + "' or login = \"" + login + "\";");
 
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_IN);
@@ -198,7 +198,7 @@ DataBase::createUser(const QString &login,
                      const QString &email) {
     QSqlQuery query;
     QString hash = mx_hash(password, login);
-    qDebug() << login << password << name<< surname << email;
+    qDebug() << login << password << name << surname << email;
     query.prepare(
         "INSERT INTO UsersCredential (login, password, first_name, last_name, auth_token, email) "
         "VALUES (:login, :password, :first_name, :last_name, :auth_token, :email);");
