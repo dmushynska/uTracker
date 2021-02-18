@@ -21,13 +21,13 @@ public:
     void parseJSON(QJsonDocument itemDoc);
 
     UserManager *getManager();
-    UserManager *m_manager;
-
 public slots:
+
     void disconnected();
     void readyRead();
-
 private:
+
+    UserManager *m_manager;
     void initResponses();
 
     QTcpSocket *m_socket;

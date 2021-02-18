@@ -16,7 +16,7 @@ public:
     explicit Workflow(QObject *parent = nullptr);
     ~Workflow() = default;
 
-    Q_INVOKABLE void getListWorkflow() const;
+    Q_INVOKABLE void getAllListWorkflow() const;
     Q_INVOKABLE void signInHandler(QString ident, QString password);
 
     CardListsModel *getcardListModel();
@@ -26,8 +26,11 @@ public:
     void printStr(QString str);
 
 signals:
-    void serverListWorkflowsResponse();
+    void serverAllListWorkflowsResponse(QJsonArray array);
     void serverResponseSignUp(int err, QString strErr);
+
+private slots:
+    void parseAllListWorkflows(QJsonArray array);
 
 private:
     void doServerRequest();

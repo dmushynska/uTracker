@@ -44,7 +44,7 @@ Page {
     }
     property var sections: [userSection, desksSection]
     property var sectionsTitles: ["User information", "Desks"]
-    property var selectedComponent: 0
+    property int selectedComponent: 0
 //    property bool isListContentHeight: true
 
     id: rootAccount
@@ -133,8 +133,9 @@ Page {
                                 selected: model.idNum === selectedComponent
                                 onClicked: {
                                     selectedComponent = model.idNum
+//                                    mWorkflow.
 //                                    console.log(model.title)
-                                    requestForDesk(model)
+//                                    requestForDesk(model)
                                     navDrawer.close()
                                 }
                             }

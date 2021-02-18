@@ -8,12 +8,13 @@ class WorkflowsModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    enum CardsRole {
-        TitleRole,
+public:
+
+    enum WorkflowRole {
+        TitleRole = Qt::UserRole,
         IdRole
     };
 
-public:
     explicit WorkflowsModel(QObject *parent = nullptr);
 
     // Header:
@@ -44,7 +45,6 @@ public:
 
 private:
     QVector<QPair<QString, int>> m_workflows;
-
 };
 
 #endif // LISTWORKFLOWSMODEL_H
