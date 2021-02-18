@@ -7,6 +7,7 @@ CardListsModel::CardListsModel(QObject *parent)
 
 QVariant CardListsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    return QVariant();
 }
 
 bool CardListsModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

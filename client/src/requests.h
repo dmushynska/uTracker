@@ -16,7 +16,7 @@ enum class RequestType {
     AUTO_OAUTH = 3,
     LOG_OUT = 4,
     CREATE_WORKFLOW = 5,
-//    ARCHIVE_WORKFLOW = 6,
+    ARCHIVE_WORKFLOW = 6,
     UPDATE_WORKFLOW = 7,
     INVITE_TO_WORKFLOW = 8,
     GET_ALL_WORKFLOWS = 9,
@@ -52,7 +52,8 @@ public:
     //workdflow (desk) sector
     void createWorkflow(const QString& title, const QString& deadline, int ownerId);
     void updateWorkflow(const QString& title, const QString& deadline, int workflowId);
-    void inviteToWorkflow(int userId, int workflowId);
+    void archieveWorkflow(int workflowId);
+    void inviteToWorkflow(const QString& login, int workflowId);
     void getAllWorkflows(int userId);
     void getSingleWorkflowData(int workflowId);
 

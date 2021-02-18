@@ -66,7 +66,7 @@ bool DataBase::isValidToken(const QString &token, int type) {
 
 void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &map) {
     QVariantMap result;
-    if (isValidToken(mx_hash("21453#gs8kFSdfD1F244iuSn1", "NazarDykyy@gmail.com"),
+    if (isValidToken(map.value("token").toString(),
                      map.value("type").toInt())) {
         switch (static_cast<RequestType>(type)) {
             case RequestType::AUTO_AUTH:
@@ -98,7 +98,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                                         map.value("deadline").toString());
                 break;
             case RequestType::INVITE_TO_WORKFLOW:
-                result = inviteToWorkflow(map.value("userId").toInt(),
+                result = inviteToWorkflow(map.value("login").toString(),
                                           map.value("workflowId").toInt());
                 break;
             case RequestType::GET_ALL_WORKFLOWS:
@@ -170,7 +170,12 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
         QSqlQuery query1;
         query1.exec("select auth_token from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
-            map["token"] = query1.value(0).toString();
+            map["userId"] = query.value(0).toString();//userId
+            map["token"] = query1.value(0).toString();//token
+            map["login"] = login;
+//            map["email"] = ;
+//            map["name"] = ;
+//            map["surname"] = ;
         }
     } else {
         map["error"] = 1;
@@ -257,15 +262,17 @@ DataBase::updateWorkflow(int workflow_id, const QString &title, const QString &d
 }
 
 QVariantMap
-DataBase::inviteToWorkflow(int user_id, int workflow_id) {
+DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
+    Q_UNUSED(login);
+    Q_UNUSED(workflow_id);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
-    if (insert("WF_connector", "workflow_id, user_id", QString::number(workflow_id) + ", " + QString::number(user_id))) {
-        map["message"] = "User succesfully invited to Workflow";
-    } else {
-        map["error"] = 1;
-        map["message"] = "Invite canceled";
-    }
+//    if (insert("WF_connector", "workflow_id, login", QString::number(workflow_id) + ", " + QString::number(user_id))) {
+//        map["message"] = "User succesfully invited to Workflow";
+//    } else {
+//        map["error"] = 1;
+//        map["message"] = "Invite canceled";
+//    }
     return map;
 }
 

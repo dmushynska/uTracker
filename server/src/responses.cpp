@@ -75,8 +75,16 @@ ToUpdateWorkflow::ToUpdateWorkflow(Connection *socket) : AbstractRequestHandler(
 
 bool ToUpdateWorkflow::isValid(QJsonObject itemObject) {
     if (itemObject.contains("title")
-        && itemObject.contains("deadline")
-        && itemObject.contains("workflowId"))
+     && itemObject.contains("deadline")
+     && itemObject.contains("workflowId"))
+        return true;
+    return false;
+}
+toArchieveWorkflow::toArchieveWorkflow(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool toArchieveWorkflow::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("token")
+     && itemObject.contains("userId"))
         return true;
     return false;
 }
@@ -84,7 +92,7 @@ bool ToUpdateWorkflow::isValid(QJsonObject itemObject) {
 ToInvitedToWorkflow::ToInvitedToWorkflow(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool ToInvitedToWorkflow::isValid(QJsonObject itemObject) {
-    if (itemObject.contains("userId")
+    if (itemObject.contains("login")
         && itemObject.contains("workflowId"))
         return true;
     return false;
