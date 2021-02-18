@@ -106,6 +106,13 @@ public:
     bool isValid(QJsonObject itemObject);
 };
 
+class toArchieveWorkflow : public AbstractRequestHandler {
+Q_OBJECT
+public:
+    toArchieveWorkflow(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
 class ToInvitedToWorkflow : public AbstractRequestHandler  {
 Q_OBJECT
 public:

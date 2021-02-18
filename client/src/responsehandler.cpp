@@ -39,6 +39,7 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
+        qDebug() << "userId :" << itemObject["userId"].toString();
         m_token = itemObject["token"].toString();
         emit m_parent->m_manager->getAuthor()->serverResponseSignIn(true);
     }
