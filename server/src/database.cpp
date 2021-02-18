@@ -33,6 +33,7 @@ void DataBase::create_tables() {
         "auth_token varchar UNIQUE,"
         "first_name varchar,"
         "last_name varchar,"
+        "email varchar,"
         "photo blob,"
         "google_token varchar,"
         "github_token varchar)");
@@ -197,6 +198,7 @@ DataBase::createUser(const QString &login,
                      const QString &email) {
     QSqlQuery query;
     QString hash = mx_hash(password, login);
+    qDebug() << login << password << name<< surname << email;
     query.prepare(
         "INSERT INTO UsersCredential (login, password, first_name, last_name, auth_token, email) "
         "VALUES (:login, :password, :first_name, :last_name, :auth_token, :email);");
