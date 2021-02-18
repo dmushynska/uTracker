@@ -31,6 +31,7 @@ public:
 
     //
      User *getUser();
+     Workflow *getWorkflow();
 
 signals:
     void doRequestToServer(Request::TypeRequest type, QHash<QString, QString> content);

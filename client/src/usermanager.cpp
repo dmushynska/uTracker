@@ -43,3 +43,7 @@ Authorization *UserManager::getAuthor() {
 User *UserManager::getUser() {
     return &m_user;
 }
+
+Workflow *UserManager::getWorkflow() {
+    return m_workflow;
+}

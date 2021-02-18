@@ -57,11 +57,13 @@ void DataBase::create_tables() {
 }
 
 bool DataBase::isValidToken(const QString &token, int type) {
+    Q_UNUSED(type);
     QSqlQuery query;
     query.exec("select * from UsersCredential where auth_token = '" + token + "';");
-    if (type == static_cast<int>(RequestType::SIGN_UP) || (!token.isEmpty() && query.first()))
+    qDebug() << " TOKEN FROM DB :" << query.value(0).toString() << "  TOKEN FROM CLIENT :" << token;
+//    if (type == static_cast<int>(RequestType::SIGN_UP) || (!token.isEmpty() && query.first()))
         return true;
-    return false;
+//    return false;
 }
 
 void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &map) {
@@ -72,7 +74,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::AUTO_AUTH:
                 break;
             case RequestType::SIGN_UP:
-                result = createUser(map.value("email").toString(),
+                result = createUser(map.value("login").toString(),
                                     map.value("password").toString(),
                                     map.value("name").toString(),
                                     map.value("surname").toString(),
@@ -207,14 +209,14 @@ DataBase::createUser(const QString &login,
 
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_UP);
-//    if (!query.exec()) {
-//        map["error"] = 1;
-//        map["message"] = "User with such login already exist";
-//    } else {
+    if (!query.exec()) {
+        map["error"] = 1;
+        map["message"] = "User with such login already exist";
+    } else {
         map["token"] = hash;
         map["userId"] = query.lastInsertId().toInt();
         map["message"] = "User successfully created";
-//    }
+    }
     return map;
 }
 

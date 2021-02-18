@@ -1,10 +1,17 @@
 #include "client.h"
 
+
 class AES;
 
 Client::Client(QObject *parent) : QObject(parent) {
-    m_socket = new QTcpSocket(this);
+    m_socket = new QTcpSocket();
     m_request = std::make_shared<AbstractRequest>(m_socket);
+    m_manager = new UserManager(this);
+    m_manager->getAuthor()->setRequest(m_request.get());
+    initResponses();
+}
+
+void Client::initResponses() {
     m_signUp = std::make_shared<SignUpResponse>(this, m_socket);
     m_signIn = std::make_shared<SignInResponse>(this, m_socket);
     m_autoSignIn = std::make_shared<AutoSignInResponse>(this, m_socket);
@@ -41,26 +48,27 @@ void Client::doConnect(char *ip, int port) {
 }
 
 void Client::testRequestLoop() {
+    //  m_request->m_token = mx_hash("const QString& pass", "salt");
 ////            ////auth sector
 //    m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
     //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
-    //m_request->autoSignIn();//-
-    //m_request->autoSignInWithGoogle();//-
-    //m_request->logOut(1);//+
+     //m_request->autoSignIn();//-
+     //m_request->autoSignInWithGoogle();//-
+     //m_request->logOut(1);//+
 
-    ////            ////workdflow (desk) sector
-    //  m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
+////            ////workdflow (desk) sector
+//      m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
     //  m_request->updateWorkflow("QString title", "QString description", 1);
+    //  m_request->inviteToWorkflow(1, 1);
+//        m_request->getAllWorkflows(0);
+        // m_request->getSingleWorkflowData(1);
 
-    //        m_request->getAllWorkflows(0);
-    // m_request->getSingleWorkflowData(1);
-
-    // m_request->getStatistics();//-
+     //m_request->getStatistics();//-
     //// // profile sector
     //  m_request->getProfile(1);
     //  m_request->updateProfile(1, "Nazar", "Dykyy");
 
-    ////list sector
+            ////list sector
     // m_request->createList("ListName", 1);
     // m_request->removeList(1);
             ////task sector
@@ -76,7 +84,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
 
     QVector<std::shared_ptr<AbstractResponseHandler>> funcList;
 
-    funcList.append({m_signIn, m_signUp, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
+    funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
     funcList.append({m_updateWorkflow, m_inviteToWorkflow, m_allWorkflow, m_singleWorkflow});
     funcList.append({m_sendStat, m_sendProfile, m_updateProfile, m_createListResponse});
     funcList.append({m_removeListResponse, m_createTaskResponse, m_updateTaskResponse});
@@ -105,7 +113,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::GET_TASK_DATA);
     for (auto i : types)
         if (static_cast<int>(i) == itemObject["type"].toInt())
-            emit funcList[types.indexOf(i)]->handleInited(itemObject);
+                emit funcList[types.indexOf(i)]->handleInited(itemObject);
 }
 
 void Client::disconnected() {
@@ -116,9 +124,9 @@ void Client::readyRead() {
     while (!m_socket->atEnd()) {
         QByteArray size = m_socket->readLine();
         // qDebug() << m_socket->read(size.toInt());
-        QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
-        if (!itemDoc.isNull())
-            parseJSON(itemDoc);
+       QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
+       if (!itemDoc.isNull())
+           parseJSON(itemDoc);
     }
 }
 

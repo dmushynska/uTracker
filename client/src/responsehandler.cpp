@@ -17,12 +17,12 @@ void SignUpResponse::responseHandle(QJsonObject itemObject) {
     qDebug() << itemObject["error"].toInt();
     if (itemObject["error"].toInt() == 1) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
-        emit m_parent->m_manager->getAuthor()->serverResponseSignUp(1, itemObject["message"].toString());
+        emit m_parent->getManager()->getAuthor()->serverResponseSignUp(1, itemObject["message"].toString());
     }
     else {
         qDebug() << "SIGN UP message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
-        emit m_parent->m_manager->getAuthor()->serverResponseSignUp(0, "");
+        emit m_parent->getManager()->getAuthor()->serverResponseSignUp(0, "");
         m_token = itemObject["token"].toString();
     }
 }
@@ -34,14 +34,14 @@ SignInResponse::SignInResponse(Client *parent, QTcpSocket *socket) :  AbstractRe
 void SignInResponse::responseHandle(QJsonObject itemObject) {
     if (itemObject["error"].toInt() == 1) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
-        emit m_parent->m_manager->getAuthor()->serverResponseSignIn(false);
+        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(false);
     }
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
         qDebug() << "userId :" << itemObject["userId"].toString();
         m_token = itemObject["token"].toString();
-        emit m_parent->m_manager->getAuthor()->serverResponseSignIn(true);
+        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -130,13 +130,8 @@ void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        QJsonArray bigArray = itemObject["workflows"].toArray();
-        for (auto arr : bigArray) {
-            qDebug() << arr << "\n";
-//            qDebug() << "ownerId :" << arr["owner_id"].toInt() << "\n";
-//            qDebug() << "title :" << arr["title"].toString() << "\n";
-//            qDebug() << "deadline :" << arr["deadline"].toString() << "\n";
-        }
+        QJsonArray arr = itemObject["workflows"].toArray();
+        emit m_parent->getManager()->getWorkflow()->serverAllListWorkflowsResponse(arr);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
