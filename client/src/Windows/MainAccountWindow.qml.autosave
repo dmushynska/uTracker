@@ -133,6 +133,7 @@ Page {
                                 selected: model.idNum === selectedComponent
                                 onClicked: {
                                     selectedComponent = model.idNum
+                                    mWorkflow.
 //                                    console.log(model.title)
                                     requestForDesk(model)
                                     navDrawer.close()

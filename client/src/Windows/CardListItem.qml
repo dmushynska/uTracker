@@ -129,9 +129,9 @@ Item {
                             id: name
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.margins: dp(20)
-                            Component.onCompleted: {
-                                name.forceActiveFocus()
-                            }
+//                            Component.onCompleted: {
+//                                name.forceActiveFocus()
+//                            }
                             Keys.onEscapePressed: {
                                 focus = false
                             }

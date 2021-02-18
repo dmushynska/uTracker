@@ -19,7 +19,8 @@ public:
     void doConnect(char *ip, int port);
     void testRequestLoop();
     void parseJSON(QJsonDocument itemDoc);
-//signals:
+
+    UserManager *getManager();
     UserManager *m_manager;
 
 public slots:
