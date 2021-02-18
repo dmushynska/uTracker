@@ -73,7 +73,7 @@ void Client::testRequestLoop() {
     // for (int i = 0; i < 4; i++)
     //     m_request->createTask("Task name" + QString::number(i), 2);
     // m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
-    m_request->moveTask(1, 2);
+    // m_request->moveTask(1, 2);
     // m_request->removeTask(1);
     // m_request->getTaskData(1);
 }

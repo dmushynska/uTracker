@@ -137,7 +137,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
         case RequestType::MOVE_TASK:
             // result = moveTask(map.value("taskId").toInt(),
             //                   map.value("listId").toInt());
-            result = moveTask(3, 2, 1, 2, 3);
+            result = moveTask(3, 2, 2);
             break;
         case RequestType::REMOVE_TASK:
             result = removeTask(map.value("taskId").toInt());
@@ -308,9 +308,6 @@ QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм доп
 
 QVariantMap DataBase::getWorkflow(int workflow_id) {
     QSqlQuery query = select("WorkFlows", "owner_id, title, deadline", "id = " + QString::number(workflow_id));
-    // query.prepare("select * from WorkFlows where id = :workflow_id;");
-    // query.bindValue(":workflow_id", workflow_id);
-    // query.exec();
     QMap<QString, QVariant> map;
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
@@ -324,6 +321,17 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
         map["message"] = "External error in GET_WORKFLOW";
     }
     return map;
+}
+
+QVariantMap DataBase::removeWorkflow(int workflow_id) {
+    QSqlQuery query;
+    if (query.exec("DELETE from WF_connector where id = " + QString::number(workflow_id) + ";")) {
+        query.exec("DELETE from WorkFlows where id = " + QString::number(workflow_id) + ";");
+        map["message"] = "WorkFlow removed";
+    } else {
+        map["message"] = "WorkFlow wasn't removed";
+        map["error"] = 1;
+    }
 }
 
 QVariantMap DataBase::getProfile(int user_id) {
@@ -451,27 +459,29 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     return map;
 }
 
-QVariantMap DataBase::moveTask(int taskId, int listId, int newListId, int indexId, int newIndexId) {
+QVariantMap DataBase::moveTask(int taskId, int newListId, int newIndexId) {
     Q_UNUSED(taskId);
-    Q_UNUSED(listId);
     Q_UNUSED(newListId);
-    Q_UNUSED(indexId);
     Q_UNUSED(newIndexId);
     QVariantMap map;
     QSqlQuery query;
-    qDebug() << query.exec("select index_id from Tasks where list_id = " + QString::number(newListId) + " and index_id > " + QString::number(newIndexId - 1) + " order by index_id desc");
+    query.exec("select list_id, index_id from Tasks where id = " + QString::number(taskId));
     if (query.first()) {
-        qDebug() << "first" << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
-        while (query.next()) {
-            qDebug() << "first" << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        int listId = query.value(0).toInt();
+        int indexId = query.value(1).toInt();
+        query.exec("select index_id from Tasks where list_id = " + QString::number(newListId) + " and index_id > " + QString::number(newIndexId - 1) + " order by index_id desc");
+        if (query.first()) {
+            update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
+            while (query.next()) {
+                update("Tasks", "index_id = " + QString::number(query.value(0).toInt() + 1), "list_id = " + QString::number(newListId) + " and index_id = " + QString::number(query.value(0).toInt()));
+            }
         }
-    }
-    // update("Tasks", "list_id = " + QString::number(newListId) + ", index_id = " + QString::number(newIndexId), "id = " + QString::number(taskId));
-    query.exec("select index_id from Tasks where list_id = " + QString::number(listId) + " and index_id > " + QString::number(indexId) + " order by index_id asc");
-    if (query.first()) {
-        qDebug() << "second " << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
-        while (query.next()) {
-            qDebug() << "second " << update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
+        query.exec("select index_id from Tasks where list_id = " + QString::number(listId) + " and index_id > " + QString::number(indexId) + " order by index_id asc");
+        if (query.first()) {
+            update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
+            while (query.next()) {
+                update("Tasks", "index_id = " + QString::number(query.value(0).toInt() - 1), "list_id = " + QString::number(listId) + " and index_id = " + QString::number(query.value(0).toInt()));
+            }
         }
     }
     map["type"] = static_cast<int>(RequestType::MOVE_TASK);
@@ -524,7 +534,6 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
         QMap<QString, QVariant> map;
         map["name"] = query.value(0).toString();
         map["surname"] = query.value(1).toString();
-        // qDebug() << query.value(0).toString() << query.value(1).toString();
         Users.append(QJsonObject::fromVariantMap(map));
     } else {
         map["error"] = 1;
@@ -534,7 +543,6 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
         QMap<QString, QVariant> map;
         map["name"] = query.value(0).toString();
         map["surname"] = query.value(1).toString();
-        // qDebug() << query.value(0).toString() << query.value(1).toString();
         Users.append(QJsonObject::fromVariantMap(map));
     }
     if (!map.contains("error")) {
@@ -552,12 +560,10 @@ bool DataBase::insert(const QString &table, const QString &insert, const QString
     QSqlQuery query;
     bool exec = query.exec("INSERT INTO " + table + " (" + insert + ") VALUES (" + values + ");");
     lastInsert = query.lastInsertId().toInt();
-    // qDebug() << exec << query.lastError() << "INSERT INTO " + table + " (" + insert + ") VALUES (" + values + ");";
     return exec;
 }
 bool DataBase::update(const QString &table, const QString &update, const QString &where) {
     QSqlQuery query;
-    // qDebug() << "UPDATE " + table + " SET " + update + " WHERE " + where + ";";
     return query.exec("UPDATE " + table + " SET " + update + " WHERE " + where + ";");
 }
 QSqlQuery DataBase::select(const QString &table, const QString &select, const QString &where) {

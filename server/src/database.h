@@ -36,12 +36,13 @@ public:
     QVariantMap getUsersFromWorkFlow(int workflow_id);
     QVariantMap getProfile(int user_id);
     QVariantMap updateProfile(int user_id, const QString &name, const QString &surname);
+    QVariantMap removeWorkflow(int workflow_id);
 
     QVariantMap createList(const QString& title, int workflowId);
     QVariantMap removeList(int listId);
     QVariantMap createTask(const QString& title, int listId);
     QVariantMap updateTask(int taskId, const QString& description, const QVariant& checkList);
-    QVariantMap moveTask(int taskId, int listId, int newListId, int indexId, int newIndexId);
+    QVariantMap moveTask(int taskId, int newListId, int newIndexId);
     QVariantMap removeTask(int taskId);
     QVariantMap getTaskData(int taskId);
 
