@@ -177,11 +177,8 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
             map["token"] = query1.value(0).toString();  //token
             map["login"] = login;
             map["email"] = query1.value(3).toString();
-            ;
             map["name"] = query1.value(1).toString();
-            ;
             map["surname"] = query1.value(2).toString();
-            ;
         }
     } else {
         map["error"] = 1;
