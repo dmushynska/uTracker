@@ -13,5 +13,6 @@
         <file>Components/S_Input_1.qml</file>
         <file>Windows/CardView.qml</file>
         <file>Windows/MoveToDialog.qml</file>
+        <file>Windows/Profile.qml</file>
     </qresource>
 </RCC>

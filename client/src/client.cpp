@@ -121,3 +121,7 @@ void Client::readyRead() {
             parseJSON(itemDoc);
     }
 }
+
+UserManager *Client::getManager() {
+    return m_manager;
+}

@@ -25,14 +25,19 @@ import QtGraphicalEffects 1.0
 //    }
 
 
+
+//                                                                      add variable isEdit
+
+
+
 Item {
     property alias listModel: deskListView.model
     function createNewList () {
         listModel.append("List " + (listModel.rowCount() + 1))
 //        listModel.append({titleD: "List " + (listModel.rowCount() + 1)})
         control.position = 1.0
-
     }
+
 
     ListModel {
         id: deskModel

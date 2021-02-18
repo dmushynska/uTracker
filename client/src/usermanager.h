@@ -7,7 +7,8 @@
 #include <QQuickView>
 #include "user.h"
 #include "authorization.h"
-#include "model/cardlistsmodel.h"
+#include "workflow.h"
+
 
 namespace Request { // this have to be moved to request class/file
     enum TypeRequest {
@@ -29,7 +30,7 @@ public:
     // Sing* page
 
     //
-
+     User *getUser();
 
 signals:
     void doRequestToServer(Request::TypeRequest type, QHash<QString, QString> content);
@@ -38,8 +39,9 @@ private:
 //    QQuickView view;
     User m_user;
     Authorization *m_author;
+    Workflow *m_workflow;
     // Models
-    CardListsModel m_cardListModel;
+
 
 //    Request m_requester;
     QQmlApplicationEngine engine;

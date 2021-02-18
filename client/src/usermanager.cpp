@@ -7,7 +7,9 @@
 
 
 
-UserManager::UserManager(QObject *parent) : QObject(parent), m_user(this), m_author(new Authorization(this))
+UserManager::UserManager(QObject *parent) : QObject(parent), m_user(this),
+    m_author(new Authorization(this)),
+    m_workflow(new Workflow(this))
 {
 //view.engine();
     QPM_INIT(engine)
@@ -30,9 +32,14 @@ void UserManager::initModules() const
 //    root->setContextProperty()
 //    engine.rootContext()->setContextProperty("mAuthor", QVariant::fromValue(&m_author));
     engine.rootContext()->setContextProperty("mAuthor", (QObject *)m_author);
-    engine.rootContext()->setContextProperty("mCardListsModel", (QObject *)&m_cardListModel);
+    engine.rootContext()->setContextProperty("mWorkflow", (QObject *)m_workflow);
+    engine.rootContext()->setContextProperty("mCardListsModel", (QObject *)(m_workflow->getcardListModel()));
 }
 
 Authorization *UserManager::getAuthor() {
     return m_author;
+}
+
+User *UserManager::getUser() {
+    return &m_user;
 }
