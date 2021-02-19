@@ -292,6 +292,10 @@ DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
     return map;
 }
 
+QVariantMap DataBase::removeFromWorkflow(int user_id) {
+    query.exec("DELETE from WF_connector where id = " + QString::number(workflow_id) + ";")
+}
+
 QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм дописать мапу яку повертаю з ерорами
     QJsonArray workflows;
     QSqlQuery query;
@@ -324,7 +328,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
         map["workflowId"] = workflow_id;
-        map["owner_id"] = query.value(0).toInt();
+        map["ownerId"] = query.value(0).toInt();
         map["title"] = query.value(1).toString();
         map["deadline"] = query.value(2).toString();
         map["message"] = "Workflow successfully has gotten";
@@ -544,6 +548,7 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QJsonArray Users;
     QSqlQuery query;
     QVariantMap map;
+    // map["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
     qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
         map["name"] = query.value(0).toString();
