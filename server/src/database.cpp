@@ -292,6 +292,18 @@ DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
     return map;
 }
 
+QVariantMap DataBase::removeFromWorkflow(int user_id) {
+    QMap<QString, QVariant> map;
+    QSqlQuery query;
+    if (query.exec("DELETE from WF_connector where id = " + QString::number(user_id) + ";")) {
+        map["message"] = "User removed";
+    } else {
+        map["message"] = "User didn't remove from workflow";
+        map["error"] = 1;
+    }
+    return map;
+}
+
 QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм дописать мапу яку повертаю з ерорами
     QJsonArray workflows;
     QSqlQuery query;
@@ -324,7 +336,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
         map["workflowId"] = workflow_id;
-        map["owner_id"] = query.value(0).toInt();
+        map["ownerId"] = query.value(0).toInt();
         map["title"] = query.value(1).toString();
         map["deadline"] = query.value(2).toString();
         map["message"] = "Workflow successfully has gotten";
@@ -420,6 +432,28 @@ QVariantMap DataBase::removeList(int listId) {
     } else {
         map["message"] = "List wasn't removed";
         map["error"] = 1;
+    }
+    return map;
+}
+
+QVariantMap DataBase::getLists(int workflowId) {
+    QSqlQuery query;
+    QJsonArray lists;
+    // map["type"] = static_cast<int>(RequestType::GET_PANELS);
+    QVariantMap map;
+    query.exec("select list_id from Lists where workflow_id = " + QString::number(workflowId));
+    if (query.first()) {
+        lists.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+    } else {
+        map["error"] = 1;
+        map["message"] = "Lists don't exist";
+    }
+    while (query.next()) {
+        lists.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+    }
+    if (!map.contains("error")) {
+        map["lists"] = lists;
+        map["message"] = "Lists successfully have gotten";
     }
     return map;
 }
@@ -528,9 +562,9 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     QSqlQuery query;
-    if (query.exec("select description, checklist from Tasks where id = " + QString::number(taskId))) {
+    if (query.exec("select description, checklist from Tasks where id = " + QString::number(taskId)) && query.first()) {
         map["message"] = "Take your task data bitch";
-        query.first();
+        // query.first();
         map["description"] = query.value(0).toString();
         map["checkList"] = query.value(1).toString();
     } else {
@@ -540,10 +574,33 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
     return map;
 }
 
+QVariantMap DataBase::getTasks(int listId) {
+    QSqlQuery query;
+    QJsonArray tasks;
+    // map["type"] = static_cast<int>(RequestType::GET_TASKS);
+    QVariantMap map;
+    query.exec("select id from Tasks where list_id = " + QString::number(listId));
+    if (query.first()) {
+        tasks.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+    } else {
+        map["error"] = 1;
+        map["message"] = "Tasks don't exist";
+    }
+    while (query.next()) {
+        tasks.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+    }
+    if (!map.contains("error")) {
+        map["tasks"] = tasks;
+        map["message"] = "Tasks successfully have gotten";
+    }
+    return map;
+}
+
 QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QJsonArray Users;
     QSqlQuery query;
     QVariantMap map;
+    // map["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
     qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
         map["name"] = query.value(0).toString();
