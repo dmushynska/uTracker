@@ -14,7 +14,6 @@ SignUpResponse::SignUpResponse(Client *parent, QTcpSocket *socket) :  AbstractRe
 }
 
 void SignUpResponse::responseHandle(QJsonObject itemObject) {
-    qDebug() << itemObject["error"].toInt();
     if (itemObject["error"].toInt() == 1) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
         emit m_parent->getManager()->getAuthor()->serverResponseSignUp(1, itemObject["message"].toString());
@@ -22,6 +21,7 @@ void SignUpResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "SIGN UP message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
+        qDebug() << "userId :" << itemObject["userId"].toString();
         emit m_parent->getManager()->getAuthor()->serverResponseSignUp(0, "");
         m_token = itemObject["token"].toString();
     }
@@ -40,8 +40,11 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
         qDebug() << "userId :" << itemObject["userId"].toInt();
+        qDebug() << "login :" << itemObject["login"].toString();
+        qDebug() << "email :" << itemObject["email"].toString();
+        qDebug() << "name :" << itemObject["name"].toString();
+        qDebug() << "surname :" << itemObject["surname"].toString();
         m_token = itemObject["token"].toString();
-//        qDebug() << "FUCKING TOKEN"
         emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
         m_parent->getManager()->getUser()->setUserId(itemObject["userId"].toInt());
         m_parent->getManager()->getWorkflow()->getAllListWorkflow();
@@ -100,6 +103,18 @@ void CreatedWorkflowResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
+ArchieveWorkflowResponse::ArchieveWorkflowResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ArchieveWorkflowResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
 UpdateWorkflowResponse::UpdateWorkflowResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
@@ -108,6 +123,8 @@ void UpdateWorkflowResponse::responseHandle(QJsonObject itemObject) {
     if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
+        qDebug() << "title :" << itemObject["title"].toString() << "\n";
+        qDebug() << "deadline :" << itemObject["deadline"].toString() << "\n";
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
     }
 }
@@ -133,7 +150,7 @@ void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        QJsonArray arr = itemObject["workflows"].toArray();
+        QJsonArray arr = itemObject["workflows"].toArray();//ne testiv
         emit m_parent->getManager()->getWorkflow()->serverAllListWorkflowsResponse(arr);
     }
 }
@@ -147,7 +164,8 @@ void SingleWorkflowDataResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "ownerId :" << itemObject["owner_id"].toInt() << "\n";
+        qDebug() << "workflowId" << itemObject["workflowId"].toInt();
+        qDebug() << "ownerId :" << itemObject["ownerId"].toInt() << "\n";
         qDebug() << "title :" << itemObject["title"].toString() << "\n";
         qDebug() << "deadline :" << itemObject["deadline"].toString() << "\n";
     }
@@ -189,6 +207,8 @@ void ToUpdateProfileResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "name :" << itemObject["name"].toString() << "\n";
+        qDebug() << "surname :" << itemObject["surname"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +259,8 @@ void ToUpdateTaskResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "description :" << itemObject["description"].toString() << "\n";
+        qDebug() << "checkList :" << itemObject["checkList"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

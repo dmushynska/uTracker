@@ -82,6 +82,14 @@ public slots:
     void responseHandle(QJsonObject itemObject);
 };
 
+class ArchieveWorkflowResponse : public AbstractResponseHandler{
+Q_OBJECT
+public:
+    ArchieveWorkflowResponse(Client *parent, QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
 class UpdateWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:

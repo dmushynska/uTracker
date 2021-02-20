@@ -34,15 +34,13 @@ void AbstractRequest::signUp(const QString& login,
     mapa["surname"] = surname;
     createJSON(mapa);
 }
-void AbstractRequest::signIn(const QString& email,
-                             const QString& login,
+void AbstractRequest::signIn(const QString& login,
                              const QString& pass) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_IN);
     mapa["token"] = m_token;
     mapa["login"] = login;
     mapa["password"] = pass;
-    mapa["email"] = email;
     createJSON(mapa);
 }
 void AbstractRequest::autoSignInWithGoogle() {
@@ -181,7 +179,6 @@ void AbstractRequest::updateTask(int taskId, const QString& description, const Q
     mapa["taskId"] = taskId;
     mapa["description"] = description;
     QJsonArray array;
-//    for (auto item : checkList) {
     for (auto item = checkList.begin(); item != checkList.end(); item++) {
         QJsonObject npcObject {
             {"str", item.key()},

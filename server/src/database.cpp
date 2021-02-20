@@ -235,8 +235,6 @@ DataBase::createWorkflow(int owner_id, const QString &title, const QString &dead
     if (res) {
         auto workflowId = query.lastInsertId().toInt();
         map["workflowId"] = workflowId;
-        // map["title"] = title;
-        // map["deadline"] = deadline;
         map["message"] = "Workflow has been created";
         query.exec(QString("INSERT INTO WF_connector (workflow_id, user_id) VALUES(%1, '%2');")
                        .arg(workflowId)
@@ -295,6 +293,7 @@ DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
 QVariantMap DataBase::removeFromWorkflow(int user_id) {
     QMap<QString, QVariant> map;
     QSqlQuery query;
+    map["type"] = static_cast<int>(RequestType::ARCHIVE_WORKFLOW);
     if (query.exec("DELETE from WF_connector where id = " + QString::number(user_id) + ";")) {
         map["message"] = "User removed";
     } else {

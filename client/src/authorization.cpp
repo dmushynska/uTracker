@@ -13,7 +13,7 @@ void Authorization::signUpHandler(QString login, QString mail, QString password)
 }
 
 void Authorization::signInHandler(QString ident, QString password) {
-    m_request->signIn(ident, ident, password);
+    m_request->signIn(ident, password);
 }
 
 void Authorization::printStr(QString str) {

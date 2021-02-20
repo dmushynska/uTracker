@@ -30,13 +30,11 @@ enum class RequestType {
 ```json
 {
     "type": SIGN_UP,
+    "email": str,
     "login": str,
     "password": str,
     "name": str,
-    "surname": str,
-    "email": str,
-    "userId": num,
-    "token": str SHA-256 hash
+    "surname": str
 }
 ```
 
@@ -45,7 +43,7 @@ enum class RequestType {
 {
     "type": SIGN_UP,
     "message": str,
-    "token": str,
+    "token": str SHA-256 hash
     "userId": num
 }
 ```
@@ -65,7 +63,7 @@ enum class RequestType {
 {
     "type": SIGN_IN,
     "login": str, // or email in "login"
-    "password": str,
+    "password": str, SHA-256 hash
     "token": str SHA-256 hash
 }
 ```
@@ -124,11 +122,11 @@ enum class RequestType {
 **Request for `CREATE_WORKFLOW` from client to server**
 ```json
 {
-    "type": CREATE_WORKFLOW,
-    "title": str,
-    "description": str,
+    "type" : CREATE_WORKFLOW,
+    "title" : str,
+    "deadline" : str,
     "ownerId" : num
-    "token": str SHA-256 hash
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -183,11 +181,11 @@ enum class RequestType {
 **Request for `UPDATE_WORKFLOW` from client to server**
 ```json
 {
-    "type": UPDATE_WORKFLOW,
-    "workflowId": num,
-    "title": str,
-    "description": str,
-    "token": str SHA-256 hash
+    "type" : UPDATE_WORKFLOW,
+    "workflowId" : num,
+    "title" : str,
+    "deadline" : str,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -196,7 +194,7 @@ enum class RequestType {
 {
     "type": UPDATE_WORKFLOW,
     "title": str,
-    "description": str,
+    "deadline": str,
     "message": str
 }
 ```
@@ -216,9 +214,9 @@ enum class RequestType {
 ```json
 {
     "type": INVITE_TO_WORKFLOW,
-    "workflowId": num,
-    "login": str,
-    "token": str SHA-256 hash
+    "workflowId" : num,
+    "login" : str,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -244,7 +242,8 @@ enum class RequestType {
 ```json
 {
     "type": GET_ALL_WORKFLOWS,
-    "userId": num
+    "userId": num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -277,7 +276,8 @@ enum class RequestType {
 ```json
 {
     "type": GET_SINGLE_WORKFLOW_DATA,
-    "workflowId": num
+    "workflowId": num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -305,7 +305,8 @@ enum class RequestType {
 **Request for `GET_STATISTICS` from client to server**
 ```json
 {
-    "type": GET_STATISTICS
+    "type": GET_STATISTICS,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -333,7 +334,8 @@ enum class RequestType {
 ```json
 {
     "type": GET_PROFILE,
-    "userId" : num
+    "userId" : num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -363,7 +365,8 @@ enum class RequestType {
     "type": UPDATE_PROFILE,
     "userID" : num,
     "name" : str,
-    "surname" : str
+    "surname" : str,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -392,7 +395,8 @@ enum class RequestType {
 {
     "type": CREATE_LIST,
     "workflowId" : num,
-    "title" : str
+    "title" : str,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -419,7 +423,8 @@ enum class RequestType {
 ```json
 {
     "type": REMOVE_LIST,
-    "listId" : num
+    "listId" : num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -446,7 +451,8 @@ enum class RequestType {
 {
     "type": CREATE_TASK,
     "listId" : num,
-    "title": str
+    "title": str,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -475,7 +481,8 @@ enum class RequestType {
     "type": UPDATE_TASK,
     "taskId" : num,
     "description": str,
-    "checkList": qvariant
+    "checkList": qvariant,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -505,7 +512,8 @@ enum class RequestType {
     "type": MOVE_TASK,
     "taskId" : num,
     "newListId" : num,
-    "newIndexId" : num
+    "newIndexId" : num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -531,7 +539,8 @@ enum class RequestType {
 ```json
 {
     "type": REMOVE_TASK,
-    "taskId" : num
+    "taskId" : num,
+    "token" : str SHA-256 hash
 }
 ```
 
@@ -557,7 +566,8 @@ enum class RequestType {
 ```json
 {
     "type": GET_TASK_DATA,
-    "taskId" : num
+    "taskId" : num,
+    "token" : str SHA-256 hash
 }
 ```
 

@@ -22,7 +22,7 @@ void Workflow::getAllListWorkflow() const
 }
 
 void Workflow::signInHandler(QString ident, QString password) {
-    m_request->signIn(ident, ident, password);
+    m_request->signIn(ident, password);
 }
 
 void Workflow::printStr(QString str) {

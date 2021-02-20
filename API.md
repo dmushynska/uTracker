@@ -62,9 +62,10 @@
 {
     "type": SIGN_UP,
     "email": str,
+    "login" : str,
     "password": str SHA-256 hash,
     "name": str,
-    "surname": str,
+    "surname": str
 }
 ```
 
@@ -92,8 +93,10 @@
 ```json
 {
     "type": SIGN_IN,
-    "email": str,
-    "password": str SHA-256 hash,
+    "token" : m_token,
+    "login" : login,
+    "password" : pass,
+    "email" : email
 }
 ```
 

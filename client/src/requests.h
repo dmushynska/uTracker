@@ -44,7 +44,7 @@ public:
 
     //auth sector
     void signUp(const QString& login, const QString& pass, const QString& name, const QString& surname, const QString& email);
-    void signIn(const QString& email, const QString&  login, const QString& pass);
+    void signIn(const QString&  login, const QString& pass);
     void autoSignInWithGoogle();
     void autoSignIn();
     void logOut(int userId);

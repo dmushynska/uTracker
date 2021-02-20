@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE void getAllListWorkflow() const;
     Q_INVOKABLE void createWorkflow(QString title);
 
+    void signInHandler(QString ident, QString password);
+
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
 
