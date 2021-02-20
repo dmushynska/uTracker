@@ -581,13 +581,13 @@ QVariantMap DataBase::getTasks(int listId) {
     QVariantMap map;
     query.exec("select id from Tasks where list_id = " + QString::number(listId));
     if (query.first()) {
-        tasks.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+        tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
     } else {
         map["error"] = 1;
         map["message"] = "Tasks don't exist";
     }
     while (query.next()) {
-        tasks.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
+        tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
     }
     if (!map.contains("error")) {
         map["tasks"] = tasks;
