@@ -82,7 +82,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                                     map.value("email").toString());
                 break;
             case RequestType::SIGN_IN:
-                result = containsUser(map.value("email").toString(),
+                result = containsUser(map.value("login").toString(),
                                       map.value("password").toString());
                 break;
             case RequestType::AUTO_OAUTH:
@@ -175,8 +175,8 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
 
 QVariantMap DataBase::containsUser(const QString &login, const QString &password) {
     QSqlQuery query;
-    query.exec("SELECT id, password FROM UsersCredential where email = '" + login + "' or login = \"" + login + "\";");
-
+    query.exec("SELECT id, password FROM UsersCredential where email = '" + login + "' or login = '" + login + "';");
+    qDebug() << "first" <<  login << password ;
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_IN);
 
@@ -186,14 +186,14 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
         map["userId"] = query.value(0);
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
-        query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
+        qDebug() << "second" <<  query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
             map["userId"] = query.value(0).toString();  //userId
             map["token"] = query1.value(0).toString();  //token
             map["login"] = login;
-            map["email"] = query1.value(3).toString();
             map["name"] = query1.value(1).toString();
             map["surname"] = query1.value(2).toString();
+            map["email"] = query1.value(3).toString();
         }
     } else {
         map["error"] = 1;
