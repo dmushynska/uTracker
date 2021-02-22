@@ -101,6 +101,23 @@ void AbstractRequest::inviteToWorkflow(const QString& login, int workflowId) {
     createJSON(mapa);
 }
 
+void AbstractRequest::removeFromWorkflow(int userId, int workflowId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::REMOVE_FROM_WORKFLOW);
+    mapa["token"] = m_token;
+    mapa["userId"] = userId;
+    mapa["workflowId"] = workflowId;
+    createJSON(mapa);
+}
+
+void AbstractRequest::getUsersFromWorkflow(int workflowId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
+    mapa["token"] = m_token;
+    mapa["workflowId"] = workflowId;
+    createJSON(mapa);
+}
+
 void AbstractRequest::getAllWorkflows(int userId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_ALL_WORKFLOWS);
@@ -153,6 +170,14 @@ void AbstractRequest::createList(const QString& title, int workflowId) {
     createJSON(mapa);
 }
 
+void AbstractRequest::getLists(int workflowId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::GET_LISTS);
+    mapa["token"] = m_token;
+    mapa["workflowId"] = workflowId;
+    createJSON(mapa);
+}
+
 void AbstractRequest::removeList(int listId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::REMOVE_LIST);
@@ -171,6 +196,15 @@ void AbstractRequest::createTask(const QString& title, int listId) {
     mapa["listId"] = listId;
     createJSON(mapa);
 }
+
+void AbstractRequest::getTasks(int listId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::GET_TASKS);
+    mapa["token"] = m_token;
+    mapa["listId"] = listId;
+    createJSON(mapa);
+}
+
 
 void AbstractRequest::updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList) {
     QMap<QString, QVariant> mapa;

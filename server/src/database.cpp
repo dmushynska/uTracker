@@ -106,6 +106,12 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 result = inviteToWorkflow(map.value("login").toString(),
                                           map.value("workflowId").toInt());
                 break;
+            case RequestType::REMOVE_FROM_WORKFLOW:
+                result = removeFromWorkflow(map.value("userId").toInt(), map.value("workflowId").toInt());
+                break;
+            case RequestType::GET_USERS_FROM_WORKFLOW:
+                result = getUsersFromWorkFlow(map.value("workflowId").toInt());
+                break;
             case RequestType::GET_ALL_WORKFLOWS:
                 result = getWorkflows(map.value("userId").toInt());
                 break;
@@ -126,12 +132,18 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 result = createList(map.value("title").toString(),
                                     map.value("workdlowId").toInt());
                 break;
+            case RequestType::GET_LISTS:
+                result = getLists(map.value("workdlowId").toInt());
+                break;
             case RequestType::REMOVE_LIST:
                 result = removeList(map.value("listId").toInt());
                 break;
             case RequestType::CREATE_TASK:
                 result = createTask(map.value("title").toString(),
                                     map.value("listId").toInt());
+                break;
+            case RequestType::GET_TASKS:
+                result = getTasks(map.value("listId").toInt());
                 break;
             case RequestType::UPDATE_TASK:
                 result = updateTask(map.value("taskId").toInt(),
@@ -290,11 +302,11 @@ DataBase::inviteToWorkflow(const QString &login, int workflow_id) {
     return map;
 }
 
-QVariantMap DataBase::removeFromWorkflow(int user_id) {
+QVariantMap DataBase::removeFromWorkflow(int user_id, int workflow_id) {
     QMap<QString, QVariant> map;
     QSqlQuery query;
-    map["type"] = static_cast<int>(RequestType::ARCHIVE_WORKFLOW);
-    if (query.exec("DELETE from WF_connector where id = " + QString::number(user_id) + ";")) {
+    map["type"] = static_cast<int>(RequestType::REMOVE_FROM_WORKFLOW);
+    if (query.exec("DELETE from WF_connector where id = " + QString::number(user_id) + " and " + " workflow_id = " + QString::number(workflow_id))) {
         map["message"] = "User removed";
     } else {
         map["message"] = "User didn't remove from workflow";
@@ -438,8 +450,8 @@ QVariantMap DataBase::removeList(int listId) {
 QVariantMap DataBase::getLists(int workflowId) {
     QSqlQuery query;
     QJsonArray lists;
-    // map["type"] = static_cast<int>(RequestType::GET_PANELS);
     QVariantMap map;
+    map["type"] = static_cast<int>(RequestType::GET_LISTS);
     query.exec("select list_id from Lists where workflow_id = " + QString::number(workflowId));
     if (query.first()) {
         lists.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
@@ -576,8 +588,8 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
 QVariantMap DataBase::getTasks(int listId) {
     QSqlQuery query;
     QJsonArray tasks;
-    // map["type"] = static_cast<int>(RequestType::GET_TASKS);
     QVariantMap map;
+    map["type"] = static_cast<int>(RequestType::GET_TASKS);
     query.exec("select id from Tasks where list_id = " + QString::number(listId));
     if (query.first()) {
         tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
@@ -599,7 +611,7 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QJsonArray Users;
     QSqlQuery query;
     QVariantMap map;
-    // map["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
+    map["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
     qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
         map["name"] = query.value(0).toString();

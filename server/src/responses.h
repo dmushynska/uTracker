@@ -22,18 +22,22 @@ enum class RequestType {
     ARCHIVE_WORKFLOW = 6,
     UPDATE_WORKFLOW = 7,
     INVITE_TO_WORKFLOW = 8,
-    GET_ALL_WORKFLOWS = 9,
-    GET_SINGLE_WORKFLOW_DATA = 10,
-    GET_STATISTICS = 11,
-    GET_PROFILE = 12,
-    UPDATE_PROFILE = 13,
-    CREATE_LIST = 14,
-    REMOVE_LIST = 15,
-    CREATE_TASK = 16,
-    UPDATE_TASK = 17,
-    MOVE_TASK = 18,
-    REMOVE_TASK = 19,
-    GET_TASK_DATA = 20
+    REMOVE_FROM_WORKFLOW = 9,
+    GET_USERS_FROM_WORKFLOW = 10,
+    GET_ALL_WORKFLOWS = 11,
+    GET_SINGLE_WORKFLOW_DATA = 12,
+    GET_STATISTICS = 13,
+    GET_PROFILE = 14,
+    UPDATE_PROFILE = 15,
+    CREATE_LIST = 16,
+    GET_LISTS = 17,
+    REMOVE_LIST = 18,
+    CREATE_TASK = 19,
+    GET_TASKS = 20,
+    UPDATE_TASK = 21,
+    MOVE_TASK = 22,
+    REMOVE_TASK = 23,
+    GET_TASK_DATA = 24
 };
 
 class AbstractRequestHandler : public QObject{
@@ -120,6 +124,21 @@ public:
     bool isValid(QJsonObject itemObject);
 };
 
+class ToRemoveFromWorkflow : public AbstractRequestHandler  {
+Q_OBJECT
+public:
+    ToRemoveFromWorkflow(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
+class ToGetUsersFromWorkflow : public AbstractRequestHandler  {
+Q_OBJECT
+public:
+    ToGetUsersFromWorkflow(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
+
 class SendAllWorkflows : public AbstractRequestHandler  {
 Q_OBJECT
 public:
@@ -165,6 +184,13 @@ public:
     bool isValid(QJsonObject itemObject);
 };
 
+class ToGetLists : public AbstractRequestHandler  {
+Q_OBJECT
+public:
+    ToGetLists(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
 class ToRemoveList : public AbstractRequestHandler  {
 Q_OBJECT
 public:
@@ -177,6 +203,13 @@ class ToCreateTask : public AbstractRequestHandler  {
 Q_OBJECT
 public:
     ToCreateTask(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
+class ToGetTasks : public AbstractRequestHandler  {
+Q_OBJECT
+public:
+    ToGetTasks(Connection *socket);
     bool isValid(QJsonObject itemObject);
 };
 

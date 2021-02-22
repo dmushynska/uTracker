@@ -30,7 +30,7 @@ public:
     QVariantMap createWorkflow(int owner_id, const QString &title, const QString &deadline);
     QVariantMap updateWorkflow(int workflow_id, const QString &title, const QString &deadline);
     QVariantMap inviteToWorkflow(const QString &login, int workflow_id);
-    QVariantMap removeFromWorkflow(int user_id);
+    QVariantMap removeFromWorkflow(int user_id, int workflowId);
 
     QVariantMap getWorkflows(int user_id);
     QVariantMap getWorkflow(int workflow_id);

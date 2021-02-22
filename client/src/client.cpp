@@ -60,6 +60,8 @@ void Client::testRequestLoop() {
 ////            ////workdflow (desk) sector
 //      m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
     //  m_request->updateWorkflow("QString title", "QString description", 1);
+//    m_request->removeFromWorkflow(1);
+//    m_request->getUsersFromWorkflow(1);
     //  m_request->inviteToWorkflow(1, 1);
 //        m_request->getAllWorkflows(0);
         // m_request->getSingleWorkflowData(1);
@@ -71,9 +73,11 @@ void Client::testRequestLoop() {
 
             ////list sector
     // m_request->createList("ListName", 1);
+    // m_request->getLists(1);
     // m_request->removeList(1);
             ////task sector
     // m_request->createTask("Task name", 1);
+    // m_request->getTasks(1);
 //    m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
 //     m_request->moveTask(1, 2);
     // m_request->removeTask(1);

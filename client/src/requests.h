@@ -19,18 +19,22 @@ enum class RequestType {
     ARCHIVE_WORKFLOW = 6,
     UPDATE_WORKFLOW = 7,
     INVITE_TO_WORKFLOW = 8,
-    GET_ALL_WORKFLOWS = 9,
-    GET_SINGLE_WORKFLOW_DATA = 10,
-    GET_STATISTICS = 11,
-    GET_PROFILE = 12,
-    UPDATE_PROFILE = 13,
-    CREATE_LIST = 14,
-    REMOVE_LIST = 15,
-    CREATE_TASK = 16,
-    UPDATE_TASK = 17,
-    MOVE_TASK = 18,
-    REMOVE_TASK = 19,
-    GET_TASK_DATA = 20
+    REMOVE_FROM_WORKFLOW = 9,
+    GET_USERS_FROM_WORKFLOW = 10,
+    GET_ALL_WORKFLOWS = 11,
+    GET_SINGLE_WORKFLOW_DATA = 12,
+    GET_STATISTICS = 13,
+    GET_PROFILE = 14,
+    UPDATE_PROFILE = 15,
+    CREATE_LIST = 16,
+    GET_LISTS = 17,
+    REMOVE_LIST = 18,
+    CREATE_TASK = 19,
+    GET_TASKS = 20,
+    UPDATE_TASK = 21,
+    MOVE_TASK = 22,
+    REMOVE_TASK = 23,
+    GET_TASK_DATA = 24
 };
 
 class AbstractRequest {
@@ -54,6 +58,8 @@ public:
     void updateWorkflow(const QString& title, const QString& deadline, int workflowId);
     void archieveWorkflow(int workflowId);
     void inviteToWorkflow(const QString& login, int workflowId);
+    void removeFromWorkflow(int userId, int workflowId);
+    void getUsersFromWorkflow(int workflowId);
     void getAllWorkflows(int userId);
     void getSingleWorkflowData(int workflowId);
 
@@ -65,9 +71,11 @@ public:
 
     //list sector
     void createList(const QString& title, int workflowId);
+    void getLists(int workflowId);
     void removeList(int listId);
     //task sector
     void createTask(const QString& title, int listId);
+    void getTasks(int listId);
     void updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList);
     void moveTask(int taskId, int listId, int indexId);
     void removeTask(int taskId);
