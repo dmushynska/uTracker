@@ -82,6 +82,22 @@ public slots:
     void responseHandle(QJsonObject itemObject);
 };
 
+class RemovedFromWorkflowResponse : public AbstractResponseHandler {
+Q_OBJECT
+public:
+    RemovedFromWorkflowResponse(Client *parent, QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class GetUsersFromWorkflowResponse : public AbstractResponseHandler {
+Q_OBJECT
+public:
+    GetUsersFromWorkflowResponse(Client *parent, QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
 class ArchieveWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
@@ -155,6 +171,14 @@ public slots:
     void responseHandle(QJsonObject itemObject);
 };
 
+class ToGetListsResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToGetListsResponse(Client *parent, QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
 class ToRemoveListResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
@@ -169,6 +193,14 @@ Q_OBJECT
 public:
     ToCreateTaskResponse(Client *parent, QTcpSocket *socket);
     public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToGetTasksResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToGetTasksResponse(Client *parent, QTcpSocket *socket);
+public slots:
     void responseHandle(QJsonObject itemObject);
 };
 

@@ -44,14 +44,18 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_createdWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_updateWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_inviteToWorkflow;
+    std::shared_ptr<AbstractResponseHandler> m_removeFromWorkflow;
+    std::shared_ptr<AbstractResponseHandler> m_getUsersFromWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_allWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_singleWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_sendStat;
     std::shared_ptr<AbstractResponseHandler> m_sendProfile;
     std::shared_ptr<AbstractResponseHandler> m_updateProfile;
     std::shared_ptr<AbstractResponseHandler> m_createListResponse;
+    std::shared_ptr<AbstractResponseHandler> m_getListsResponse;
     std::shared_ptr<AbstractResponseHandler> m_removeListResponse;
     std::shared_ptr<AbstractResponseHandler> m_createTaskResponse;
+    std::shared_ptr<AbstractResponseHandler> m_getTasksResponse;
     std::shared_ptr<AbstractResponseHandler> m_updateTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_moveTaskResponse;
     std::shared_ptr<AbstractResponseHandler> m_removeTaskResponse;
