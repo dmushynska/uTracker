@@ -1,12 +1,13 @@
 #include "client.h"
 #include "requests.h"
 
-AbstractRequest::AbstractRequest(QTcpSocket *socket) : m_socket(socket) {}
+AbstractRequest::AbstractRequest(std::shared_ptr<QSslSocket> socket) :m_socket(socket) { }
 
-void AbstractRequest::createJSON(QMap<QString, QVariant> map) {
+void AbstractRequest::createJSON(QMap<QString, QVariant> map)
+{
 
-    QJsonObject jsonObject =  QJsonObject::fromVariantMap(map);
-    QJsonDocument *jsonDoc = new QJsonDocument(jsonObject);
+    QJsonObject jsonObject = QJsonObject::fromVariantMap(map);
+    QJsonDocument* jsonDoc = new QJsonDocument(jsonObject);
     QByteArray json = jsonDoc->toJson();
     // qDebug() << json;
 
@@ -15,16 +16,18 @@ void AbstractRequest::createJSON(QMap<QString, QVariant> map) {
     m_socket->write("\n" + json);
 }
 
-void AbstractRequest::setToken(const QString& token) {
+void AbstractRequest::setToken(const QString& token)
+{
     m_token = token;
 }
 
 ////auth sector/////////////////////////////////////////////////////////////////////////
 void AbstractRequest::signUp(const QString& login,
-                             const QString& pass,
-                             const QString& name,
-                             const QString& surname,
-                             const QString& email) {
+        const QString& pass,
+        const QString& name,
+        const QString& surname,
+        const QString& email)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_UP);
     mapa["login"] = login;
@@ -35,8 +38,9 @@ void AbstractRequest::signUp(const QString& login,
     createJSON(mapa);
 }
 void AbstractRequest::signIn(const QString& email,
-                             const QString& login,
-                             const QString& pass) {
+        const QString& login,
+        const QString& pass)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::SIGN_IN);
     mapa["token"] = m_token;
@@ -45,19 +49,22 @@ void AbstractRequest::signIn(const QString& email,
     mapa["email"] = email;
     createJSON(mapa);
 }
-void AbstractRequest::autoSignInWithGoogle() {
+void AbstractRequest::autoSignInWithGoogle()
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::AUTO_OAUTH);
     mapa["token"] = m_token;
     createJSON(mapa);
 }
-void AbstractRequest::autoSignIn() {
+void AbstractRequest::autoSignIn()
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::AUTO_AUTH);
     mapa["token"] = m_token;
     createJSON(mapa);
 }
-void AbstractRequest::logOut(int userId) {
+void AbstractRequest::logOut(int userId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::LOG_OUT);
     mapa["token"] = m_token;
@@ -66,7 +73,8 @@ void AbstractRequest::logOut(int userId) {
 }
 
 ////workdflow (desk) sector/////////////////////////////////////////////////////////////////////////
-void AbstractRequest::createWorkflow(const QString& title, const QString& deadline, int ownerId) {
+void AbstractRequest::createWorkflow(const QString& title, const QString& deadline, int ownerId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_WORKFLOW);
     mapa["token"] = m_token;
@@ -76,7 +84,8 @@ void AbstractRequest::createWorkflow(const QString& title, const QString& deadli
     createJSON(mapa);
 }
 
-void AbstractRequest::updateWorkflow(const QString& title, const QString& deadline, int workflowId) {
+void AbstractRequest::updateWorkflow(const QString& title, const QString& deadline, int workflowId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_WORKFLOW);
     mapa["token"] = m_token;
@@ -86,7 +95,8 @@ void AbstractRequest::updateWorkflow(const QString& title, const QString& deadli
     createJSON(mapa);
 }
 
-void AbstractRequest::archieveWorkflow(int workflowId) {
+void AbstractRequest::archieveWorkflow(int workflowId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::ARCHIVE_WORKFLOW);
     mapa["token"] = m_token;
@@ -94,7 +104,8 @@ void AbstractRequest::archieveWorkflow(int workflowId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::inviteToWorkflow(const QString& login, int workflowId) {
+void AbstractRequest::inviteToWorkflow(const QString& login, int workflowId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::INVITE_TO_WORKFLOW);
     mapa["token"] = m_token;
@@ -103,7 +114,8 @@ void AbstractRequest::inviteToWorkflow(const QString& login, int workflowId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::getAllWorkflows(int userId) {
+void AbstractRequest::getAllWorkflows(int userId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_ALL_WORKFLOWS);
     mapa["token"] = m_token;
@@ -111,7 +123,8 @@ void AbstractRequest::getAllWorkflows(int userId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::getSingleWorkflowData(int workflowId) {
+void AbstractRequest::getSingleWorkflowData(int workflowId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
     mapa["token"] = m_token;
@@ -119,8 +132,8 @@ void AbstractRequest::getSingleWorkflowData(int workflowId) {
     createJSON(mapa);
 }
 
-
-void AbstractRequest::getStatistics() {
+void AbstractRequest::getStatistics()
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_STATISTICS);
     mapa["token"] = m_token;
@@ -128,7 +141,8 @@ void AbstractRequest::getStatistics() {
 }
 
 ////profile sector/////////////////////////////////////////////////////////////////////////
-void AbstractRequest::getProfile(int userId) {
+void AbstractRequest::getProfile(int userId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_PROFILE);
     mapa["token"] = m_token;
@@ -136,7 +150,8 @@ void AbstractRequest::getProfile(int userId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::updateProfile(int userId, const QString& name, const QString& surname) {
+void AbstractRequest::updateProfile(int userId, const QString& name, const QString& surname)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_PROFILE);
     mapa["token"] = m_token;
@@ -146,7 +161,8 @@ void AbstractRequest::updateProfile(int userId, const QString& name, const QStri
     createJSON(mapa);
 }
 ////list sector/////////////////////////////////////////////////////////////////////////
-void AbstractRequest::createList(const QString& title, int workflowId) {
+void AbstractRequest::createList(const QString& title, int workflowId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_LIST);
     mapa["token"] = m_token;
@@ -155,7 +171,8 @@ void AbstractRequest::createList(const QString& title, int workflowId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::removeList(int listId) {
+void AbstractRequest::removeList(int listId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::REMOVE_LIST);
     mapa["token"] = m_token;
@@ -163,9 +180,9 @@ void AbstractRequest::removeList(int listId) {
     createJSON(mapa);
 }
 
-
 ////task sector/////////////////////////////////////////////////////////////////////////
-void AbstractRequest::createTask(const QString& title, int listId) {
+void AbstractRequest::createTask(const QString& title, int listId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::CREATE_TASK);
     mapa["token"] = m_token;
@@ -174,7 +191,8 @@ void AbstractRequest::createTask(const QString& title, int listId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList) {
+void AbstractRequest::updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     mapa["token"] = m_token;
@@ -183,9 +201,9 @@ void AbstractRequest::updateTask(int taskId, const QString& description, const Q
     QJsonArray array;
 //    for (auto item : checkList) {
     for (auto item = checkList.begin(); item != checkList.end(); item++) {
-        QJsonObject npcObject {
-            {"str", item.key()},
-            {"isDone", item.value()}
+        QJsonObject npcObject{
+                {"str", item.key()},
+                {"isDone", item.value()}
         };
         array.append(npcObject);
     }
@@ -193,7 +211,8 @@ void AbstractRequest::updateTask(int taskId, const QString& description, const Q
     createJSON(mapa);
 }
 
-void AbstractRequest::moveTask(int taskId, int listId, int indexId) {
+void AbstractRequest::moveTask(int taskId, int listId, int indexId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::MOVE_TASK);
     mapa["token"] = m_token;
@@ -203,7 +222,8 @@ void AbstractRequest::moveTask(int taskId, int listId, int indexId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::removeTask(int taskId) {
+void AbstractRequest::removeTask(int taskId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::REMOVE_TASK);
     mapa["token"] = m_token;
@@ -211,7 +231,8 @@ void AbstractRequest::removeTask(int taskId) {
     createJSON(mapa);
 }
 
-void AbstractRequest::getTaskData(int taskId) {
+void AbstractRequest::getTaskData(int taskId)
+{
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     mapa["token"] = m_token;

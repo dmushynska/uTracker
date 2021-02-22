@@ -17,7 +17,7 @@ class Client;
 class AbstractResponseHandler : public QObject{
 Q_OBJECT
 public:
-    AbstractResponseHandler(QTcpSocket *socket);
+    AbstractResponseHandler(std::shared_ptr<QSslSocket> socket);
 
     QString getToken();
 
@@ -28,7 +28,7 @@ public slots:
     virtual void responseHandle(QJsonObject itemObject) = 0;
 
 protected:
-    QTcpSocket *m_socket;
+    std::shared_ptr<QSslSocket> m_socket;
     QByteArray m_json;
     QString m_token;
     Client *m_parent;
@@ -37,7 +37,7 @@ protected:
 class SignUpResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignUpResponse(Client *parent, QTcpSocket *socket);
+    SignUpResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -45,7 +45,7 @@ public slots:
 class SignInResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignInResponse(Client *parent, QTcpSocket *socket);
+    SignInResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -53,7 +53,7 @@ public slots:
 class SignInWithGoogleResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    SignInWithGoogleResponse(Client *parent, QTcpSocket *socket);
+    SignInWithGoogleResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -61,7 +61,7 @@ public slots:
 class AutoSignInResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    AutoSignInResponse(Client *parent, QTcpSocket *socket);
+    AutoSignInResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -69,7 +69,7 @@ public slots:
 class LogOutResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    LogOutResponse(Client *parent, QTcpSocket *socket);
+    LogOutResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -77,7 +77,31 @@ public slots:
 class CreatedWorkflowResponse : public AbstractResponseHandler {
 Q_OBJECT
 public:
-    CreatedWorkflowResponse(Client *parent, QTcpSocket *socket);
+    CreatedWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class RemovedFromWorkflowResponse : public AbstractResponseHandler {
+Q_OBJECT
+public:
+    RemovedFromWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class GetUsersFromWorkflowResponse : public AbstractResponseHandler {
+Q_OBJECT
+public:
+    GetUsersFromWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ArchieveWorkflowResponse : public AbstractResponseHandler{
+Q_OBJECT
+public:
+    ArchieveWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -85,7 +109,7 @@ public slots:
 class UpdateWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    UpdateWorkflowResponse(Client *parent, QTcpSocket *socket);
+    UpdateWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -93,7 +117,7 @@ public slots:
 class InvitedToWorkflowResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    InvitedToWorkflowResponse(Client *parent, QTcpSocket *socket);
+    InvitedToWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -101,7 +125,7 @@ public slots:
 class AllWorkflowsResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    AllWorkflowsResponse(Client *parent, QTcpSocket *socket);
+    AllWorkflowsResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -109,7 +133,7 @@ public slots:
 class SingleWorkflowDataResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SingleWorkflowDataResponse(Client *parent, QTcpSocket *socket);
+    SingleWorkflowDataResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -117,7 +141,7 @@ public slots:
 class SendStatistics : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SendStatistics(Client *parent, QTcpSocket *socket);
+    SendStatistics(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -125,7 +149,7 @@ public slots:
 class SendProfileResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    SendProfileResponse(Client *parent, QTcpSocket *socket);
+    SendProfileResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -133,7 +157,7 @@ public slots:
 class ToUpdateProfileResponse : public AbstractResponseHandler{
 Q_OBJECT
 public:
-    ToUpdateProfileResponse(Client *parent, QTcpSocket *socket);
+    ToUpdateProfileResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -142,7 +166,15 @@ public slots:
 class ToCreateListResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToCreateListResponse(Client *parent, QTcpSocket *socket);
+    ToCreateListResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToGetListsResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToGetListsResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -150,7 +182,7 @@ public slots:
 class ToRemoveListResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToRemoveListResponse(Client *parent, QTcpSocket *socket);
+    ToRemoveListResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -159,15 +191,23 @@ public slots:
 class ToCreateTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToCreateTaskResponse(Client *parent, QTcpSocket *socket);
-    public slots:
+    ToCreateTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
+class ToGetTasksResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToGetTasksResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
+public slots:
     void responseHandle(QJsonObject itemObject);
 };
 
 class ToUpdateTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToUpdateTaskResponse(Client *parent, QTcpSocket *socket);
+    ToUpdateTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -175,7 +215,7 @@ public slots:
 class ToMoveTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToMoveTaskResponse(Client *parent, QTcpSocket *socket);
+    ToMoveTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -183,7 +223,7 @@ public slots:
 class ToRemoveTaskResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    ToRemoveTaskResponse(Client *parent, QTcpSocket *socket);
+    ToRemoveTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
@@ -191,7 +231,8 @@ public slots:
 class SendTaskDataResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:
-    SendTaskDataResponse(Client *parent, QTcpSocket *socket);
+    SendTaskDataResponse(Client *parent, std::shared_ptr<QSslSocket> socket);
 public slots:
     void responseHandle(QJsonObject itemObject);
 };
+

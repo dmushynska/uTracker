@@ -11,7 +11,7 @@
 #include "responses.h"
 
 class DataBase : public QObject {
-    Q_OBJECT
+Q_OBJECT
     QSqlDatabase m_db;
     static DataBase *m_pInstance;
     explicit DataBase();
@@ -30,6 +30,7 @@ public:
     QVariantMap createWorkflow(int owner_id, const QString &title, const QString &deadline);
     QVariantMap updateWorkflow(int workflow_id, const QString &title, const QString &deadline);
     QVariantMap inviteToWorkflow(const QString &login, int workflow_id);
+    QVariantMap removeFromWorkflow(int user_id, int workflowId);
 
     QVariantMap getWorkflows(int user_id);
     QVariantMap getWorkflow(int workflow_id);
@@ -40,11 +41,14 @@ public:
 
     QVariantMap createList(const QString& title, int workflowId);
     QVariantMap removeList(int listId);
+    QVariantMap getLists(int workflowId);
+
     QVariantMap createTask(const QString& title, int listId);
     QVariantMap updateTask(int taskId, const QString& description, const QVariant& checkList);
     QVariantMap moveTask(int taskId, int newListId, int newIndexId);
     QVariantMap removeTask(int taskId);
     QVariantMap getTaskData(int taskId);
+    QVariantMap getTasks(int listId);
 
 public:
     static DataBase *getInstance();
@@ -57,3 +61,4 @@ public:
 signals:
     void getData(Connection *m_connection, int type, const QMap<QString, QVariant> &map);
 };
+

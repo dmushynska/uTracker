@@ -21,7 +21,7 @@ public:
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
-
+    void signInHandler(QString ident, QString password);
     void setRequest(AbstractRequest *request);
 
     void printStr(QString str);

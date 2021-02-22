@@ -1,7 +1,7 @@
 #include "responsehandler.h"
 #include "client.h"
 
-AbstractResponseHandler::AbstractResponseHandler(QTcpSocket *socket) : m_socket(socket) {
+AbstractResponseHandler::AbstractResponseHandler(std::shared_ptr<QSslSocket> socket) : m_socket(socket) {
     connect(this, &AbstractResponseHandler::handleInited, &AbstractResponseHandler::responseHandle);
 }
 
@@ -9,12 +9,11 @@ QString AbstractResponseHandler::getToken() {
     return m_token;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-SignUpResponse::SignUpResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SignUpResponse::SignUpResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void SignUpResponse::responseHandle(QJsonObject itemObject) {
-    qDebug() << itemObject["error"].toInt();
     if (itemObject["error"].toInt() == 1) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
         emit m_parent->getManager()->getAuthor()->serverResponseSignUp(1, itemObject["message"].toString());
@@ -22,12 +21,13 @@ void SignUpResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "SIGN UP message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
+        qDebug() << "userId :" << itemObject["userId"].toString();
         emit m_parent->getManager()->getAuthor()->serverResponseSignUp(0, "");
         m_token = itemObject["token"].toString();
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-SignInResponse::SignInResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SignInResponse::SignInResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
@@ -40,15 +40,18 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "token :" << itemObject["token"].toString();
         qDebug() << "userId :" << itemObject["userId"].toInt();
+        qDebug() << "login :" << itemObject["login"].toString();
+        qDebug() << "email :" << itemObject["email"].toString();
+        qDebug() << "name :" << itemObject["name"].toString();
+        qDebug() << "surname :" << itemObject["surname"].toString();
         m_token = itemObject["token"].toString();
-//        qDebug() << "FUCKING TOKEN"
         emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
         m_parent->getManager()->getUser()->setUserId(itemObject["userId"].toInt());
         m_parent->getManager()->getWorkflow()->getAllListWorkflow();
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-SignInWithGoogleResponse::SignInWithGoogleResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SignInWithGoogleResponse::SignInWithGoogleResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
@@ -62,7 +65,7 @@ void SignInWithGoogleResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-AutoSignInResponse::AutoSignInResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+AutoSignInResponse::AutoSignInResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
@@ -76,7 +79,7 @@ void AutoSignInResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-LogOutResponse::LogOutResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+LogOutResponse::LogOutResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
@@ -87,7 +90,7 @@ void LogOutResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-CreatedWorkflowResponse::CreatedWorkflowResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+CreatedWorkflowResponse::CreatedWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
@@ -100,11 +103,37 @@ void CreatedWorkflowResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-UpdateWorkflowResponse::UpdateWorkflowResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+RemovedFromWorkflowResponse::RemovedFromWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
-void UpdateWorkflowResponse::responseHandle(QJsonObject itemObject) {
+void RemovedFromWorkflowResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "REMOVE from workflow :" << itemObject << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+GetUsersFromWorkflowResponse::GetUsersFromWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void GetUsersFromWorkflowResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "GET USERS :" << itemObject << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ArchieveWorkflowResponse::ArchieveWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ArchieveWorkflowResponse::responseHandle(QJsonObject itemObject) {
     if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
@@ -112,65 +141,80 @@ void UpdateWorkflowResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-InvitedToWorkflowResponse::InvitedToWorkflowResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+UpdateWorkflowResponse::UpdateWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void UpdateWorkflowResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "title :" << itemObject["title"].toString() << "\n";
+        qDebug() << "deadline :" << itemObject["deadline"].toString() << "\n";
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+InvitedToWorkflowResponse::InvitedToWorkflowResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void InvitedToWorkflowResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-AllWorkflowsResponse::AllWorkflowsResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+AllWorkflowsResponse::AllWorkflowsResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        QJsonArray arr = itemObject["workflows"].toArray();
+        QJsonArray arr = itemObject["workflows"].toArray();//ne testiv
         emit m_parent->getManager()->getWorkflow()->serverAllListWorkflowsResponse(arr);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-SingleWorkflowDataResponse::SingleWorkflowDataResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SingleWorkflowDataResponse::SingleWorkflowDataResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void SingleWorkflowDataResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "ownerId :" << itemObject["owner_id"].toInt() << "\n";
+        qDebug() << "workflowId" << itemObject["workflowId"].toInt();
+        qDebug() << "ownerId :" << itemObject["ownerId"].toInt() << "\n";
         qDebug() << "title :" << itemObject["title"].toString() << "\n";
         qDebug() << "deadline :" << itemObject["deadline"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-SendStatistics::SendStatistics(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SendStatistics::SendStatistics(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void SendStatistics::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-SendProfileResponse::SendProfileResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+SendProfileResponse::SendProfileResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void SendProfileResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
@@ -180,24 +224,26 @@ void SendProfileResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-ToUpdateProfileResponse::ToUpdateProfileResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+ToUpdateProfileResponse::ToUpdateProfileResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void ToUpdateProfileResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "name :" << itemObject["name"].toString() << "\n";
+        qDebug() << "surname :" << itemObject["surname"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-ToCreateListResponse::ToCreateListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+ToCreateListResponse::ToCreateListResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
@@ -205,24 +251,37 @@ void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+ToGetListsResponse::ToGetListsResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToGetListsResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "ToGetListsResponse :" << itemObject["listId"]<< "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToRemoveListResponse::ToRemoveListResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void ToRemoveListResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-ToCreateTaskResponse::ToCreateTaskResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+ToCreateTaskResponse::ToCreateTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
@@ -230,53 +289,68 @@ void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-ToUpdateTaskResponse::ToUpdateTaskResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+ToGetTasksResponse::ToGetTasksResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToGetTasksResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "ToGetListsResponse :" << itemObject["listId"]<< "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToUpdateTaskResponse::ToUpdateTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
 
 void ToUpdateTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
-        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
-    else {
-        qDebug() << "message :" << itemObject["message"].toString() << "\n";
-    }
-}
-////////////////////////////////////////////////////////////////////////////////////////
-ToMoveTaskResponse::ToMoveTaskResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
-    m_parent = parent;
-}
-
-void ToMoveTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
-        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
-    else {
-        qDebug() << "message :" << itemObject["message"].toString() << "\n";
-    }
-}
-////////////////////////////////////////////////////////////////////////////////////////
-ToRemoveTaskResponse::ToRemoveTaskResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
-    m_parent = parent;
-}
-
-void ToRemoveTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
-        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
-    else {
-        qDebug() << "message :" << itemObject["message"].toString() << "\n";
-    }
-}
-////////////////////////////////////////////////////////////////////////////////////////
-SendTaskDataResponse::SendTaskDataResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
-    m_parent = parent;
-}
-
-void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
-                QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
+        qDebug() << "checkList :" << itemObject["checkList"].toString() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToMoveTaskResponse::ToMoveTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToMoveTaskResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToRemoveTaskResponse::ToRemoveTaskResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToRemoveTaskResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+SendTaskDataResponse::SendTaskDataResponse(Client *parent, std::shared_ptr<QSslSocket> socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "description :" << itemObject["description"].toString() << "\n";
+        QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
         QJsonObject itemObject = itemDoc.object();
         QJsonArray arr = itemObject["array"].toArray();
         qDebug() << "CHECK_LIST :\n";

@@ -12,14 +12,18 @@ Runnable::Runnable(Connection *socket) {
     m_createWorkFlow = std::make_shared<ToCreatedWorkflow>(socket);
     m_updateWorkFlow = std::make_shared<ToUpdateWorkflow>(socket);
     m_inviteToWorkFlow = std::make_shared<ToInvitedToWorkflow>(socket);
+    m_removeFromWorkFlow = std::make_shared<ToRemoveFromWorkflow>(socket);
+    m_getUsersFromWorkFlow = std::make_shared<ToGetUsersFromWorkflow>(socket);
     m_sendAllWorkFlows = std::make_shared<SendAllWorkflows>(socket);
     m_sendSingleWorkFlow = std::make_shared<SendSingleWorkflowData>(socket);
     m_sendStatistics = std::make_shared<SendStatistics>(socket);
     m_sendProfile = std::make_shared<SendProfile>(socket);
     m_updateProfile = std::make_shared<ToUpdateProfile>(socket);
     m_createList = std::make_shared<ToCreateList>(socket);
+    m_getLists = std::make_shared<ToGetLists>(socket);
     m_removeList = std::make_shared<ToRemoveList>(socket);
     m_createTask = std::make_shared<ToCreateTask>(socket);
+    m_getTasks = std::make_shared<ToGetTasks>(socket);
     m_updateTask = std::make_shared<ToUpdateTask>(socket);
     m_moveTask = std::make_shared<ToMoveTask>(socket);
     m_removeTask = std::make_shared<ToRemoveTask>(socket);
@@ -30,9 +34,9 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     QJsonObject itemObject = itemDoc.object();
     QVector<std::shared_ptr<AbstractRequestHandler>> funcList;
     funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createWorkFlow});
-    funcList.append({m_updateWorkFlow, m_inviteToWorkFlow, m_sendAllWorkFlows, m_sendSingleWorkFlow});
-    funcList.append({m_sendStatistics, m_sendProfile, m_updateProfile, m_createList});
-    funcList.append({m_removeList, m_createTask, m_updateTask});
+    funcList.append({m_updateWorkFlow, m_inviteToWorkFlow,m_removeFromWorkFlow, m_getUsersFromWorkFlow, m_sendAllWorkFlows});
+    funcList.append({m_sendSingleWorkFlow, m_sendStatistics, m_sendProfile, m_updateProfile, m_createList});
+    funcList.append({m_getLists, m_removeList, m_createTask, m_getTasks, m_updateTask});
     funcList.append({m_moveTask, m_removeTask, m_sendTaskData});
     QVector<RequestType> types;
     types.append(RequestType::SIGN_UP);
@@ -43,14 +47,18 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::CREATE_WORKFLOW);
     types.append(RequestType::UPDATE_WORKFLOW);
     types.append(RequestType::INVITE_TO_WORKFLOW);
+    types.append(RequestType::REMOVE_FROM_WORKFLOW);
+    types.append(RequestType::GET_USERS_FROM_WORKFLOW);
     types.append(RequestType::GET_ALL_WORKFLOWS);
     types.append(RequestType::GET_SINGLE_WORKFLOW_DATA);
     types.append(RequestType::GET_STATISTICS);
     types.append(RequestType::GET_PROFILE);
     types.append(RequestType::UPDATE_PROFILE);
     types.append(RequestType::CREATE_LIST);
+    types.append(RequestType::GET_LISTS);
     types.append(RequestType::REMOVE_LIST);
     types.append(RequestType::CREATE_TASK);
+    types.append(RequestType::GET_TASKS);
     types.append(RequestType::UPDATE_TASK);
     types.append(RequestType::MOVE_TASK);
     types.append(RequestType::REMOVE_TASK);
@@ -58,10 +66,14 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     if (static_cast<int>(RequestType::SIGN_UP) == itemObject["type"].toInt()
         || static_cast<int>(RequestType::SIGN_IN) == itemObject["type"].toInt()) {
         m_mutex->lock();
-        if(!itemObject["login"].toString().isEmpty())
-            m_itr->find(m_ptr).value() = itemObject["login"].toString();
+//        if(!itemObject["login"].toString().isEmpty())
+//            m_itr->find(m_ptr).value() = itemObject["login"].toString();
+        if(!m_ptr->get_mail().isEmpty())
+//            m_itr->find(m_ptr).value() = itemObject["login"].toString();
+            m_ptr->set_login( itemObject["login"].toString());
         else
-            m_itr->find(m_ptr).value() = itemObject["email"].toString();
+//            m_itr->find(m_ptr).value() = itemObject["email"].toString();
+            m_ptr->set_mail( itemObject["email"].toString());
         m_mutex->unlock();
     }
     for (auto i : types)

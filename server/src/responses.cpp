@@ -17,9 +17,9 @@ ToSignUp::ToSignUp(Connection *socket) :  AbstractRequestHandler(socket){}
 
 bool ToSignUp::isValid(QJsonObject itemObject) {
     if (!itemObject["email"].toString().isEmpty()
-      && !itemObject["password"].toString().isEmpty()
-      && !itemObject["name"].toString().isEmpty()
-      && !itemObject["surname"].toString().isEmpty())
+            && !itemObject["password"].toString().isEmpty()
+            && !itemObject["name"].toString().isEmpty()
+            && !itemObject["surname"].toString().isEmpty())
         return true;
     return false;
 }
@@ -29,7 +29,7 @@ ToSignIn::ToSignIn(Connection *socket) : AbstractRequestHandler(socket){}
 bool ToSignIn::isValid(QJsonObject itemObject) {
     if (!itemObject["password"].toString().isEmpty()) {
         if (!itemObject["login"].toString().isEmpty()
-            || !itemObject["email"].toString().isEmpty())
+                || !itemObject["email"].toString().isEmpty())
             return true;
     }
     return false;
@@ -64,9 +64,9 @@ ToCreatedWorkflow::ToCreatedWorkflow(Connection *socket) : AbstractRequestHandle
 
 bool ToCreatedWorkflow::isValid(QJsonObject itemObject) {
     if (itemObject.contains("title")
-        && itemObject.contains("deadline")
-        && itemObject.contains("ownerId")) {
-            return true;
+            && itemObject.contains("deadline")
+            && itemObject.contains("ownerId")) {
+        return true;
     }
     return false;
 }
@@ -75,8 +75,8 @@ ToUpdateWorkflow::ToUpdateWorkflow(Connection *socket) : AbstractRequestHandler(
 
 bool ToUpdateWorkflow::isValid(QJsonObject itemObject) {
     if (itemObject.contains("title")
-     && itemObject.contains("deadline")
-     && itemObject.contains("workflowId"))
+            && itemObject.contains("deadline")
+            && itemObject.contains("workflowId"))
         return true;
     return false;
 }
@@ -84,7 +84,7 @@ toArchieveWorkflow::toArchieveWorkflow(Connection *socket) : AbstractRequestHand
 
 bool toArchieveWorkflow::isValid(QJsonObject itemObject) {
     if (itemObject.contains("token")
-     && itemObject.contains("userId"))
+            && itemObject.contains("userId"))
         return true;
     return false;
 }
@@ -93,7 +93,24 @@ ToInvitedToWorkflow::ToInvitedToWorkflow(Connection *socket) : AbstractRequestHa
 
 bool ToInvitedToWorkflow::isValid(QJsonObject itemObject) {
     if (itemObject.contains("login")
-        && itemObject.contains("workflowId"))
+            && itemObject.contains("workflowId"))
+        return true;
+    return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+ToRemoveFromWorkflow::ToRemoveFromWorkflow(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool ToRemoveFromWorkflow::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("workflowId")
+            && itemObject.contains("userId"))
+        return true;
+    return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+ToGetUsersFromWorkflow::ToGetUsersFromWorkflow(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool ToGetUsersFromWorkflow::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("workflowId"))
         return true;
     return false;
 }
@@ -137,8 +154,8 @@ ToUpdateProfile::ToUpdateProfile(Connection *socket) : AbstractRequestHandler(so
 
 bool ToUpdateProfile::isValid(QJsonObject itemObject) {
     if (itemObject.contains("name")
-        && itemObject.contains("surname")
-        && itemObject.contains("userId"))
+            && itemObject.contains("surname")
+            && itemObject.contains("userId"))
         return true;
     return false;
 }
@@ -148,7 +165,15 @@ ToCreateList::ToCreateList(Connection *socket) : AbstractRequestHandler(socket){
 
 bool ToCreateList::isValid(QJsonObject itemObject) {
     if (itemObject.contains("title")
-        && itemObject.contains("workflowId"))
+            && itemObject.contains("workflowId"))
+        return true;
+    return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+ToGetLists::ToGetLists(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool ToGetLists::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("workflowId"))
         return true;
     return false;
 }
@@ -166,7 +191,15 @@ ToCreateTask::ToCreateTask(Connection *socket) : AbstractRequestHandler(socket){
 
 bool ToCreateTask::isValid(QJsonObject itemObject) {
     if (itemObject.contains("title")
-        && itemObject.contains("listId"))
+            && itemObject.contains("listId"))
+        return true;
+    return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+ToGetTasks::ToGetTasks(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool ToGetTasks::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("listId"))
         return true;
     return false;
 }
@@ -175,8 +208,8 @@ ToUpdateTask::ToUpdateTask(Connection *socket) : AbstractRequestHandler(socket){
 
 bool ToUpdateTask::isValid(QJsonObject itemObject) {
     if (itemObject.contains("checkList")
-        && itemObject.contains("description")
-        && itemObject.contains("taskId"))
+            && itemObject.contains("description")
+            && itemObject.contains("taskId"))
         return true;
     return false;
 }
@@ -185,7 +218,7 @@ ToMoveTask::ToMoveTask(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool ToMoveTask::isValid(QJsonObject itemObject) {
     if (itemObject.contains("listId")
-        && itemObject.contains("taskId"))
+            && itemObject.contains("taskId"))
         return true;
     return false;
 }
