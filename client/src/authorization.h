@@ -25,18 +25,15 @@ public:
     void setRequest(AbstractRequest *request);
 
     void printStr(QString str);
+    Q_INVOKABLE void setUserId(int id);
 
 signals:
     void serverResponseSignIn(bool valid);
     void serverResponseSignUp(int err, QString strErr);
 
 private:
-    void doServerRequest();
-private:
     AbstractRequest *m_request;
-    QString m_mail;
-    QString m_login;
-    QString m_password;
+
 };
 
 #endif // AUTHORIZATION_H

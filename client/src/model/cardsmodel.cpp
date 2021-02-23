@@ -1,7 +1,7 @@
-#include "cardsmodel.h"
+#include "workflow.h"
 
-CardsModel::CardsModel(QObject *parent)
-    : QAbstractListModel(parent)
+CardsModel::CardsModel(QObject *parent, int parentID)
+    : QAbstractListModel(parent), m_parentId(parentID)
 {
 }
 
@@ -43,6 +43,8 @@ bool CardsModel::setData(const QModelIndex &index, const QVariant &value, int ro
     if (data(index, role) != value) {
         if (role == TitleRole)
             m_cards[index.row()].setTitle(value.toString());
+        if (role == IdRole)
+            m_cards[index.row()].setId(value.toInt());
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -67,10 +69,11 @@ bool CardsModel::insertRows(int row, int count, const QModelIndex &parent)
     return /*response is true*/count < rowCount();
 }
 
-bool CardsModel::append(QString text)
+bool CardsModel::append(const QString &title, int id)
 {
     insertRows(rowCount(), 1);
-    setData(createIndex(rowCount() - 1, 0), text, TitleRole);
+    setData(createIndex(rowCount() - 1, 0), title, TitleRole);
+    setData(createIndex(rowCount() - 1, 0), title, IdRole);
     return true;
 }
 
@@ -89,4 +92,12 @@ QHash<int, QByteArray> CardsModel::roleNames() const
     roleName[TitleRole] = "text";
     roleName[IdRole] = "idCard";
     return  roleName;
+}
+
+int CardsModel::parentId() const {
+    return m_parentId;
+}
+
+void CardsModel::setParentId(int id) {
+    m_parentId = id;
 }

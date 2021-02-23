@@ -47,6 +47,10 @@ bool CardListsModel::setData(const QModelIndex &index, const QVariant &value, in
     if (data(index, role) != value) {
         if (role == TitleRole)
             m_kanb[index.row()].title = value.toString();
+        if (role == IdRole) {
+            m_kanb[index.row()].id = value.toInt();
+            m_kanb[index.row()].model->setParentId(value.toInt());
+        }
         if (role == ModelsRole)
             m_kanb[index.row()].model = std::make_shared<CardsModel>(qvariant_cast<CardsModel *>(value));
         emit dataChanged(index, index, QVector<int>() << role);
@@ -73,7 +77,7 @@ bool CardListsModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-bool CardListsModel::append(QString title, int id)
+bool CardListsModel::append(const QString &title, int id)
 {
 //    emit PARENT_CAST(Workflow, parent())->appendListSignal(title);
     insertRows(rowCount(), 1);

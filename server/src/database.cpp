@@ -182,13 +182,13 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
     //    if (query.first())
     //        qDebug() << "userFound";
     if (query.first() && (query.value(1).toString() == password)) {
-        qDebug() <<"userId " << query.value(0).toInt();
+        qDebug() << "userId " << query.value(0).toInt() << " " << password;
         map["userId"] = query.value(0).toInt();
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
         query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
-            map["userId"] = query.value(0).toString();  //userId
+            map["userId"] = query.value(0).toInt();  //userId
             map["token"] = query1.value(0).toString();  //token
             map["login"] = login;
             map["name"] = query1.value(1).toString();

@@ -44,7 +44,9 @@ public:
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    Q_INVOKABLE bool append(QString title, int id);
+
+
+    Q_INVOKABLE bool append(const QString &title, int id);
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -52,6 +54,13 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void clearAllLists();
+
+    Kanban getKanbById(int listId) {
+        for (auto& v : m_kanb)
+            if (v.id == listId)
+                return v;
+        return {"", -1, nullptr};
+    }
 
 private:
     QVector<Kanban> m_kanb;

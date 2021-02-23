@@ -1,4 +1,5 @@
 #include "authorization.h"
+#include "usermanager.h"
 #include <iostream>
 
 Authorization::Authorization(QObject *parent) : QObject(parent) {}
@@ -19,4 +20,8 @@ void Authorization::signInHandler(QString ident, QString password) {
 
 void Authorization::printStr(QString str) {
     qDebug() << str;
+}
+
+void Authorization::setUserId(int id) {
+    PARENT_CAST(UserManager, parent())->getUser()->setUserId(id);
 }

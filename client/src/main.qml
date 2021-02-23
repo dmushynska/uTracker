@@ -34,7 +34,7 @@ ApplicationWindow {
 //        showError("Titile", "Text", "Hide", "2000")
         console.log("MainAccountWindow")
         pageStack.replace(Qt.resolvedUrl("Windows/MainAccountWindow.qml"))
-        mWorkflow.getAllListWorkflow()
+//        mWorkflow.getAllListWorkflow()
     }
 
 }

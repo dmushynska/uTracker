@@ -9,7 +9,7 @@
 
 #define PARENT_CAST(parent, x) qobject_cast<parent *>(x)
 
-class Workflow : public QObject
+class Workflow final : public QObject
 {
     Q_OBJECT
 
@@ -21,8 +21,11 @@ public:
     Q_INVOKABLE void getAllListWorkflow() const;
     Q_INVOKABLE void createWorkflow(QString title);
 
-    //*     Lists    *//
-    Q_INVOKABLE void creatLists(QString title){}
+    //*     Lists       *//
+    Q_INVOKABLE void appendLists(QString title);
+
+    //*     Tasks       *//
+    Q_INVOKABLE void appendTask(QString title, int id);
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
@@ -34,16 +37,17 @@ public:
     void printStr(QString str);
 
 signals:        // Model Signals
-    void appendListSignal(const QString &title);
+//    void appendListSignal(const QString &title);
 
 private slots:  // Model Slots
-    void appendListRequset(const QString &title);
+//    void appendListRequest(const QString &title);
 
 signals:        // Server Response Signals
     void serverAllListWorkflowsResponse(QJsonArray array);
     void serverCreateWorkflowResponse(QString title, int id);
     void serverWorkflowListsResponse();
-    void serverCreatedListResponse(const QString title, int id);
+    void serverCreatedListResponse(const QString &title, int id);
+    void serverCreateTaskResponse(const QString &title, int id);
 
 private slots:  // Server Response Slots
     void parseAllListWorkflows(QJsonArray array);
@@ -51,7 +55,8 @@ private slots:  // Server Response Slots
     void parseLists() {
         m_currCardListModel->clearAllLists();
     }
-    void parseCreatedList(const QString title, int id);
+    void parseCreatedList(const QString &title, int id);
+    void parseCreateTask(const QString &title, int id);
 
 private:
     WorkflowsModel *m_workflowsModel;

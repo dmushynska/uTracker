@@ -33,8 +33,9 @@ import QtGraphicalEffects 1.0
 Item {
     property alias listModel: deskListView.model
     function createNewList () {
-        listModel.append("List " + (listModel.rowCount() + 1))
+        mWorkflow.appendLists("List " + (listModel.rowCount() + 1))
 //        listModel.append({titleD: "List " + (listModel.rowCount() + 1)})
+
         control.position = 1.0
     }
 
@@ -164,33 +165,33 @@ Item {
                 }
             }
         }
-        MouseArea {
-            id: coords
-            anchors {
-                top:parent.top
-                left: parent.left
-            }
-            width: deskListView.width
-            height: dp(70)
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+//        MouseArea {
+//            id: coords
+//            anchors {
+//                top:parent.top
+//                left: parent.left
+//            }
+//            width: deskListView.width
+//            height: dp(70)
+//            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-            onReleased: {
-                if (mouse.button === Qt.RightButton)
-                    return
-                if (deskListView.draggedItemIndex !== -1) {
-                    var draggedIndex = deskListView.draggedItemIndex
-                    deskListView.draggedItemIndex = -1
-                    mCardListsModel.move(draggedIndex,deskListView.indexAt(mouseX + control.globalPos, mouseY),1)
-                }
-            }
+//            onReleased: {
+//                if (mouse.button === Qt.RightButton)
+//                    return
+//                if (deskListView.draggedItemIndex !== -1) {
+//                    var draggedIndex = deskListView.draggedItemIndex
+//                    deskListView.draggedItemIndex = -1
+//                    mCardListsModel.move(draggedIndex,deskListView.indexAt(mouseX + control.globalPos, mouseY),1)
+//                }
+//            }
 
-            onPressed: {
-                if (mouse.button === Qt.RightButton)
-                    return
-                deskListView.draggedItemIndex = deskListView.indexAt(mouseX + control.globalPos, mouseY)
-                console.log("Pressed " + deskListView.draggedItemIndex)
-            }
-        }
+//            onPressed: {
+//                if (mouse.button === Qt.RightButton)
+//                    return
+//                deskListView.draggedItemIndex = deskListView.indexAt(mouseX + control.globalPos, mouseY)
+//                console.log("Pressed " + deskListView.draggedItemIndex)
+//            }
+//        }
 
     }
 }

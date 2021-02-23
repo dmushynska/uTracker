@@ -1,6 +1,8 @@
 #include "responsehandler.h"
 #include "client.h"
 
+#define WORKFLOW m_parent->getManager()->getWorkflow()
+
 AbstractResponseHandler::AbstractResponseHandler(QTcpSocket *socket) : m_socket(socket) {
     connect(this, &AbstractResponseHandler::handleInited, &AbstractResponseHandler::responseHandle);
 }
@@ -45,9 +47,10 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "name :" << itemObject["name"].toString();
         qDebug() << "surname :" << itemObject["surname"].toString();
         m_token = itemObject["token"].toString();
-        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
         m_parent->getManager()->getUser()->setUserId(itemObject["userId"].toInt());
-        m_parent->getManager()->getWorkflow()->getAllListWorkflow();
+        qDebug() << "COME USER -------- ID -------- " <<itemObject["userId"].toInt();
+        WORKFLOW->getAllListWorkflow();
+        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +103,7 @@ void CreatedWorkflowResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "workflowId :" << itemObject["workflowId"].toInt() << "\n";
-        emit m_parent->getManager()->getWorkflow()->serverCreateWorkflowResponse(itemObject["title"].toString(),
+        emit WORKFLOW->serverCreateWorkflowResponse(itemObject["title"].toString(),
                                                                             itemObject["workflowId"].toInt());
     }
 }
@@ -179,7 +182,7 @@ void AllWorkflowsResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         QJsonArray arr = itemObject["workflows"].toArray();//ne testiv
-        emit m_parent->getManager()->getWorkflow()->serverAllListWorkflowsResponse(arr);
+        emit WORKFLOW->serverAllListWorkflowsResponse(arr);
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -250,6 +253,7 @@ void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "listId :" << itemObject["listId"].toInt() << "\n";
+        emit WORKFLOW->serverCreatedListResponse(itemObject["message"].toString(), itemObject["listId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +268,7 @@ void ToGetListsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "ToGetListsResponse :" << itemObject << "\n";
     }
-    emit m_parent->getManager()->getWorkflow()->serverWorkflowListsResponse();
+    emit WORKFLOW->serverWorkflowListsResponse();
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
@@ -289,6 +293,7 @@ void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "taskId :" << itemObject["taskId"].toInt() << "\n";
+        emit WORKFLOW->serverCreateTaskResponse(itemObject["message"].toString(), itemObject["taskId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

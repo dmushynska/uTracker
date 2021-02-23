@@ -14,7 +14,7 @@ class CardsModel : public QAbstractListModel
     };
 
 public:
-    explicit CardsModel(QObject *parent = nullptr);
+    explicit CardsModel(QObject *parent = nullptr, int parentID = -1);
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -35,7 +35,10 @@ public:
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    Q_INVOKABLE bool append(QString text);
+    void setParentId(int id);
+
+    Q_INVOKABLE bool append(const QString &title, int id);
+    Q_INVOKABLE int parentId() const;
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -44,6 +47,7 @@ public:
 
 private:
     QVector<Card> m_cards;
+    int m_parentId;
 };
 
 #endif // CARDSMODEL_H

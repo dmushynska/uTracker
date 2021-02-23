@@ -11,7 +11,8 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverAllListWorkflowsResponse, &Workflow::parseAllListWorkflows);
     connect(this, &Workflow::serverCreateWorkflowResponse, &Workflow::parseCreatedWorkflow);
     connect(this, &Workflow::serverWorkflowListsResponse, &Workflow::parseLists);
-    connect(this, &Workflow::appendListSignal, &Workflow::appendListRequset);
+    connect(this, &Workflow::serverCreatedListResponse, &Workflow::parseCreatedList);
+    connect(this, &Workflow::serverCreateTaskResponse, &Workflow::parseCreateTask);
 }
 
 void Workflow::setRequest(AbstractRequest *request) {
@@ -20,6 +21,7 @@ void Workflow::setRequest(AbstractRequest *request) {
 
 void Workflow::getAllListWorkflow() const
 {
+    qDebug() << "USER -------- ID -------- " << PARENT_CAST(UserManager, parent())->getUser()->getUserId();
     m_request->getAllWorkflows(PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
@@ -49,6 +51,7 @@ WorkflowsModel *Workflow::getWorkflowsModel() {
 }
 
 void Workflow::createWorkflow(QString title) {
+    qDebug() << "CREATE ----------- WF" <<  PARENT_CAST(UserManager, parent())->getUser()->getUserId();
     m_request->createWorkflow(title, "", PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
@@ -61,10 +64,22 @@ void Workflow::getWorkflowsModelById(int id) {
     m_request->getLists(m_idCurrentWorkflow);
 }
 
-void Workflow::appendListRequset(const QString &title) {
+//void Workflow::appendListRequest(const QString &title) {
+//    m_request->createList(title, m_idCurrentWorkflow);
+//}
+
+void Workflow::parseCreatedList(const QString &title, int id) {
+    m_currCardListModel->append(title, id);
+}
+
+void Workflow::appendLists(QString title) {
     m_request->createList(title, m_idCurrentWorkflow);
 }
 
-void Workflow::parseCreatedList(const QString title, int id) {
-    m_currCardListModel->append(title, id);
+void Workflow::parseCreateTask(const QString &title, int id) {
+    m_currCardListModel->getKanbById(id).model->append(title, id);
+}
+
+void Workflow::appendTask(QString title, int id) {
+    m_request->createTask(title, id);
 }

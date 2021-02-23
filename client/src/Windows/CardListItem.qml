@@ -10,7 +10,8 @@ Item {
     id: cardList
 
     function createNewCard() {
-        layout.model.append("Task " + (layout.model.rowCount() + 1))
+        if (layout.model.parentId() > -1)
+            mWorkflow.appendTask("Task " + (layout.model.rowCount() + 1), layout.model.parentId())
         control.position = 1.0
     }
 
