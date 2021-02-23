@@ -9,6 +9,9 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     m_currCardListModel = new CardListsModel(this);
 
     connect(this, &Workflow::serverAllListWorkflowsResponse, &Workflow::parseAllListWorkflows);
+    connect(this, &Workflow::serverCreateWorkflowResponse, &Workflow::parseCreatedWorkflow);
+    connect(this, &Workflow::serverWorkflowListsResponse, &Workflow::parseLists);
+    connect(this, &Workflow::appendListSignal, &Workflow::appendListRequset);
 }
 
 void Workflow::setRequest(AbstractRequest *request) {
@@ -17,12 +20,7 @@ void Workflow::setRequest(AbstractRequest *request) {
 
 void Workflow::getAllListWorkflow() const
 {
-
-    m_request->getAllWorkflows(qobject_cast<UserManager *>(parent())->getUser()->getUserId());
-}
-
-void Workflow::signInHandler(QString ident, QString password) {
-    m_request->signIn(ident, password);
+    m_request->getAllWorkflows(PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
 void Workflow::printStr(QString str) {
@@ -34,10 +32,13 @@ CardListsModel *Workflow::getCardListModel() {
 }
 
 void Workflow::parseAllListWorkflows(QJsonArray array) {
+//    if (array.size() != m_workflowsModel->rowCount())
+        m_workflowsModel->clear();
     for(int i = 0; i < array.count(); i++) {
-        QModelIndex index = m_workflowsModel->createModelIndex(i);
-        m_workflowsModel->setData(index, array.at(i)["title"].toString(), WorkflowsModel::WorkflowRole::TitleRole);
-        m_workflowsModel->setData(index, array.at(i)["workflowId"].toInt(), WorkflowsModel::WorkflowRole::IdRole);
+//        QModelIndex index = m_workflowsModel->createModelIndex(i);
+        m_workflowsModel->append(array.at(i)["title"].toString(), array.at(i)["workflowId"].toInt());
+//        m_workflowsModel->setData(index, array.at(i)["title"].toString(), WorkflowsModel::WorkflowRole::TitleRole);
+//        m_workflowsModel->setData(index, array.at(i)["workflowId"].toInt(), WorkflowsModel::WorkflowRole::IdRole);
     }
 }
 
@@ -48,6 +49,22 @@ WorkflowsModel *Workflow::getWorkflowsModel() {
 }
 
 void Workflow::createWorkflow(QString title) {
-
+    m_request->createWorkflow(title, "", PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
+void Workflow::parseCreatedWorkflow(QString title, int id) {
+    m_workflowsModel->append(title, id);
+}
+
+void Workflow::getWorkflowsModelById(int id) {
+    m_idCurrentWorkflow = id;
+    m_request->getLists(m_idCurrentWorkflow);
+}
+
+void Workflow::appendListRequset(const QString &title) {
+    m_request->createList(title, m_idCurrentWorkflow);
+}
+
+void Workflow::parseCreatedList(const QString title, int id) {
+    m_currCardListModel->append(title, id);
+}

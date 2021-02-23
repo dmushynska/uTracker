@@ -245,6 +245,7 @@ DataBase::createWorkflow(int owner_id, const QString &title, const QString &dead
     if (res) {
         auto workflowId = query.lastInsertId().toInt();
         map["workflowId"] = workflowId;
+        map["title"] = title;
         map["message"] = "Workflow has been created";
         query.exec(QString("INSERT INTO WF_connector (workflow_id, user_id) VALUES(%1, '%2');")
                        .arg(workflowId)

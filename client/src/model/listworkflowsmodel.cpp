@@ -37,12 +37,14 @@ QVariant WorkflowsModel::data(const QModelIndex &index, int role) const
         return m_workflows[index.row()].second;
     return QVariant();
 }
-
+#include <QDebug>
 bool WorkflowsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (data(index, role) != value) {
         if (role == TitleRole)
             m_workflows[index.row()].first = value.toString();
+        if (role == IdRole)
+            m_workflows[index.row()].second = value.toInt();
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -67,12 +69,16 @@ bool WorkflowsModel::insertRows(int row, int count, const QModelIndex &parent)
     return /*response is true*/count < rowCount();
 }
 
-bool WorkflowsModel::append(QString text)
+bool WorkflowsModel::append(QString title, int id)
 {
     insertRows(rowCount(), 1);
-    setData(createIndex(rowCount() - 1, 0), text, TitleRole);
+    setData(createIndex(rowCount() - 1, 0), title, TitleRole);
     setData(createIndex(rowCount() - 1, 0), rowCount(), IdRole);
     return true;
+}
+
+bool WorkflowsModel::clear() {
+    removeRows(0, rowCount());
 }
 
 bool WorkflowsModel::removeRows(int row, int count, const QModelIndex &parent)

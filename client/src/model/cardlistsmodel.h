@@ -3,6 +3,9 @@
 
 #include <QAbstractListModel>
 #include "model/cardsmodel.h"
+#include <memory>
+
+#define PARENT_CAST(parent, x) qobject_cast<parent *>(x)
 
 class CardListsModel : public QAbstractListModel
 {
@@ -10,11 +13,13 @@ class CardListsModel : public QAbstractListModel
     
     enum CardListsRole {
         TitleRole,
-        ModelsRole
+        ModelsRole,
+        IdRole
     };
     struct Kanban {
         QString title;
-        CardsModel *model;
+        int id;
+        std::shared_ptr<CardsModel> model;
     };
 
 public:
@@ -39,12 +44,14 @@ public:
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    Q_INVOKABLE bool append(QString title);
+    Q_INVOKABLE bool append(QString title, int id);
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     
     QHash<int, QByteArray> roleNames() const override;
+
+    void clearAllLists();
 
 private:
     QVector<Kanban> m_kanb;

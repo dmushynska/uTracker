@@ -1,4 +1,5 @@
 #include "cardlistsmodel.h"
+#include "workflow.h"
 
 CardListsModel::CardListsModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -34,8 +35,10 @@ QVariant CardListsModel::data(const QModelIndex &index, int role) const
 
     if (role == TitleRole)
         return m_kanb[index.row()].title;
+    if (role == IdRole)
+        return m_kanb[index.row()].id;
     if (role == ModelsRole)
-        return QVariant::fromValue(m_kanb[index.row()].model);
+        return QVariant::fromValue(m_kanb[index.row()].model.get());
     return QVariant();
 }
 
@@ -45,7 +48,7 @@ bool CardListsModel::setData(const QModelIndex &index, const QVariant &value, in
         if (role == TitleRole)
             m_kanb[index.row()].title = value.toString();
         if (role == ModelsRole)
-            m_kanb[index.row()].model = qvariant_cast<CardsModel *>(value);
+            m_kanb[index.row()].model = std::make_shared<CardsModel>(qvariant_cast<CardsModel *>(value));
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -64,26 +67,24 @@ bool CardListsModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
     for (int i = row; i < row + count; i++) {
-        Kanban newKanb {"", new CardsModel};
-        m_kanb.insert(i, newKanb);
+        m_kanb.insert(i, {"", -1, std::make_shared<CardsModel>()});
     }
     endInsertRows();
     return true;
 }
 
-bool CardListsModel::append(QString title)
+bool CardListsModel::append(QString title, int id)
 {
+//    emit PARENT_CAST(Workflow, parent())->appendListSignal(title);
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
+    setData(createIndex(rowCount() - 1, 0), id, IdRole);
     return true;
 }
 
 bool CardListsModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count - 1);
-    for (int i = row; i < row + count; i++) {
-        delete m_kanb[row].model;
-    }
     m_kanb.remove(row, count);
     endRemoveRows();
     return true;
@@ -94,5 +95,10 @@ QHash<int, QByteArray> CardListsModel::roleNames() const
     QHash<int, QByteArray> roleName;
     roleName[TitleRole] = "titleD";
     roleName[ModelsRole] = "modelD";
+    roleName[IdRole] = "idD";
     return  roleName;
+}
+
+void CardListsModel::clearAllLists() {
+    removeRows(0, rowCount());
 }

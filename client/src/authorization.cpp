@@ -5,6 +5,7 @@ Authorization::Authorization(QObject *parent) : QObject(parent) {}
 
 void Authorization::setRequest(AbstractRequest *request) {
     m_request = request;
+    m_request->signUp("1", "11111111", "Pavel", "Durov", "1@1.1");
 }
 
 void Authorization::signUpHandler(QString login, QString mail, QString password)
