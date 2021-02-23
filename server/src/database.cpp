@@ -176,7 +176,6 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
 QVariantMap DataBase::containsUser(const QString &login, const QString &password) {
     QSqlQuery query;
     query.exec("SELECT id, password FROM UsersCredential where email = '" + login + "' or login = '" + login + "';");
-    qDebug() << "first" <<  login << password ;
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::SIGN_IN);
 
@@ -186,7 +185,7 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
         map["userId"] = query.value(0);
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
-        qDebug() << "second" <<  query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
+        query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
         if (query1.first()) {
             map["userId"] = query.value(0).toString();  //userId
             map["token"] = query1.value(0).toString();  //token
@@ -210,7 +209,6 @@ DataBase::createUser(const QString &login,
                      const QString &email) {
     QSqlQuery query;
     QString hash = mx_hash(password, login);
-    qDebug() << login << password << name << surname << email;
     query.prepare(
         "INSERT INTO UsersCredential (login, password, first_name, last_name, auth_token, email) "
         "VALUES (:login, :password, :first_name, :last_name, :auth_token, :email);");
@@ -452,7 +450,7 @@ QVariantMap DataBase::getLists(int workflowId) {
     QJsonArray lists;
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_LISTS);
-    query.exec("select list_id from Lists where workflow_id = " + QString::number(workflowId));
+    query.exec("select id from Lists where workflow_id = " + QString::number(workflowId));
     if (query.first()) {
         lists.append(QJsonObject::fromVariantMap(getTasks(query.value(0).toInt())));
     } else {
@@ -612,7 +610,7 @@ QVariantMap DataBase::getUsersFromWorkFlow(int workflow_id) {
     QSqlQuery query;
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_USERS_FROM_WORKFLOW);
-    qDebug() << query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
+    query.exec("select first_name, last_name, id from UsersCredential where id in (select user_id from WF_connector where workflow_id = " + QString::number(workflow_id) + ");");
     if (query.first()) {
         map["name"] = query.value(0).toString();
         map["surname"] = query.value(1).toString();
