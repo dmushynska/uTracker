@@ -38,6 +38,16 @@ Item {
         control.position = 1.0
     }
 
+//    Connections {
+//        target: mWorkflow
+//        onServerSingleWorkflowResponse: {
+//            if (!valid) {
+//                snackbar.open("Wrong login or password");
+//            } else {
+//                root.goMainWindow();
+//            }
+//        }
+//    }
 
     ListModel {
         id: deskModel

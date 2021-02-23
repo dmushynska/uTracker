@@ -100,6 +100,8 @@ void CreatedWorkflowResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "workflowId :" << itemObject["workflowId"].toInt() << "\n";
+        emit m_parent->getManager()->getWorkflow()->serverCreateWorkflowResponse(itemObject["title"].toString(),
+                                                                            itemObject["workflowId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +262,9 @@ void ToGetListsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "ToGetListsResponse :" << itemObject["listId"]<< "\n";
+        qDebug() << "ToGetListsResponse :" << itemObject << "\n";
     }
+    emit m_parent->getManager()->getWorkflow()->serverWorkflowListsResponse();
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {

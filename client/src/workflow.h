@@ -7,6 +7,7 @@
 #include "model/listworkflowsmodel.h"
 #include "requests.h"
 
+#define PARENT_CAST(parent, x) qobject_cast<parent *>(x)
 
 class Workflow : public QObject
 {
@@ -16,32 +17,47 @@ public:
     explicit Workflow(QObject *parent = nullptr);
     ~Workflow() = default;
 
+    //*     Workflows    *//
     Q_INVOKABLE void getAllListWorkflow() const;
     Q_INVOKABLE void createWorkflow(QString title);
 
-    void signInHandler(QString ident, QString password);
+    //*     Lists    *//
+    Q_INVOKABLE void creatLists(QString title){}
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
 
     void setRequest(AbstractRequest *request);
 
+    Q_INVOKABLE void getWorkflowsModelById(int id);
+
     void printStr(QString str);
 
-signals:
+signals:        // Model Signals
+    void appendListSignal(const QString &title);
+
+private slots:  // Model Slots
+    void appendListRequset(const QString &title);
+
+signals:        // Server Response Signals
     void serverAllListWorkflowsResponse(QJsonArray array);
-    void serverResponseSignUp(int err, QString strErr);
+    void serverCreateWorkflowResponse(QString title, int id);
+    void serverWorkflowListsResponse();
+    void serverCreatedListResponse(const QString title, int id);
 
-private slots:
+private slots:  // Server Response Slots
     void parseAllListWorkflows(QJsonArray array);
+    void parseCreatedWorkflow(QString title, int id);
+    void parseLists() {
+        m_currCardListModel->clearAllLists();
+    }
+    void parseCreatedList(const QString title, int id);
 
 private:
-    void doServerRequest();
-private:
-    AbstractRequest *m_request;
     WorkflowsModel *m_workflowsModel;
     CardListsModel *m_currCardListModel;
-    int idCurrentForkflow;
+    AbstractRequest *m_request;
+    int m_idCurrentWorkflow;
 };
 
 #endif // WORKFLOW_H

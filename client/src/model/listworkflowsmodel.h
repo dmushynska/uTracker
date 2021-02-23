@@ -36,7 +36,8 @@ public:
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    Q_INVOKABLE bool append(QString text);
+    Q_INVOKABLE bool append(QString title, int id);
+    Q_INVOKABLE bool clear();
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;

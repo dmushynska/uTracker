@@ -11,8 +11,9 @@ Page {
     function createNewDesk() {
         console.log("Request to create new desk");
         console.log("!!!!!" + (rootAccount.height - userSection.count * (48 * Units.dp + 3) - dp(200)))
-        mWorkflowList.append("Desk " + (mWorkflowList.rowCount + 1))
-        mWorkflow
+//        mWorkflowList.append("Desk " + (mWorkflowList.rowCount + 1))
+        var name = (mWorkflowList.rowCount() + 1)
+        mWorkflow.createWorkflow("Desk " + name)
         control.position = 1.0
 //        sectionItems.model.dataChanged()
     }
@@ -133,10 +134,11 @@ Page {
                                 text: model.titleWorkflow
                                 selected: model.idWorkflow === selectedComponent
                                 onClicked: {
-                                    selectedComponent = model.idNum
+                                    selectedComponent = model.idWorkflow;
 //                                    mWorkflow.
 //                                    console.log(model.title)
 //                                    requestForDesk(model)
+                                    mWorkflow.getWorkflowsModelById(selectedComponent)
                                     navDrawer.close()
                                 }
                             }
