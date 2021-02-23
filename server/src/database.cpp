@@ -182,7 +182,8 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
     //    if (query.first())
     //        qDebug() << "userFound";
     if (query.first() && (query.value(1).toString() == password)) {
-        map["userId"] = query.value(0);
+        qDebug() <<"userId " << query.value(0).toInt();
+        map["userId"] = query.value(0).toInt();
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
         query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
@@ -315,6 +316,7 @@ QVariantMap DataBase::removeFromWorkflow(int user_id, int workflow_id) {
 }
 
 QVariantMap DataBase::getWorkflows(int user_id) {  // треба норм дописать мапу яку повертаю з ерорами
+    // qDebug() << user_id;
     QJsonArray workflows;
     QSqlQuery query;
     query.exec(QString("select workflow_id from WF_connector where user_id = %1;").arg(user_id));
