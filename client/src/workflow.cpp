@@ -110,3 +110,30 @@ void Workflow::parseGetTasks(QJsonObject array) {
     int listId = array["listId"].toInt();
 //    m_currCardListModel
 }
+
+void Workflow::moveSetCardId(int id) {
+    m_move.cardId = id;
+}
+
+void Workflow::moveSetToListId(int id) {
+    m_move.toListId = id;
+}
+
+void Workflow::moveSetCurrListId(int id) {
+    m_move.listId = id;
+}
+
+void Workflow::moveRequest(bool toOtherList, int index) {
+    m_move.toOtherList = toOtherList;
+    if (toOtherList)
+        m_request->moveTask(m_move.cardId, m_move.toListId, index == -1 ? 0 : index);
+    else
+        m_request->moveTask(m_move.cardId, m_move.listId, index == -1 ? 0 : index);
+}
+
+void Workflow::parseMoveTask(const QString &msg) {
+    if (m_move.toOtherList) { // implement finding tasks by id & use it here
+        auto *from = m_currCardListModel->getKanbById(m_move.listId);
+        auto *to = m_currCardListModel->getKanbById(m_move.toListId);
+    }
+}

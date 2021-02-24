@@ -122,9 +122,5 @@ Item {
                 ]
             }
         }
-        MoveToDialog {
-//                visible: true
-        }
-
     }
 }

@@ -13,6 +13,13 @@ class Workflow final : public QObject
 {
     Q_OBJECT
 
+    struct MoveData {
+        int cardId = -1;
+        int listId = -1;
+        int toCardIndex = -1;
+        int toListId = -1;
+        bool toOtherList;
+    };
 public:
     explicit Workflow(QObject *parent = nullptr);
     ~Workflow() = default;
@@ -26,6 +33,11 @@ public:
 
     //*     Tasks       *//
     Q_INVOKABLE void appendTask(QString title, int id);
+        //*     Move    *//
+        Q_INVOKABLE void moveSetCardId(int id);
+        Q_INVOKABLE void moveSetToListId(int id);
+        Q_INVOKABLE void moveSetCurrListId(int id);
+    Q_INVOKABLE void moveRequest(bool toOtherList, int index = -1);
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
@@ -49,6 +61,7 @@ signals:        // Server Response Signals
     void serverCreatedListResponse(const QString &title, int id);
     void serverCreateTaskResponse(const QString &title, int id, int listId);
     void serverGetTasksResponse(QJsonObject array);
+    void serverMoveTaskResponse(const QString &msg);
 
 private slots:  // Server Response Slots
     void parseAllListWorkflows(QJsonArray array);
@@ -57,11 +70,13 @@ private slots:  // Server Response Slots
     void parseCreatedList(const QString &title, int id);
     void parseCreateTask(const QString &title, int id, int listId);
     void parseGetTasks(QJsonObject array);
+    void parseMoveTask(const QString &msg);
 
 private:
     WorkflowsModel *m_workflowsModel;
     CardListsModel *m_currCardListModel;
     AbstractRequest *m_request;
+    MoveData m_move;
     int m_idCurrentWorkflow;
 };
 
