@@ -46,7 +46,7 @@ public:
 
 
 
-    Q_INVOKABLE bool append(const QString &title, int id);
+    Q_INVOKABLE bool append(const QString &title, int id, const std::shared_ptr<CardsModel> &model = nullptr);
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
@@ -55,11 +55,14 @@ public:
 
     void clearAllLists();
 
-    Kanban getKanbById(int listId) {
-        for (auto& v : m_kanb)
-            if (v.id == listId)
-                return v;
-        return {"", -1, nullptr};
+    Kanban* getKanbById(int listId) {
+        for (int i = 0; i < m_kanb.size(); i++)
+            if (m_kanb[i].id == listId)
+                return &(m_kanb[i]);
+        throw "nothing";
+    }
+    Kanban* operator[](int listId) {
+        return getKanbById(listId);
     }
 
 private:

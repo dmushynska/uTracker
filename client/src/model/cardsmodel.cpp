@@ -1,4 +1,6 @@
 #include "workflow.h"
+#include "cardsmodel.h"
+
 
 CardsModel::CardsModel(QObject *parent, int parentID)
     : QAbstractListModel(parent), m_parentId(parentID)
@@ -69,11 +71,12 @@ bool CardsModel::insertRows(int row, int count, const QModelIndex &parent)
     return /*response is true*/count < rowCount();
 }
 
-bool CardsModel::append(const QString &title, int id)
+bool CardsModel::append(const QString &title, int id, int parentID)
 {
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
-    setData(createIndex(rowCount() - 1, 0), title, IdRole);
+    setData(createIndex(rowCount() - 1, 0), id, IdRole);
+//    m_parentId = parentID;
     return true;
 }
 
@@ -100,4 +103,13 @@ int CardsModel::parentId() const {
 
 void CardsModel::setParentId(int id) {
     m_parentId = id;
+}
+
+std::shared_ptr<CardsModel> CardsModel::creatCardsModel(const QJsonObject &array, QObject *parent, int parentID) {
+    std::shared_ptr<CardsModel> model = std::make_shared<CardsModel>(parent, parentID);
+    for(const auto &t : array["tasks"].toArray()) {
+        auto task = t.toObject();
+        model->append(task["title"].toString(), task["taskId"].toInt(), task["listId"].toInt());
+    }
+    return model;
 }

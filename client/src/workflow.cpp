@@ -13,6 +13,7 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverWorkflowListsResponse, &Workflow::parseLists);
     connect(this, &Workflow::serverCreatedListResponse, &Workflow::parseCreatedList);
     connect(this, &Workflow::serverCreateTaskResponse, &Workflow::parseCreateTask);
+    connect(this, &Workflow::serverGetTasksResponse, &Workflow::parseGetTasks);
 }
 
 void Workflow::setRequest(AbstractRequest *request) {
@@ -51,7 +52,7 @@ WorkflowsModel *Workflow::getWorkflowsModel() {
 }
 
 void Workflow::createWorkflow(QString title) {
-    qDebug() << "CREATE ----------- WF" <<  PARENT_CAST(UserManager, parent())->getUser()->getUserId();
+    qDebug() << "REQUEST CREATE ----------- WF ----------- USER ID" <<  PARENT_CAST(UserManager, parent())->getUser()->getUserId();
     m_request->createWorkflow(title, "", PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
@@ -76,10 +77,36 @@ void Workflow::appendLists(QString title) {
     m_request->createList(title, m_idCurrentWorkflow);
 }
 
-void Workflow::parseCreateTask(const QString &title, int id) {
-    m_currCardListModel->getKanbById(id).model->append(title, id);
+void Workflow::parseCreateTask(const QString &title, int id, int listId) {
+//    m_request->getLists(m_idCurrentWorkflow);
+    qDebug() << "PARSE CREATE ----------- TK ----------- ID" << title << id;
+    try {
+        (*m_currCardListModel)[listId]->model->append(title, id);
+    } catch (QString err) {
+        qDebug() << "<<<ERROR>>>";
+    }
 }
 
 void Workflow::appendTask(QString title, int id) {
+    qDebug() << "REQUEST CREATE ----------- TK ----------- USER ID" <<  title;
     m_request->createTask(title, id);
+}
+
+void Workflow::parseLists(QJsonObject array) {
+    m_currCardListModel->clearAllLists();
+    if (array["error"] != 1) {
+        qDebug() << "Some problem";
+    }
+    QJsonArray lists = array["lists"].toArray();
+    for (auto l : lists) {
+        auto list = l.toObject();
+//    qDebug() << list["title"].toString();
+        auto model = CardsModel::creatCardsModel(list);
+        m_currCardListModel->append(list["title"].toString(), list["listId"].toInt(), model);
+    }
+}
+
+void Workflow::parseGetTasks(QJsonObject array) {
+    int listId = array["listId"].toInt();
+//    m_currCardListModel
 }

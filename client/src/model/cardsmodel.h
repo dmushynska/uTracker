@@ -37,13 +37,15 @@ public:
 
     void setParentId(int id);
 
-    Q_INVOKABLE bool append(const QString &title, int id);
+    Q_INVOKABLE bool append(const QString &title, int id, int parentID = -1);
     Q_INVOKABLE int parentId() const;
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
     QHash<int, QByteArray> roleNames() const override;
+
+    static std::shared_ptr<CardsModel> creatCardsModel(const QJsonObject &array, QObject *parent = nullptr, int parentID = -1);
 
 private:
     QVector<Card> m_cards;

@@ -79,6 +79,7 @@ bool WorkflowsModel::append(QString title, int id)
 
 bool WorkflowsModel::clear() {
     removeRows(0, rowCount());
+    return true;
 }
 
 bool WorkflowsModel::removeRows(int row, int count, const QModelIndex &parent)

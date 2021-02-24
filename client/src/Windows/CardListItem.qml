@@ -10,6 +10,7 @@ Item {
     id: cardList
 
     function createNewCard() {
+        console.debug("{{{DEBUGGGG}}} ListId -> " + (layout.model.parentId()))
         if (layout.model.parentId() > -1)
             mWorkflow.appendTask("Task " + (layout.model.rowCount() + 1), layout.model.parentId())
         control.position = 1.0
@@ -121,11 +122,11 @@ Item {
                         font.pixelSize: dp(24)
                         text: cardListTitle
                         font.bold: true
-                        visible: !name.visible
+//                        visible: !name.visible
                     }
-//                    Item {
-//                        anchors.fill: parent
-////                        focus: true
+                    Item {
+                        anchors.fill: parent
+//                        focus: true
                         TextField {
                             id: name
                             anchors.verticalCenter: parent.verticalCenter
@@ -146,7 +147,7 @@ Item {
                                     cardTitle.text = text
                                 visible = focus
                             }
-//                        }
+                        }
 
                         visible: true
                     }

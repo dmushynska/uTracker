@@ -45,18 +45,18 @@ private slots:  // Model Slots
 signals:        // Server Response Signals
     void serverAllListWorkflowsResponse(QJsonArray array);
     void serverCreateWorkflowResponse(QString title, int id);
-    void serverWorkflowListsResponse();
+    void serverWorkflowListsResponse(QJsonObject array);
     void serverCreatedListResponse(const QString &title, int id);
-    void serverCreateTaskResponse(const QString &title, int id);
+    void serverCreateTaskResponse(const QString &title, int id, int listId);
+    void serverGetTasksResponse(QJsonObject array);
 
 private slots:  // Server Response Slots
     void parseAllListWorkflows(QJsonArray array);
     void parseCreatedWorkflow(QString title, int id);
-    void parseLists() {
-        m_currCardListModel->clearAllLists();
-    }
+    void parseLists(QJsonObject array);
     void parseCreatedList(const QString &title, int id);
-    void parseCreateTask(const QString &title, int id);
+    void parseCreateTask(const QString &title, int id, int listId);
+    void parseGetTasks(QJsonObject array);
 
 private:
     WorkflowsModel *m_workflowsModel;

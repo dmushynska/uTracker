@@ -1,6 +1,8 @@
 #include "cardlistsmodel.h"
 #include "workflow.h"
 
+Q_DECLARE_SMART_POINTER_METATYPE(std::shared_ptr)
+
 CardListsModel::CardListsModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -51,8 +53,10 @@ bool CardListsModel::setData(const QModelIndex &index, const QVariant &value, in
             m_kanb[index.row()].id = value.toInt();
             m_kanb[index.row()].model->setParentId(value.toInt());
         }
-        if (role == ModelsRole)
-            m_kanb[index.row()].model = std::make_shared<CardsModel>(qvariant_cast<CardsModel *>(value));
+        if (role == ModelsRole) {
+            m_kanb[index.row()].model = qvariant_cast<std::shared_ptr<CardsModel>>(value);
+            m_kanb[index.row()].model->setParentId(m_kanb[index.row()].id);
+        }
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -77,11 +81,13 @@ bool CardListsModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-bool CardListsModel::append(const QString &title, int id)
+bool CardListsModel::append(const QString &title, int id, const std::shared_ptr<CardsModel> &model)
 {
 //    emit PARENT_CAST(Workflow, parent())->appendListSignal(title);
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
+    if (model != nullptr)
+        setData(createIndex(rowCount() - 1, 0), QVariant::fromValue<std::shared_ptr<CardsModel>>(model), ModelsRole);
     setData(createIndex(rowCount() - 1, 0), id, IdRole);
     return true;
 }
