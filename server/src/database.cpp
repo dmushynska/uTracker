@@ -90,7 +90,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::LOG_OUT:
                 break;
             case RequestType::CREATE_WORKFLOW:
-                result = createWorkflow(map.value("userId").toInt(),
+                result = createWorkflow(map.value("ownerId").toInt(),
                                         map.value("title").toString(),
                                         map.value("deadline").toString());
                 break;
@@ -182,8 +182,8 @@ QVariantMap DataBase::containsUser(const QString &login, const QString &password
     //    if (query.first())
     //        qDebug() << "userFound";
     if (query.first() && (query.value(1).toString() == password)) {
-        qDebug() << "userId " << query.value(0).toInt() << " " << password;
-        map["userId"] = query.value(0).toInt();
+        // qDebug() << "userId " << query.value(0).toInt() << " " << password;
+        // map["userId"] = query.value(0).toInt();
         map["message"] = "Successfully authorized";
         QSqlQuery query1;
         query1.exec("select auth_token, first_name, last_name, email from UsersCredential where id = " + query.value(0).toString());
