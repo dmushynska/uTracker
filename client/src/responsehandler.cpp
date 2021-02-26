@@ -334,6 +334,7 @@ void ToMoveTaskResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        emit WORKFLOW->serverMoveTaskResponse(itemObject["message"].toString());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -342,10 +343,11 @@ ToRemoveTaskResponse::ToRemoveTaskResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToRemoveTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        emit WORKFLOW->serverRemoveTaskResponse(itemObject["message"].toString(), itemObject["listId"].toInt(), itemObject["taskId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

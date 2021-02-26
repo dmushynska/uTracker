@@ -19,15 +19,24 @@ public:
     void setTitle(const QString title);
 
     // Id
-    int getId() const;
+    Q_INVOKABLE int getId() const;
     void setId(int id) {
         m_id = id;
     }
 
+    // List id
+    int getListId() const {
+        return m_listId;
+    }
+    void setListId(int id) {
+        if (id != -1)
+            m_listId = id;
+    }
 
 private:
     QString m_title;
     int m_id;
+    int m_listId = -1;
 };
 
 #endif // CARD_H

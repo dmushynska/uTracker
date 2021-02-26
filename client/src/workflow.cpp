@@ -14,6 +14,8 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverCreatedListResponse, &Workflow::parseCreatedList);
     connect(this, &Workflow::serverCreateTaskResponse, &Workflow::parseCreateTask);
     connect(this, &Workflow::serverGetTasksResponse, &Workflow::parseGetTasks);
+    connect(this, &Workflow::serverMoveTaskResponse, &Workflow::parseMoveTask);
+    connect(this, &Workflow::serverRemoveTaskResponse, &Workflow::parseRemoveTask);
 }
 
 void Workflow::setRequest(AbstractRequest *request) {
@@ -81,14 +83,14 @@ void Workflow::parseCreateTask(const QString &title, int id, int listId) {
 //    m_request->getLists(m_idCurrentWorkflow);
     qDebug() << "PARSE CREATE ----------- TK ----------- ID" << title << id;
     try {
-        (*m_currCardListModel)[listId]->model->append(title, id);
+        (*m_currCardListModel)[listId]->model->append(title, id, listId);
     } catch (QString err) {
         qDebug() << "<<<ERROR>>>";
     }
 }
 
 void Workflow::appendTask(QString title, int id) {
-    qDebug() << "REQUEST CREATE ----------- TK ----------- USER ID" <<  title;
+    qDebug() << "REQUEST CREATE ----------- TK ----------- USER ID" << title;
     m_request->createTask(title, id);
 }
 
@@ -101,7 +103,7 @@ void Workflow::parseLists(QJsonObject array) {
     for (auto l : lists) {
         auto list = l.toObject();
 //    qDebug() << list["title"].toString();
-        auto model = CardsModel::creatCardsModel(list);
+        auto model = CardsModel::creatCardsModel(list, nullptr, list["listId"].toInt());
         m_currCardListModel->append(list["title"].toString(), list["listId"].toInt(), model);
     }
 }
@@ -125,6 +127,7 @@ void Workflow::moveSetCurrListId(int id) {
 
 void Workflow::moveRequest(bool toOtherList, int index) {
     m_move.toOtherList = toOtherList;
+    qDebug() << "REQUEST MOVE ----------- TK ----------- TASK ID" <<  m_move.cardId << "--- FROM ID" << m_move.listId << "--- TO ID" << m_move.toListId;
     if (toOtherList)
         m_request->moveTask(m_move.cardId, m_move.toListId, index == -1 ? 0 : index);
     else
@@ -132,8 +135,40 @@ void Workflow::moveRequest(bool toOtherList, int index) {
 }
 
 void Workflow::parseMoveTask(const QString &msg) {
+    qDebug () << "============ Paresed MOVE =============" << m_move.cardId << m_move.listId << m_move.toListId;
     if (m_move.toOtherList) { // implement finding tasks by id & use it here
-        auto *from = m_currCardListModel->getKanbById(m_move.listId);
-        auto *to = m_currCardListModel->getKanbById(m_move.toListId);
+        try {
+            auto *from = m_currCardListModel->getKanbById(m_move.listId);
+            auto *to = m_currCardListModel->getKanbById(m_move.toListId);
+            int index = 0;
+            Card *movableTask = from->findTaskById(m_move.cardId, &index);
+            if (movableTask) {
+                Card card = *movableTask;
+                card.setListId(m_move.toListId);
+                to->model->append(card);
+                if (index != -1)
+                    from->model->removeRows(index, 1);
+            }
+        } catch (...) { return; }
     }
+}
+
+void Workflow::parseRemoveTask(const QString &msg, int listId, int taskId) {
+    if (listId == 0)
+        return;
+    try {
+        auto *from = m_currCardListModel->getKanbById(listId);
+        int index = 0;
+        Card *movableTask = from->findTaskById(taskId, &index);
+        qDebug() << "2654872364872634872638476238746287364      " <<  index;
+        if (movableTask) {
+            if (index != -1)
+                from->model->removeRows(index, 1);
+        }
+    } catch (const QString &ex) { qDebug() << "2654872364872634872638476238746287364     FUCK YOU " << ex; return; }
+}
+
+void Workflow::removeRequest(int id) {
+    qDebug() << "REQUEST REMOVE ----------- TK ----------- ID" << id;
+    m_request->removeTask(id);
 }

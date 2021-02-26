@@ -562,8 +562,14 @@ QVariantMap DataBase::removeTask(int taskId) {
     QVariantMap map;
     QSqlQuery query;
     map["type"] = static_cast<int>(RequestType::REMOVE_TASK);
+    query.exec("select list_id from Tasks where id = " + QString::number(taskId));
+        if (query.first()) {
+            map["listId"] = query.value(0).toInt();
+        }
     if (query.exec("DELETE from Tasks where id = " + QString::number(taskId))) {
         map["message"] = "Task removed";
+
+        map["taskId"] = taskId;
     } else {
         map["message"] = "Task wasn't removed";
         map["error"] = 1;

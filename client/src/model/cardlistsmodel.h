@@ -20,6 +20,7 @@ class CardListsModel : public QAbstractListModel
         QString title;
         int id;
         std::shared_ptr<CardsModel> model;
+        Card *findTaskById(int id, int *indx = nullptr);
     };
 
 public:
@@ -64,6 +65,7 @@ public:
     Kanban* operator[](int listId) {
         return getKanbById(listId);
     }
+
 
 private:
     QVector<Kanban> m_kanb;

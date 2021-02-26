@@ -51,11 +51,14 @@ bool CardListsModel::setData(const QModelIndex &index, const QVariant &value, in
             m_kanb[index.row()].title = value.toString();
         if (role == IdRole) {
             m_kanb[index.row()].id = value.toInt();
-            m_kanb[index.row()].model->setParentId(value.toInt());
+            if (m_kanb[index.row()].model)
+                m_kanb[index.row()].model->setParentId(value.toInt());
+            qDebug() << "!@#!@#!@#!@#!@#!@#!@#!@# IDRole" << m_kanb[index.row()].id;
         }
         if (role == ModelsRole) {
             m_kanb[index.row()].model = qvariant_cast<std::shared_ptr<CardsModel>>(value);
             m_kanb[index.row()].model->setParentId(m_kanb[index.row()].id);
+            qDebug() << "!@#!@#!@#!@#!@#!@#!@#!@# ModelsRole" << m_kanb[index.row()].id;
         }
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
@@ -75,7 +78,7 @@ bool CardListsModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row + count - 1);
     for (int i = row; i < row + count; i++) {
-        m_kanb.insert(i, {"", -1, std::make_shared<CardsModel>()});
+        m_kanb.insert(i, {"", -1, std::make_shared<CardsModel>(this)});
     }
     endInsertRows();
     return true;
@@ -86,9 +89,10 @@ bool CardListsModel::append(const QString &title, int id, const std::shared_ptr<
 //    emit PARENT_CAST(Workflow, parent())->appendListSignal(title);
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
-    if (model != nullptr)
-        setData(createIndex(rowCount() - 1, 0), QVariant::fromValue<std::shared_ptr<CardsModel>>(model), ModelsRole);
     setData(createIndex(rowCount() - 1, 0), id, IdRole);
+    if (model != nullptr) {
+        setData(createIndex(rowCount() - 1, 0), QVariant::fromValue<std::shared_ptr<CardsModel>>(model), ModelsRole);
+    }
     return true;
 }
 
@@ -111,4 +115,10 @@ QHash<int, QByteArray> CardListsModel::roleNames() const
 
 void CardListsModel::clearAllLists() {
     removeRows(0, rowCount());
+}
+
+Card *CardListsModel::Kanban::findTaskById(int id, int *indx) {
+    if (id < 0)
+        return nullptr;
+    return model->findById(id, indx);
 }

@@ -38,6 +38,7 @@ public:
         Q_INVOKABLE void moveSetToListId(int id);
         Q_INVOKABLE void moveSetCurrListId(int id);
     Q_INVOKABLE void moveRequest(bool toOtherList, int index = -1);
+    Q_INVOKABLE void removeRequest(int id);
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
@@ -62,6 +63,7 @@ signals:        // Server Response Signals
     void serverCreateTaskResponse(const QString &title, int id, int listId);
     void serverGetTasksResponse(QJsonObject array);
     void serverMoveTaskResponse(const QString &msg);
+    void serverRemoveTaskResponse(const QString &msg, int listId, int taskId);
 
 private slots:  // Server Response Slots
     void parseAllListWorkflows(QJsonArray array);
@@ -71,6 +73,7 @@ private slots:  // Server Response Slots
     void parseCreateTask(const QString &title, int id, int listId);
     void parseGetTasks(QJsonObject array);
     void parseMoveTask(const QString &msg);
+    void parseRemoveTask(const QString &msg, int listId, int taskId);
 
 private:
     WorkflowsModel *m_workflowsModel;

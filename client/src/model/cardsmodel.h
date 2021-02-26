@@ -10,7 +10,8 @@ class CardsModel : public QAbstractListModel
 
     enum CardsRole {
         TitleRole,
-        IdRole
+        IdRole,
+        ParentIdRole
     };
 
 public:
@@ -24,7 +25,7 @@ public:
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex &index, int role = TitleRole) const override;
 
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value,
@@ -37,16 +38,22 @@ public:
 
     void setParentId(int id);
 
-    Q_INVOKABLE bool append(const QString &title, int id, int parentID = -1);
+    Q_INVOKABLE bool append(const QString &title, int id, int parentID);
+    Q_INVOKABLE bool append(const Card &card);
     Q_INVOKABLE int parentId() const;
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
+    Card *findById(int id, int *indx = nullptr);
+    void removeById(int id);
+
     QHash<int, QByteArray> roleNames() const override;
 
     static std::shared_ptr<CardsModel> creatCardsModel(const QJsonObject &array, QObject *parent = nullptr, int parentID = -1);
 
+signals:
+    void taskAppended();
 private:
     QVector<Card> m_cards;
     int m_parentId;

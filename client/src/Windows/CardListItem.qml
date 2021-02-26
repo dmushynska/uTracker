@@ -187,8 +187,17 @@ Item {
                         id:card
                         cardContent: model.text
                         cardWidth: layout.width
-                        cardId: index
+                        cardId: idCard
+                        parentId: idParent
                         modelOwner: cardsModel
+                        Connections {                               // !
+                            target: cardsModel                      // !
+                            onTaskAppended: {                       // !
+                                control.position = 1.0;             // !
+                                console.log("{}{}{}{}{} Peremoga {}{}{}{}")
+                            }                                       // !
+                        }                                           // !
+
                         states: [
                             State {
                                 name: "inDrag"

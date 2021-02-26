@@ -7,7 +7,8 @@ import Material.ListItems 0.1 as ListItem
 Item {
     id: card
 
-    property int cardId: 000000
+    property int cardId: -1
+    property int parentId: -1
     property string cardContent: "value"
     property int cardWidth: dp(100)
     property int cardHeight: dp(80)
@@ -85,7 +86,7 @@ Item {
                         text: "Remove"
                         hoverAnimation: true
                         onTriggered: {
-                            // request
+                            mWorkflow.removeRequest(cardId)
                         }
                     },
                     Action {
@@ -107,9 +108,11 @@ Item {
                         onTriggered: {
 //                            var cardIndex = layout.indexAt(mouseX, mouseY + control.globalPos)
 //                            var cardItem = cardModel.get(index)
-                            console.log("Request to server: Id of card: " + cardId)
+                            console.log("$$$$$$$$$$$$$$$$$$$$ Request to server: Id of card: " + cardId + " LISTSSST " + parentId)
                             var componentMove;
                             var spriteMove;
+                            mWorkflow.moveSetCardId(cardId);
+                            mWorkflow.moveSetCurrListId(parentId);
                             componentMove = Qt.createComponent("MoveToDialog.qml");
                             if (componentMove.status === Component.Ready){
                                 spriteMove = componentMove.createObject(card);
@@ -122,9 +125,5 @@ Item {
                 ]
             }
         }
-        MoveToDialog {
-//                visible: true
-        }
-
     }
 }

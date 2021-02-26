@@ -5,6 +5,7 @@
 CardsModel::CardsModel(QObject *parent, int parentID)
     : QAbstractListModel(parent), m_parentId(parentID)
 {
+//    connect(this, &CardsModel::taskAppended, PARENT_CAST(CardListsModel, parent), &CardListsModel::taskAppended);
 }
 
 QVariant CardsModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -37,6 +38,9 @@ QVariant CardsModel::data(const QModelIndex &index, int role) const
         return m_cards[index.row()].getTitle();
     if (role == IdRole)
         return m_cards[index.row()].getId();
+    if (role == ParentIdRole) {
+        return m_parentId;
+    }
     return QVariant();
 }
 
@@ -47,6 +51,8 @@ bool CardsModel::setData(const QModelIndex &index, const QVariant &value, int ro
             m_cards[index.row()].setTitle(value.toString());
         if (role == IdRole)
             m_cards[index.row()].setId(value.toInt());
+        if (role == ParentIdRole)
+            m_cards[index.row()].setListId(m_parentId);
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -73,9 +79,15 @@ bool CardsModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool CardsModel::append(const QString &title, int id, int parentID)
 {
+
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
     setData(createIndex(rowCount() - 1, 0), id, IdRole);
+    setData(createIndex(rowCount() - 1, 0), parentID, ParentIdRole);
+
+    emit taskAppended();
+    qDebug() << "{}{}{} {}{}{} {}{}{} {}{}{} {}{}{} {}{}{}" << m_parentId;
+
 //    m_parentId = parentID;
     return true;
 }
@@ -94,7 +106,8 @@ QHash<int, QByteArray> CardsModel::roleNames() const
     QHash<int, QByteArray> roleName;
     roleName[TitleRole] = "text";
     roleName[IdRole] = "idCard";
-    return  roleName;
+    roleName[ParentIdRole] = "idParent";
+    return roleName;
 }
 
 int CardsModel::parentId() const {
@@ -109,7 +122,33 @@ std::shared_ptr<CardsModel> CardsModel::creatCardsModel(const QJsonObject &array
     std::shared_ptr<CardsModel> model = std::make_shared<CardsModel>(parent, parentID);
     for(const auto &t : array["tasks"].toArray()) {
         auto task = t.toObject();
-        model->append(task["title"].toString(), task["taskId"].toInt(), task["listId"].toInt());
+        qDebug() << ")()()()()()()()()()9 Creating Tasks ID:" << parentID;
+        model->append(task["title"].toString(), task["taskId"].toInt(), parentID);
     }
     return model;
+}
+
+Card *CardsModel::findById(int id, int *indx) {
+    if (indx)
+        (*indx) = 0;
+    for (auto &card : m_cards) {
+        if (card.getId() == id) {
+            return &card;
+        }
+        if (indx)
+            (*indx)++;
+    }
+    if (indx)
+        *indx = -1;
+    return nullptr;
+}
+
+bool CardsModel::append(const Card &card) {
+    return append(card.getTitle(), card.getId(), card.getListId());
+}
+
+void CardsModel::removeById(int id) {
+    int indx = 0;
+    findById(id, &indx);
+    removeRows(indx, 1);
 }
