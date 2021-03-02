@@ -16,6 +16,7 @@ Item {
 
     width: cardWidth
     height: cardHeight
+
     Card {
         anchors.centerIn: parent
         width: parent.width - dp(20)
@@ -42,11 +43,22 @@ Item {
                 height: parent.height
                 width: lay.width - (menuButton.height + parent.spacing * 2)
                 visible: !infoText.visible
+//                acceptableInput: true
                 onAccepted: {
                     infoText.text = text;
                     focus = false
                     infoText.visible = true
+                    saveName();
                 }
+                onFocusChanged: {
+                    if (focus == false)
+                        accepted()
+                }
+
+//                Keys.onTabPressed: {
+//                    accepted()
+
+//                }
 
             }
 
@@ -58,9 +70,10 @@ Item {
                 maxActionCount: 1
 //                backgroundColor: "pink"
 
+
                 actions: [
                     Action {
-                        id: addPers
+                        id: details
                         iconName: "navigation/chevron_right"
                         text: "Details.."
                         hoverAnimation: true
@@ -70,14 +83,14 @@ Item {
                             console.log("Request to server: Id of card: " + cardId)
 
                             // Waiting for response
-
-                            var component;
-                            var sprite;
-                            component = Qt.createComponent("CardView.qml");
-                            if (component.status === Component.Ready){
-                                sprite = component.createObject(card, {text: "info:" + cardId});
-                            }
-                            sprite.show()
+                            mWorkflow.openDescription(cardId);
+//                            var component;
+//                            var sprite;
+//                            component = Qt.createComponent("CardView.qml");
+//                            if (component.status === Component.Ready){
+//                                sprite = component.createObject(card, {text: "info:" + cardId});
+//                            }
+//                            sprite.show()
                         }
                     },
                     Action {

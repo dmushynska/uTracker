@@ -356,18 +356,19 @@ SendTaskDataResponse::SendTaskDataResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
         QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
-        QJsonObject itemObject = itemDoc.object();
-        QJsonArray arr = itemObject["array"].toArray();
+        QJsonObject object = itemDoc.object();
+        QJsonArray arr = object["array"].toArray();
         qDebug() << "CHECK_LIST :\n";
         for(int i = 0; i < arr.count(); i++) {
             qDebug() << arr.at(i)["str"].toString();
             qDebug() << arr.at(i)["isDone"].toBool();
         }
+        emit WORKFLOW->serverGetTaskDataResponse(itemObject["message"].toString(), itemObject["description"].toString(), arr, itemObject);
     }
 }

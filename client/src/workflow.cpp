@@ -1,4 +1,3 @@
-//#include "workflow.h"
 #include "usermanager.h"
 #include "workflow.h"
 
@@ -7,6 +6,7 @@
 Workflow::Workflow(QObject *parent) : QObject(parent) {
     m_workflowsModel = new WorkflowsModel(this);
     m_currCardListModel = new CardListsModel(this);
+    m_descriptionModel = new DescriptionModel(this);
 
     connect(this, &Workflow::serverAllListWorkflowsResponse, &Workflow::parseAllListWorkflows);
     connect(this, &Workflow::serverCreateWorkflowResponse, &Workflow::parseCreatedWorkflow);
@@ -16,6 +16,13 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverGetTasksResponse, &Workflow::parseGetTasks);
     connect(this, &Workflow::serverMoveTaskResponse, &Workflow::parseMoveTask);
     connect(this, &Workflow::serverRemoveTaskResponse, &Workflow::parseRemoveTask);
+    connect(this, &Workflow::serverGetTaskDataResponse, &Workflow::parseGetTaskData);
+}
+
+Workflow::~Workflow() {
+    delete m_workflowsModel;
+    delete m_currCardListModel;
+    delete m_descriptionModel;
 }
 
 void Workflow::setRequest(AbstractRequest *request) {
@@ -36,6 +43,8 @@ CardListsModel *Workflow::getCardListModel() {
     return m_currCardListModel;
 }
 
+
+
 void Workflow::parseAllListWorkflows(QJsonArray array) {
 //    if (array.size() != m_workflowsModel->rowCount())
         m_workflowsModel->clear();
@@ -46,8 +55,6 @@ void Workflow::parseAllListWorkflows(QJsonArray array) {
 //        m_workflowsModel->setData(index, array.at(i)["workflowId"].toInt(), WorkflowsModel::WorkflowRole::IdRole);
     }
 }
-
-
 
 WorkflowsModel *Workflow::getWorkflowsModel() {
     return m_workflowsModel;
@@ -67,8 +74,6 @@ void Workflow::getWorkflowsModelById(int id) {
     m_request->getLists(m_idCurrentWorkflow);
 }
 
-//void Workflow::appendListRequest(const QString &title) {
-//    m_request->createList(title, m_idCurrentWorkflow);
 //}
 
 void Workflow::parseCreatedList(const QString &title, int id) {
@@ -171,4 +176,28 @@ void Workflow::parseRemoveTask(const QString &msg, int listId, int taskId) {
 void Workflow::removeRequest(int id) {
     qDebug() << "REQUEST REMOVE ----------- TK ----------- ID" << id;
     m_request->removeTask(id);
+}
+
+DescriptionModel *Workflow::getDescriptionModel() {
+    return m_descriptionModel;
+}
+
+void Workflow::openDescription(int id) {
+    m_request->getTaskData(id);
+}
+
+void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obg) {
+    m_descriptionModel->setTaskDescription(descr);
+    m_descriptionModel->setTaskTitle(obg["title"].toString());
+    m_descriptionModel->setTaskId(obg["taskId"].toInt());
+    for(int i = 0; i < array.count(); i++) {
+        m_descriptionModel->insert({array.at(i)["isDone"].toBool(), array.at(i)["str"].toString()});
+    }
+    qDebug() << "DATA EMITED";
+    emit gotTaskData();
+}
+
+void Workflow::saveDescription() {
+    m_request->updateTask(m_descriptionModel->getTaskId(), "", m_descriptionModel->toMap());
+    qDebug() << m_descriptionModel->toMap();
 }

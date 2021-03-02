@@ -40,6 +40,7 @@ Item {
 
 //    }
 
+
     ListModel {
         id: cardModel
         ListElement {
@@ -132,7 +133,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.margins: dp(20)
                             Component.onCompleted: {
-                                name.forceActiveFocus()
+//                                name.forceActiveFocus()
                             }
                             Keys.onEscapePressed: {
                                 focus = false

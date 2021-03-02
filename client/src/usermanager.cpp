@@ -35,6 +35,7 @@ void UserManager::initModules() const
     engine.rootContext()->setContextProperty("mWorkflow", (QObject *)m_workflow);
     engine.rootContext()->setContextProperty("mCardListsModel", (QObject *)(m_workflow->getCardListModel()));
     engine.rootContext()->setContextProperty("mWorkflowList", (QObject *)(m_workflow->getWorkflowsModel()));
+    engine.rootContext()->setContextProperty("mDescriptor", (QObject *)(m_workflow->getDescriptionModel()));
 }
 
 Authorization *UserManager::getAuthor() {
