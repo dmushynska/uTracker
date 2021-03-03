@@ -31,19 +31,21 @@ public:
 
     //*     Lists       *//
     Q_INVOKABLE void appendLists(QString title);
+    Q_INVOKABLE void removeList(int id);
+    Q_INVOKABLE void renameList(int id);
 
     //*     Tasks       *//
     Q_INVOKABLE void appendTask(QString title, int id);
     Q_INVOKABLE void renameTask(int id, QString name){}    ///////////////// Is not implemented
     Q_INVOKABLE void openDescription(int id);
     Q_INVOKABLE void saveDescription();
+    Q_INVOKABLE void removeTask(int id);
 
     //*     Move    *//
-        Q_INVOKABLE void moveSetCardId(int id);
-        Q_INVOKABLE void moveSetToListId(int id);
-        Q_INVOKABLE void moveSetCurrListId(int id);
-        Q_INVOKABLE void moveRequest(bool toOtherList, int index = -1);
-    Q_INVOKABLE void removeRequest(int id);
+    Q_INVOKABLE void moveSetCardId(int id);
+    Q_INVOKABLE void moveSetToListId(int id);
+    Q_INVOKABLE void moveSetCurrListId(int id);
+    Q_INVOKABLE void moveRequest(bool toOtherList, int index = -1);
 
 
 
@@ -73,9 +75,11 @@ signals:        // Server Response Signals
     void serverMoveTaskResponse(const QString &msg);
     void serverRemoveTaskResponse(const QString &msg, int listId, int taskId);
     void serverGetTaskDataResponse(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obj);
+    void serverRemoveListResponse(const QString &msg, int listId);
 private slots:  // Server Response Slots
-    void parseAllListWorkflows(QJsonArray array);
 
+
+    void parseAllListWorkflows(QJsonArray array);
     void parseCreatedWorkflow(QString title, int id);
     void parseLists(QJsonObject array);
     void parseCreatedList(const QString &title, int id);
@@ -84,6 +88,7 @@ private slots:  // Server Response Slots
     void parseMoveTask(const QString &msg);
     void parseRemoveTask(const QString &msg, int listId, int taskId);
     void parseGetTaskData(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obg);
+    void parseRemoveList(const QString &msg, int listId);
 
 private:
     WorkflowsModel *m_workflowsModel;

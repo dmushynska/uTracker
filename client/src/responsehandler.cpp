@@ -280,6 +280,7 @@ void ToRemoveListResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        emit WORKFLOW->serverRemoveListResponse(itemObject["message"].toString(), itemObject["listId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

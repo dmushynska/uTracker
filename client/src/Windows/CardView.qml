@@ -67,5 +67,8 @@ Dialog {
         mDescriptor.clearAllData();
         snackbar.open("Data saved");
     }
+    onRejected: {
+        mDescriptor.clearAllData();
+    }
 }
 

@@ -17,6 +17,7 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverMoveTaskResponse, &Workflow::parseMoveTask);
     connect(this, &Workflow::serverRemoveTaskResponse, &Workflow::parseRemoveTask);
     connect(this, &Workflow::serverGetTaskDataResponse, &Workflow::parseGetTaskData);
+    connect(this, &Workflow::serverRemoveListResponse, &Workflow::parseRemoveList);
 }
 
 Workflow::~Workflow() {
@@ -173,7 +174,7 @@ void Workflow::parseRemoveTask(const QString &msg, int listId, int taskId) {
     } catch (const QString &ex) { qDebug() << "2654872364872634872638476238746287364     FUCK YOU " << ex; return; }
 }
 
-void Workflow::removeRequest(int id) {
+void Workflow::removeTask(int id) {
     qDebug() << "REQUEST REMOVE ----------- TK ----------- ID" << id;
     m_request->removeTask(id);
 }
@@ -193,11 +194,27 @@ void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonA
     for(int i = 0; i < array.count(); i++) {
         m_descriptionModel->insert({array.at(i)["isDone"].toBool(), array.at(i)["str"].toString()});
     }
-    qDebug() << "DATA EMITED";
+    qDebug() << "DATA EMITTED";
     emit gotTaskData();
 }
 
 void Workflow::saveDescription() {
     m_request->updateTask(m_descriptionModel->getTaskId(), "", m_descriptionModel->toMap());
     qDebug() << m_descriptionModel->toMap();
+}
+
+void Workflow::removeList(int id) {
+    if (id > -1)
+      m_request->removeList(id);
+}
+
+void Workflow::renameList(int id) {
+//    if (id > -1)
+//      m_request-> rename
+}
+
+void Workflow::parseRemoveList(const QString &msg, int listId) {
+    int index = m_currCardListModel->indexById(listId);
+    if (index > -1)
+        m_currCardListModel->removeRows(index, 1);
 }

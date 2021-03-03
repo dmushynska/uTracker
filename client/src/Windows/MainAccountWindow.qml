@@ -74,7 +74,7 @@ Page {
     actions: [
         Action {
             id: info
-            iconName: "navigation/menu"
+            iconName: "action/account_circle"
             text: "Info"
             hoverAnimation: false
             onTriggered: {
@@ -86,6 +86,7 @@ Page {
 
     rightSidebar: InfoSidebar {
         id: sidebarInfo
+        showing: false
     }
     backAction: navDrawer.action
     NavigationDrawer {
