@@ -51,6 +51,7 @@ public:
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    int indexById(int id) const;
     
     QHash<int, QByteArray> roleNames() const override;
 

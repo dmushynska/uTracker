@@ -36,7 +36,16 @@ Item {
                 font.pixelSize: dp(19)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
-                visible: false
+                MouseArea {
+                    id: renameTaskArea
+                    anchors.fill: parent
+                    onDoubleClicked: {
+                        console.log("Renaming Task #" + cardContent)
+                        infoText.visible = false
+                        infoTextField.visible = true
+                        infoTextField.forceActiveFocus()
+                    }
+                }
             }
             TextField {
                 id: infoTextField
@@ -44,21 +53,27 @@ Item {
                 width: lay.width - (menuButton.height + parent.spacing * 2)
                 visible: !infoText.visible
 //                acceptableInput: true
-                onAccepted: {
-                    infoText.text = text;
+                Component.onCompleted: {
+                    visible = false
+                }
+                Component.onDestruction: {
                     focus = false
+                    visible = false
+                }
+
+                onAccepted: {
+                    if (text !== "") {
+                        infoText.text = text;
+//                        mWorkflow.renameTask();
+                    }
+                    visible = false
                     infoText.visible = true
-                    saveName();
                 }
                 onFocusChanged: {
+//                    console.log("#" + cardContent + " % " + focus)
                     if (focus == false)
                         accepted()
                 }
-
-//                Keys.onTabPressed: {
-//                    accepted()
-
-//                }
 
             }
 
@@ -74,53 +89,41 @@ Item {
                 actions: [
                     Action {
                         id: details
-                        iconName: "navigation/chevron_right"
+                        iconName: "image/color_lens"
                         text: "Details.."
                         hoverAnimation: true
                         onTriggered: {
-//                            var cardIndex = layout.indexAt(mouseX, mouseY + control.globalPos)
-//                            var cardItem = cardModel.get(index)
-                            console.log("Request to server: Id of card: " + cardId)
 
-                            // Waiting for response
+                            console.log("Request to server: Id of card: " + cardId)
                             mWorkflow.openDescription(cardId);
-//                            var component;
-//                            var sprite;
-//                            component = Qt.createComponent("CardView.qml");
-//                            if (component.status === Component.Ready){
-//                                sprite = component.createObject(card, {text: "info:" + cardId});
-//                            }
-//                            sprite.show()
                         }
                     },
                     Action {
                         id: delPers
-                        iconName: "navigation/chevron_right"
+                        iconName: "action/delete"
                         text: "Remove"
                         hoverAnimation: true
                         onTriggered: {
-                            mWorkflow.removeRequest(cardId)
+                            mWorkflow.removeTask(cardId)
                         }
                     },
                     Action {
                         id: renamePers
-                        iconName: "navigation/chevron_right"
+                        iconName: "image/edit"
                         text: "Rename"
                         hoverAnimation: true
                         onTriggered: {
                             infoText.visible = false
-                            infoTextField.forceActiveFocus();
-                            infoTextField.focus = true
+                            infoTextField.visible = true
+                            infoTextField.forceActiveFocus()
                         }
                     },
                     Action {
                         id: movePers
-                        iconName: "navigation/chevron_right"
+                        iconName: "content/forward"
                         text: "Move to list.."
                         hoverAnimation: true
                         onTriggered: {
-//                            var cardIndex = layout.indexAt(mouseX, mouseY + control.globalPos)
-//                            var cardItem = cardModel.get(index)
                             console.log("$$$$$$$$$$$$$$$$$$$$ Request to server: Id of card: " + cardId + " LISTSSST " + parentId)
                             var componentMove;
                             var spriteMove;

@@ -122,3 +122,13 @@ Card *CardListsModel::Kanban::findTaskById(int id, int *indx) {
         return nullptr;
     return model->findById(id, indx);
 }
+
+int CardListsModel::indexById(int id) const {
+    int index = 0;
+    for (const auto &k : m_kanb) {
+        if (k.id == id)
+            return index;
+        index++;
+    }
+    return -1;
+}

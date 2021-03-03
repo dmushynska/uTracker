@@ -113,11 +113,12 @@ Item {
                     cardsModel: modelD
                     cardListHeight: deskListView.height - dp(70)
                     cardListTitle: titleD
-
-                    cardTitleEditor.onAccepted:  {
-                        console.log("!!!")
-                        buttonAddList.clicked()
-                    }
+                    listId: idD
+//                    cardTitleEditor.onAccepted:  {
+//                        if(index == (mCardListsModel.rowCount() - 1)) {
+//                            buttonAddList.clicked()
+//                        }
+//                    }
                     states: [
                     State {
                             name: "inDrag"

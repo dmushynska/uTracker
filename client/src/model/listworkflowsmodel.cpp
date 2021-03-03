@@ -102,3 +102,5 @@ QHash<int, QByteArray> WorkflowsModel::roleNames() const
 QModelIndex WorkflowsModel::createModelIndex(int row) {
     return createIndex(row, 0);
 }
+
+

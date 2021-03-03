@@ -104,7 +104,7 @@ bool CardsModel::removeRows(int row, int count, const QModelIndex &parent)
 QHash<int, QByteArray> CardsModel::roleNames() const
 {
     QHash<int, QByteArray> roleName;
-    roleName[TitleRole] = "text";
+    roleName[TitleRole] = "textCard";
     roleName[IdRole] = "idCard";
     roleName[ParentIdRole] = "idParent";
     return roleName;
