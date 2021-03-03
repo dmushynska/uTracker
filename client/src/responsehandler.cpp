@@ -257,6 +257,19 @@ void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
+ToRenameListResponse::ToRenameListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToRenameListResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "title :" << itemObject["title"].toInt() << "\n";
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
 ToGetListsResponse::ToGetListsResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
     m_parent = parent;
 }
@@ -276,10 +289,11 @@ ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToRemoveListResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "listId :" << itemObject["listId"].toInt() << "\n";
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

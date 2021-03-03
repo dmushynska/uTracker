@@ -170,6 +170,15 @@ bool ToCreateList::isValid(QJsonObject itemObject) {
     return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+ToRenameList::ToRenameList(Connection *socket) : AbstractRequestHandler(socket){}
+
+bool ToRenameList::isValid(QJsonObject itemObject) {
+    if (itemObject.contains("title")
+        && itemObject.contains("listId"))
+        return true;
+    return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 ToGetLists::ToGetLists(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool ToGetLists::isValid(QJsonObject itemObject) {
@@ -209,7 +218,8 @@ ToUpdateTask::ToUpdateTask(Connection *socket) : AbstractRequestHandler(socket){
 bool ToUpdateTask::isValid(QJsonObject itemObject) {
     if (itemObject.contains("checkList")
         && itemObject.contains("description")
-        && itemObject.contains("taskId"))
+        && itemObject.contains("taskId")
+        && itemObject.contains("title"))
         return true;
     return false;
 }

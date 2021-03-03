@@ -132,6 +132,10 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 result = createList(map.value("title").toString(),
                                     map.value("workflowId").toInt());
                 break;
+            case RequestType::RENAME_LIST:
+                result = renameList(map.value("title").toString(),
+                                    map.value("listId").toInt());
+                break;
             case RequestType::GET_LISTS:
                 result = getLists(map.value("workflowId").toInt());
                 break;
@@ -148,7 +152,8 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::UPDATE_TASK:
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
-                                    map.value("checkList"));
+                                    map.value("checkList"),
+                                    map.value("title").toString());
                 break;
             case RequestType::MOVE_TASK:
                 result = moveTask(map.value("taskId").toInt(),
@@ -419,8 +424,6 @@ QVariantMap DataBase::updateProfile(int user_id, const QString &name, const QStr
 }
 
 QVariantMap DataBase::createList(const QString &title, int workflowId) {
-    Q_UNUSED(workflowId);
-    Q_UNUSED(title);
     QVariantMap map;
     int lastId;
     map["type"] = static_cast<int>(RequestType::CREATE_LIST);
@@ -435,6 +438,23 @@ QVariantMap DataBase::createList(const QString &title, int workflowId) {
     return map;
 }
 
+QVariantMap DataBase::renameList(const QString &title, int listId) {
+    QVariantMap map;
+    map["type"] = static_cast<int>(RequestType::RENAME_LIST);
+    QSqlQuery query;
+    query.prepare("UPDATE Lists SET title = :title WHERE id = " + QString::number(listId) + ";");
+    query.bindValue(":title", title);
+    if (query.exec()) {
+        map["message"] = "List renamed";
+        map["listId"] = listId;
+        map["title"] = title;
+    } else {
+        map["message"] = "List wasn't renamed";
+        map["error"] = 1;
+    }
+    return map;
+}
+
 QVariantMap DataBase::removeList(int listId) {
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::REMOVE_LIST);
@@ -442,6 +462,7 @@ QVariantMap DataBase::removeList(int listId) {
     if (query.exec("DELETE from Lists where id = " + QString::number(listId) + ";")) {
         query.exec("DELETE from Tasks where list_id = " + QString::number(listId) + ";");
         map["message"] = "List removed";
+        map["listId"] = listId;
     } else {
         map["message"] = "List wasn't removed";
         map["error"] = 1;
@@ -492,7 +513,10 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
     return map;
 }
 
-QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList) {
+QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList, const QString &title) {
+    Q_UNUSED(title);
+    //треба настроїть щоб коли приходить тайтл - зберігаєш тайтл в останню колонку // а коли дескріпшн і чекліст то створювати нову колонку
+
     QJsonObject obj{
         {"array", checkList.toJsonArray()}};
     QJsonDocument *jsonDoc = new QJsonDocument(obj);
@@ -504,13 +528,6 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
     query.bindValue(":checklist", json);
-    // qDebug() << obj;
-    // QJsonArray ll = checkList.toJsonArray();
-    // qDebug() << "CHECK_LIST :\n";
-    // for(int i = 0; i < ll.count(); i++) {
-    //     qDebug() << ll.at(i)["str"].toString();
-    //     qDebug() << ll.at(i)["isDone"].toBool();
-    // }
     if (query.exec()) {
         map["message"] = "Task updated";
         map["description"] = description;

@@ -42,6 +42,7 @@ private:
     std::shared_ptr<AbstractRequestHandler> m_sendProfile;
     std::shared_ptr<AbstractRequestHandler> m_updateProfile;
     std::shared_ptr<AbstractRequestHandler> m_createList;
+    std::shared_ptr<AbstractRequestHandler> m_renameList;
     std::shared_ptr<AbstractRequestHandler> m_getLists;
     std::shared_ptr<AbstractRequestHandler> m_removeList;
     std::shared_ptr<AbstractRequestHandler> m_createTask;

@@ -30,14 +30,15 @@ enum class RequestType {
     GET_PROFILE = 14,
     UPDATE_PROFILE = 15,
     CREATE_LIST = 16,
-    GET_LISTS = 17,
-    REMOVE_LIST = 18,
-    CREATE_TASK = 19,
-    GET_TASKS = 20,
-    UPDATE_TASK = 21,
-    MOVE_TASK = 22,
-    REMOVE_TASK = 23,
-    GET_TASK_DATA = 24
+    RENAME_LIST = 17,
+    GET_LISTS = 18,
+    REMOVE_LIST = 19,
+    CREATE_TASK = 20,
+    GET_TASKS = 21,
+    UPDATE_TASK = 22,
+    MOVE_TASK = 23,
+    REMOVE_TASK = 24,
+    GET_TASK_DATA = 25
 };
 
 class AbstractRequestHandler : public QObject{
@@ -181,6 +182,13 @@ class ToCreateList : public AbstractRequestHandler  {
 Q_OBJECT
 public:
     ToCreateList(Connection *socket);
+    bool isValid(QJsonObject itemObject);
+};
+
+class ToRenameList : public AbstractRequestHandler  {
+Q_OBJECT
+public:
+    ToRenameList(Connection *socket);
     bool isValid(QJsonObject itemObject);
 };
 

@@ -52,6 +52,7 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_sendProfile;
     std::shared_ptr<AbstractResponseHandler> m_updateProfile;
     std::shared_ptr<AbstractResponseHandler> m_createListResponse;
+    std::shared_ptr<AbstractResponseHandler> m_renameListResponse;
     std::shared_ptr<AbstractResponseHandler> m_getListsResponse;
     std::shared_ptr<AbstractResponseHandler> m_removeListResponse;
     std::shared_ptr<AbstractResponseHandler> m_createTaskResponse;

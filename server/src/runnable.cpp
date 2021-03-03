@@ -20,6 +20,7 @@ Runnable::Runnable(Connection *socket) {
     m_sendProfile = std::make_shared<SendProfile>(socket);
     m_updateProfile = std::make_shared<ToUpdateProfile>(socket);
     m_createList = std::make_shared<ToCreateList>(socket);
+    m_renameList = std::make_shared<ToRenameList>(socket);
     m_getLists = std::make_shared<ToGetLists>(socket);
     m_removeList = std::make_shared<ToRemoveList>(socket);
     m_createTask = std::make_shared<ToCreateTask>(socket);
@@ -36,7 +37,7 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createWorkFlow});
     funcList.append({m_updateWorkFlow, m_inviteToWorkFlow,m_removeFromWorkFlow, m_getUsersFromWorkFlow, m_sendAllWorkFlows});
     funcList.append({m_sendSingleWorkFlow, m_sendStatistics, m_sendProfile, m_updateProfile, m_createList});
-    funcList.append({m_getLists, m_removeList, m_createTask, m_getTasks, m_updateTask});
+    funcList.append({m_renameList, m_getLists, m_removeList, m_createTask, m_getTasks, m_updateTask});
     funcList.append({m_moveTask, m_removeTask, m_sendTaskData});
     QVector<RequestType> types;
     types.append(RequestType::SIGN_UP);
@@ -55,6 +56,7 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::GET_PROFILE);
     types.append(RequestType::UPDATE_PROFILE);
     types.append(RequestType::CREATE_LIST);
+    types.append(RequestType::RENAME_LIST);
     types.append(RequestType::GET_LISTS);
     types.append(RequestType::REMOVE_LIST);
     types.append(RequestType::CREATE_TASK);

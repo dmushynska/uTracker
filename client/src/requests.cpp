@@ -170,6 +170,15 @@ void AbstractRequest::createList(const QString& title, int workflowId) {
     createJSON(mapa);
 }
 
+void AbstractRequest::renameList(const QString& title, int listId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::RENAME_LIST);
+    mapa["token"] = m_token;
+    mapa["title"] = title;
+    mapa["listId"] = listId;
+    createJSON(mapa);
+}
+
 void AbstractRequest::getLists(int workflowId) {
     QMap<QString, QVariant> mapa;
     mapa["type"] = static_cast<int>(RequestType::GET_LISTS);
@@ -195,6 +204,14 @@ void AbstractRequest::createTask(const QString& title, int listId) {
     mapa["title"] = title;
     mapa["listId"] = listId;
     createJSON(mapa);
+}
+
+void AbstractRequest::renameTask(const QString& title, int taskId) {
+    QMap<QString, QVariant> mapa;
+    mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
+    mapa["token"] = m_token;
+    mapa["taskId"] = taskId;
+    mapa["title"] = title;
 }
 
 void AbstractRequest::getTasks(int listId) {
