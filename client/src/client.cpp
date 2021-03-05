@@ -29,7 +29,7 @@ void Client::initResponses() {
     m_sendProfile = std::make_shared<SendProfileResponse>(this, m_socket);
     m_updateProfile = std::make_shared<ToUpdateProfileResponse>(this, m_socket);
     m_createListResponse = std::make_shared<ToCreateListResponse>(this, m_socket);
-    m_renameListResponse = std::make_shared<ToCreateListResponse>(this, m_socket);
+    m_renameListResponse = std::make_shared<ToRenameListResponse>(this, m_socket);
     m_getListsResponse = std::make_shared<ToGetListsResponse>(this, m_socket);
     m_removeListResponse = std::make_shared<ToRemoveListResponse>(this, m_socket);
     m_createTaskResponse = std::make_shared<ToCreateTaskResponse>(this, m_socket);

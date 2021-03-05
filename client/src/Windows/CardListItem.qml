@@ -158,7 +158,7 @@ Item {
                                 onAccepted: {
                                     if (text.length > 0) {
                                         cardTitle.text = text
-//                                        mWorkflow.renameList();
+                                        mWorkflow.renameList(listId, text);
                                     }
                                     focus = false
                                     visible = false

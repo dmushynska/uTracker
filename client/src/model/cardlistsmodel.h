@@ -11,25 +11,25 @@ class CardListsModel : public QAbstractListModel
 {
     Q_OBJECT
     
-    enum CardListsRole {
-        TitleRole,
-        ModelsRole,
-        IdRole
-    };
     struct Kanban {
         QString title;
         int id;
         std::shared_ptr<CardsModel> model;
         Card *findTaskById(int id, int *indx = nullptr);
     };
-
 public:
+
+    enum CardListsRole {
+        TitleRole = Qt::UserRole,
+        ModelsRole,
+        IdRole
+    };
     explicit CardListsModel(QObject *parent = nullptr);
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = TitleRole) const override;
 
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = TitleRole) override;
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -52,6 +52,8 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     int indexById(int id) const;
+
+    QModelIndex createCustomIndex(int row) { return QAbstractListModel::createIndex(row, 0); }
     
     QHash<int, QByteArray> roleNames() const override;
 

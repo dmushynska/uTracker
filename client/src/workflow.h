@@ -32,11 +32,12 @@ public:
     //*     Lists       *//
     Q_INVOKABLE void appendLists(QString title);
     Q_INVOKABLE void removeList(int id);
-    Q_INVOKABLE void renameList(int id);
+    Q_INVOKABLE void renameList(int id, QString name);
+
 
     //*     Tasks       *//
     Q_INVOKABLE void appendTask(QString title, int id);
-    Q_INVOKABLE void renameTask(int id, QString name){}    ///////////////// Is not implemented
+    Q_INVOKABLE void renameTask(int id, QString name);    ///////////////// Is not implemented
     Q_INVOKABLE void openDescription(int id);
     Q_INVOKABLE void saveDescription();
     Q_INVOKABLE void removeTask(int id);
@@ -76,6 +77,8 @@ signals:        // Server Response Signals
     void serverRemoveTaskResponse(const QString &msg, int listId, int taskId);
     void serverGetTaskDataResponse(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obj);
     void serverRemoveListResponse(const QString &msg, int listId);
+    void serverRenameListResponse(const QString &msg, int listId, const QString &name);
+
 private slots:  // Server Response Slots
 
 
@@ -89,6 +92,8 @@ private slots:  // Server Response Slots
     void parseRemoveTask(const QString &msg, int listId, int taskId);
     void parseGetTaskData(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obg);
     void parseRemoveList(const QString &msg, int listId);
+    void parseRenameList(const QString &msg, int listId, const QString &name);
+
 
 private:
     WorkflowsModel *m_workflowsModel;

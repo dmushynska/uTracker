@@ -64,7 +64,7 @@ Item {
                 onAccepted: {
                     if (text !== "") {
                         infoText.text = text;
-//                        mWorkflow.renameTask();
+                        mWorkflow.renameTask(cardId, text);
                     }
                     visible = false
                     infoText.visible = true

@@ -266,7 +266,9 @@ void ToRenameListResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "title :" << itemObject["title"].toInt() << "\n";
+        qDebug() << "title :" << itemObject["listId"].toInt() << "\n";
+
+        emit WORKFLOW->serverRenameListResponse(itemObject["message"].toString(), itemObject["listId"].toInt(), itemObject["title"].toString());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////

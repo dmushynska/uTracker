@@ -125,8 +125,8 @@ Item {
                             when: index === deskListView.draggedItemIndex
                             PropertyChanges { target: cardList; parent: dndContainer }
                             PropertyChanges { target: cardList; anchors.centerIn: undefined }
-                            PropertyChanges { target: cardList; x: coords.mouseX - dp(150)}
-                            PropertyChanges { target: cardList; y: coords.mouseY - dp(35)}
+//                            PropertyChanges { target: cardList; x: coords.mouseX - dp(150)}
+//                            PropertyChanges { target: cardList; y: coords.mouseY - dp(35)}
                         }
                     ]
                 }

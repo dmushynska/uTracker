@@ -52,6 +52,7 @@ public:
 
     static std::shared_ptr<CardsModel> creatCardsModel(const QJsonObject &array, QObject *parent = nullptr, int parentID = -1);
 
+
 signals:
     void taskAppended();
 private:

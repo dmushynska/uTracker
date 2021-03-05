@@ -18,6 +18,7 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverRemoveTaskResponse, &Workflow::parseRemoveTask);
     connect(this, &Workflow::serverGetTaskDataResponse, &Workflow::parseGetTaskData);
     connect(this, &Workflow::serverRemoveListResponse, &Workflow::parseRemoveList);
+    connect(this, &Workflow::serverRenameListResponse, &Workflow::parseRenameList);
 }
 
 Workflow::~Workflow() {
@@ -208,13 +209,27 @@ void Workflow::removeList(int id) {
       m_request->removeList(id);
 }
 
-void Workflow::renameList(int id) {
-//    if (id > -1)
-//      m_request-> rename
+void Workflow::renameList(int id, QString name) {
+    if (id > -1)
+        m_request->renameList(name, id);
+}
+
+void Workflow::renameTask(int id, QString name) {
+    if (id > -1)
+        m_request->renameTask(name, id);
 }
 
 void Workflow::parseRemoveList(const QString &msg, int listId) {
     int index = m_currCardListModel->indexById(listId);
     if (index > -1)
         m_currCardListModel->removeRows(index, 1);
+}
+
+void Workflow::parseRenameList(const QString &msg, int listId, const QString &name) {
+    int index = m_currCardListModel->indexById(listId);
+
+    if (index < 0) {
+        return;
+    }
+    m_currCardListModel->setData(m_currCardListModel->createCustomIndex(index), name, CardListsModel::TitleRole);
 }
