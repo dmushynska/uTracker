@@ -27,14 +27,15 @@ enum class RequestType {
     GET_PROFILE = 14,
     UPDATE_PROFILE = 15,
     CREATE_LIST = 16,
-    GET_LISTS = 17,
-    REMOVE_LIST = 18,
-    CREATE_TASK = 19,
-    GET_TASKS = 20,
-    UPDATE_TASK = 21,
-    MOVE_TASK = 22,
-    REMOVE_TASK = 23,
-    GET_TASK_DATA = 24
+    RENAME_LIST = 17,
+    GET_LISTS = 18,
+    REMOVE_LIST = 19,
+    CREATE_TASK = 20,
+    GET_TASKS = 21,
+    UPDATE_TASK = 22,
+    MOVE_TASK = 23,
+    REMOVE_TASK = 24,
+    GET_TASK_DATA = 25
 };
 
 class AbstractRequest {
@@ -71,11 +72,13 @@ public:
 
     //list sector
     void createList(const QString& title, int workflowId);
+    void renameList(const QString& title, int listId);
     void getLists(int workflowId);
     void removeList(int listId);
     //task sector
     void createTask(const QString& title, int listId);
     void getTasks(int listId);
+    void renameTask(const QString& title, int taskId);
     void updateTask(int taskId, const QString& description, const QMap<QString, bool>& checkList);
     void moveTask(int taskId, int listId, int indexId);
     void removeTask(int taskId);

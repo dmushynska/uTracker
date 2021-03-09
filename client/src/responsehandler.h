@@ -171,6 +171,14 @@ public slots:
     void responseHandle(QJsonObject itemObject);
 };
 
+class ToRenameListResponse : public AbstractResponseHandler  {
+Q_OBJECT
+public:
+    ToRenameListResponse(Client *parent, QTcpSocket *socket);
+public slots:
+    void responseHandle(QJsonObject itemObject);
+};
+
 class ToGetListsResponse : public AbstractResponseHandler  {
 Q_OBJECT
 public:

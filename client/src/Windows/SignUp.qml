@@ -78,6 +78,7 @@ Page {
                 }
                 validator: RegExpValidator { regExp:/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/ }
             }
+            input.onAccepted:inputEmail.input.forceActiveFocus()
         }
         Label {
             id: logLableLogin
@@ -113,6 +114,7 @@ Page {
                 validator: RegExpValidator { regExp:/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/ }
             }
             KeyNavigation.tab: inputPassword
+            input.onAccepted:inputPassword.input.forceActiveFocus()
         }
         Label {
             id: logLableMail
@@ -145,6 +147,7 @@ Page {
                             (inputPasswordConfirm.input.text.length <= 0)
                 }
             }
+            input.onAccepted:inputPasswordConfirm.input.forceActiveFocus()
         }
         Label {
             id: logLablePassword
@@ -178,6 +181,7 @@ Page {
                     logLableConfirm.toLogLable()
                 }
             }
+            input.onAccepted:signUp.clicked()
         }
 
         Label {
@@ -199,12 +203,12 @@ Page {
         }
 
         S_Button_1 {
-            id:signUn
+            id:signUp
             buttonEnabled: !inputLogin.error && !inputEmail.error && !inputPassword.error && !inputPasswordConfirm.error
             buttonContent: "Sign Up"
             width: parent.width
             Component.onCompleted: {
-                signUn.clicked.connect(signUpRequest);
+                signUp.clicked.connect(signUpRequest);
             }
         }
     }

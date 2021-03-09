@@ -131,6 +131,13 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::CREATE_LIST:
                 result = createList(map.value("title").toString(),
                                     map.value("workflowId").toInt());
+<<<<<<< HEAD
+=======
+                break;
+            case RequestType::RENAME_LIST:
+                result = renameList(map.value("title").toString(),
+                                    map.value("listId").toInt());
+>>>>>>> a64fb2e4d9528774de97cd193031ce8e9c2a3b63
                 break;
             case RequestType::GET_LISTS:
                 result = getLists(map.value("workflowId").toInt());
@@ -148,7 +155,8 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
             case RequestType::UPDATE_TASK:
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
-                                    map.value("checkList"));
+                                    map.value("checkList"),
+                                    map.value("title").toString());
                 break;
             case RequestType::MOVE_TASK:
                 result = moveTask(map.value("taskId").toInt(),
@@ -422,17 +430,38 @@ QVariantMap DataBase::updateProfile(int user_id, const QString &name, const QStr
 }
 
 QVariantMap DataBase::createList(const QString &title, int workflowId) {
+<<<<<<< HEAD
     Q_UNUSED(workflowId);
     Q_UNUSED(title);
     qDebug() << workflowId;
+=======
+>>>>>>> a64fb2e4d9528774de97cd193031ce8e9c2a3b63
     QVariantMap map;
     int lastId;
     map["type"] = static_cast<int>(RequestType::CREATE_LIST);
     if (insert("Lists", "workflow_id, title", QString::number(workflowId) + ", '" + title + "'", lastId)) {
         map["message"] = "List created";
         map["listId"] = lastId;
+        map["title"] = title;
     } else {
         map["message"] = "List wasn't created";
+        map["error"] = 1;
+    }
+    return map;
+}
+
+QVariantMap DataBase::renameList(const QString &title, int listId) {
+    QVariantMap map;
+    map["type"] = static_cast<int>(RequestType::RENAME_LIST);
+    QSqlQuery query;
+    query.prepare("UPDATE Lists SET title = :title WHERE id = " + QString::number(listId) + ";");
+    query.bindValue(":title", title);
+    if (query.exec()) {
+        map["message"] = "List renamed";
+        map["listId"] = listId;
+        map["title"] = title;
+    } else {
+        map["message"] = "List wasn't renamed";
         map["error"] = 1;
     }
     return map;
@@ -445,6 +474,7 @@ QVariantMap DataBase::removeList(int listId) {
     if (query.exec("DELETE from Lists where id = " + QString::number(listId) + ";")) {
         query.exec("DELETE from Tasks where list_id = " + QString::number(listId) + ";");
         map["message"] = "List removed";
+        map["listId"] = listId;
     } else {
         map["message"] = "List wasn't removed";
         map["error"] = 1;
@@ -487,6 +517,7 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
     if (insert("Tasks", "title, list_id, index_id", "'" + title + "', " + QString::number(listId) + ", " + QString::number(index_id), lastid)) {
         map["message"] = "Task created";
         map["taskId"] = lastid;
+        map["listId"] = listId;
     } else {
         map["message"] = "Task wasn't created";
         map["error"] = 1;
@@ -494,7 +525,10 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
     return map;
 }
 
-QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList) {
+QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList, const QString &title) {
+    Q_UNUSED(title);
+    //треба настроїть щоб коли приходить тайтл - зберігаєш тайтл в останню колонку // а коли дескріпшн і чекліст то створювати нову колонку
+
     QJsonObject obj{
         {"array", checkList.toJsonArray()}};
     QJsonDocument *jsonDoc = new QJsonDocument(obj);
@@ -506,13 +540,6 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     query.prepare("UPDATE Tasks SET description = :description, checklist = :checklist WHERE id = " + QString::number(taskId) + ";");
     query.bindValue(":description", description);
     query.bindValue(":checklist", json);
-    // qDebug() << obj;
-    // QJsonArray ll = checkList.toJsonArray();
-    // qDebug() << "CHECK_LIST :\n";
-    // for(int i = 0; i < ll.count(); i++) {
-    //     qDebug() << ll.at(i)["str"].toString();
-    //     qDebug() << ll.at(i)["isDone"].toBool();
-    // }
     if (query.exec()) {
         map["message"] = "Task updated";
         map["description"] = description;
@@ -564,8 +591,14 @@ QVariantMap DataBase::removeTask(int taskId) {
     QVariantMap map;
     QSqlQuery query;
     map["type"] = static_cast<int>(RequestType::REMOVE_TASK);
+    query.exec("select list_id from Tasks where id = " + QString::number(taskId));
+        if (query.first()) {
+            map["listId"] = query.value(0).toInt();
+        }
     if (query.exec("DELETE from Tasks where id = " + QString::number(taskId))) {
         map["message"] = "Task removed";
+
+        map["taskId"] = taskId;
     } else {
         map["message"] = "Task wasn't removed";
         map["error"] = 1;
@@ -578,11 +611,14 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     QSqlQuery query;
-    if (query.exec("select description, checklist from Tasks where id = " + QString::number(taskId)) && query.first()) {
+    if (query.exec("select title, description, checklist, list_id from Tasks where id = " + QString::number(taskId)) && query.first()) {
         map["message"] = "Take your task data bitch";
         // query.first();
-        map["description"] = query.value(0).toString();
-        map["checkList"] = query.value(1).toString();
+        map["title"] = query.value(0).toString();
+        map["description"] = query.value(1).toString();
+        map["checkList"] = query.value(2).toString();
+        map["listId"] = query.value(3).toInt();
+        map["taskId"] = taskId;
     } else {
         map["message"] = "i dont now wtf";
         map["error"] = 1;
@@ -604,6 +640,11 @@ QVariantMap DataBase::getTasks(int listId) {
     }
     while (query.next()) {
         tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
+    }
+    query.exec("select title from Lists where id = " + QString::number(listId));
+    if (query.first()) {
+        map["title"] = query.value(0).toString();
+        map["listId"] = listId;
     }
     if (!map.contains("error")) {
         map["tasks"] = tasks;

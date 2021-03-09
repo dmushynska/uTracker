@@ -113,19 +113,20 @@ Item {
                     cardsModel: modelD
                     cardListHeight: deskListView.height - dp(70)
                     cardListTitle: titleD
-
-                    cardTitleEditor.onAccepted:  {
-                        console.log("!!!")
-                        buttonAddList.clicked()
-                    }
+                    listId: idD
+//                    cardTitleEditor.onAccepted:  {
+//                        if(index == (mCardListsModel.rowCount() - 1)) {
+//                            buttonAddList.clicked()
+//                        }
+//                    }
                     states: [
                     State {
                             name: "inDrag"
                             when: index === deskListView.draggedItemIndex
                             PropertyChanges { target: cardList; parent: dndContainer }
                             PropertyChanges { target: cardList; anchors.centerIn: undefined }
-                            PropertyChanges { target: cardList; x: coords.mouseX - dp(150)}
-                            PropertyChanges { target: cardList; y: coords.mouseY - dp(35)}
+//                            PropertyChanges { target: cardList; x: coords.mouseX - dp(150)}
+//                            PropertyChanges { target: cardList; y: coords.mouseY - dp(35)}
                         }
                     ]
                 }

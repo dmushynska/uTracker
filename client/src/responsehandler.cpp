@@ -253,7 +253,22 @@ void ToCreateListResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "listId :" << itemObject["listId"].toInt() << "\n";
-        emit WORKFLOW->serverCreatedListResponse(itemObject["message"].toString(), itemObject["listId"].toInt());
+        emit WORKFLOW->serverCreatedListResponse(itemObject["title"].toString(), itemObject["listId"].toInt());
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////
+ToRenameListResponse::ToRenameListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
+    m_parent = parent;
+}
+
+void ToRenameListResponse::responseHandle(QJsonObject itemObject) {
+    if (itemObject["error"].toInt() == 1)
+        qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else {
+        qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "title :" << itemObject["listId"].toInt() << "\n";
+
+        emit WORKFLOW->serverRenameListResponse(itemObject["message"].toString(), itemObject["listId"].toInt(), itemObject["title"].toString());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -266,9 +281,9 @@ void ToGetListsResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
-        qDebug() << "ToGetListsResponse :" << itemObject << "\n";
+        qDebug() << "ToGetListsResponse :" << itemObject["lists"] << "\n";
     }
-    emit WORKFLOW->serverWorkflowListsResponse();
+    emit WORKFLOW->serverWorkflowListsResponse(itemObject);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
@@ -276,10 +291,12 @@ ToRemoveListResponse::ToRemoveListResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToRemoveListResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        qDebug() << "listId :" << itemObject["listId"].toInt() << "\n";
+        emit WORKFLOW->serverRemoveListResponse(itemObject["message"].toString(), itemObject["listId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +310,7 @@ void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "taskId :" << itemObject["taskId"].toInt() << "\n";
-        emit WORKFLOW->serverCreateTaskResponse(itemObject["message"].toString(), itemObject["taskId"].toInt());
+        emit WORKFLOW->serverCreateTaskResponse(itemObject["message"].toString(), itemObject["taskId"].toInt(), itemObject["listId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -308,6 +325,7 @@ void ToGetTasksResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "ToGetListsResponse :" << itemObject["listId"]<< "\n";
     }
+    emit WORKFLOW->serverGetTasksResponse(itemObject);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 ToUpdateTaskResponse::ToUpdateTaskResponse(Client *parent, QTcpSocket *socket) :  AbstractResponseHandler(socket) {
@@ -333,6 +351,7 @@ void ToMoveTaskResponse::responseHandle(QJsonObject itemObject) {
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        emit WORKFLOW->serverMoveTaskResponse(itemObject["message"].toString());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -341,10 +360,11 @@ ToRemoveTaskResponse::ToRemoveTaskResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToRemoveTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
+        emit WORKFLOW->serverRemoveTaskResponse(itemObject["message"].toString(), itemObject["listId"].toInt(), itemObject["taskId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -353,18 +373,19 @@ SendTaskDataResponse::SendTaskDataResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void SendTaskDataResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
-                QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
-        QJsonObject itemObject = itemDoc.object();
-        QJsonArray arr = itemObject["array"].toArray();
+        QJsonDocument itemDoc = QJsonDocument::fromJson(itemObject["checkList"].toString().toUtf8());
+        QJsonObject object = itemDoc.object();
+        QJsonArray arr = object["array"].toArray();
         qDebug() << "CHECK_LIST :\n";
         for(int i = 0; i < arr.count(); i++) {
             qDebug() << arr.at(i)["str"].toString();
             qDebug() << arr.at(i)["isDone"].toBool();
         }
+        emit WORKFLOW->serverGetTaskDataResponse(itemObject["message"].toString(), itemObject["description"].toString(), arr, itemObject);
     }
 }

@@ -7,7 +7,8 @@ import Material.ListItems 0.1 as ListItem
 Item {
     id: card
 
-    property int cardId: 000000
+    property int cardId: -1
+    property int parentId: -1
     property string cardContent: "value"
     property int cardWidth: dp(100)
     property int cardHeight: dp(80)
@@ -15,6 +16,7 @@ Item {
 
     width: cardWidth
     height: cardHeight
+
     Card {
         anchors.centerIn: parent
         width: parent.width - dp(20)
@@ -34,17 +36,43 @@ Item {
                 font.pixelSize: dp(19)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
-                visible: false
+                MouseArea {
+                    id: renameTaskArea
+                    anchors.fill: parent
+                    onDoubleClicked: {
+                        console.log("Renaming Task #" + cardContent)
+                        infoText.visible = false
+                        infoTextField.visible = true
+                        infoTextField.forceActiveFocus()
+                    }
+                }
             }
             TextField {
                 id: infoTextField
                 height: parent.height
                 width: lay.width - (menuButton.height + parent.spacing * 2)
                 visible: !infoText.visible
-                onAccepted: {
-                    infoText.text = text;
+//                acceptableInput: true
+                Component.onCompleted: {
+                    visible = false
+                }
+                Component.onDestruction: {
                     focus = false
+                    visible = false
+                }
+
+                onAccepted: {
+                    if (text !== "") {
+                        infoText.text = text;
+                        mWorkflow.renameTask(cardId, text);
+                    }
+                    visible = false
                     infoText.visible = true
+                }
+                onFocusChanged: {
+//                    console.log("#" + cardContent + " % " + focus)
+                    if (focus == false)
+                        accepted()
                 }
 
             }
@@ -57,70 +85,61 @@ Item {
                 maxActionCount: 1
 //                backgroundColor: "pink"
 
+
                 actions: [
                     Action {
-                        id: addPers
-                        iconName: "navigation/chevron_right"
+                        id: details
+                        iconName: "image/color_lens"
                         text: "Details.."
                         hoverAnimation: true
                         onTriggered: {
-//                            var cardIndex = layout.indexAt(mouseX, mouseY + control.globalPos)
-//                            var cardItem = cardModel.get(index)
+
                             console.log("Request to server: Id of card: " + cardId)
-
-                            // Waiting for response
-
-                            var component;
-                            var sprite;
-                            component = Qt.createComponent("CardView.qml");
-                            if (component.status === Component.Ready){
-                                sprite = component.createObject(card, {text: "info:" + cardId});
-                            }
-                            sprite.show()
+                            mWorkflow.openDescription(cardId);
                         }
                     },
                     Action {
                         id: delPers
-                        iconName: "navigation/chevron_right"
+                        iconName: "action/delete"
                         text: "Remove"
                         hoverAnimation: true
                         onTriggered: {
-                            // request
+                            mWorkflow.removeTask(cardId)
                         }
                     },
                     Action {
                         id: renamePers
-                        iconName: "navigation/chevron_right"
+                        iconName: "image/edit"
                         text: "Rename"
                         hoverAnimation: true
                         onTriggered: {
                             infoText.visible = false
-                            infoTextField.forceActiveFocus();
-                            infoTextField.focus = true
+                            infoTextField.visible = true
+                            infoTextField.forceActiveFocus()
                         }
                     },
                     Action {
                         id: movePers
-                        iconName: "navigation/chevron_right"
+                        iconName: "content/forward"
                         text: "Move to list.."
                         hoverAnimation: true
                         onTriggered: {
-//                            var cardIndex = layout.indexAt(mouseX, mouseY + control.globalPos)
-//                            var cardItem = cardModel.get(index)
-                            console.log("Request to server: Id of card: " + cardId)
+                            console.log("$$$$$$$$$$$$$$$$$$$$ Request to server: Id of card: " + cardId + " LISTSSST " + parentId)
                             var componentMove;
                             var spriteMove;
+                            mWorkflow.moveSetCardId(cardId);
+                            mWorkflow.moveSetCurrListId(parentId);
                             componentMove = Qt.createComponent("MoveToDialog.qml");
                             if (componentMove.status === Component.Ready){
                                 spriteMove = componentMove.createObject(card);
                                 console.log("Request to server: Id of card: " + componentMove)
                             }
+
                             spriteMove.show()
                         }
                     }
                 ]
             }
         }
-
     }
 }

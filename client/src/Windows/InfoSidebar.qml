@@ -18,7 +18,7 @@ PageSidebar {
         actions: [
             Action {
                 id: addPers
-                iconName: "navigation/chevron_right"
+                iconName: "content/add"
                 text: "Add colab"
                 hoverAnimation: true
                 onTriggered: {
@@ -26,7 +26,7 @@ PageSidebar {
             },
             Action {
                 id: delPers
-                iconName: "navigation/chevron_right"
+                iconName: "action/delete"
                 text: "Remove colab"
                 hoverAnimation: true
                 onTriggered: {

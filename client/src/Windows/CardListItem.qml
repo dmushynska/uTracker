@@ -10,6 +10,7 @@ Item {
     id: cardList
 
     function createNewCard() {
+        console.debug("{{{DEBUGGGG}}} ListId -> " + (layout.model.parentId()))
         if (layout.model.parentId() > -1)
             mWorkflow.appendTask("Task " + (layout.model.rowCount() + 1), layout.model.parentId())
         control.position = 1.0
@@ -21,23 +22,13 @@ Item {
     property alias cardsModel: layout.model
     readonly property alias cardListHeader: header
     property alias cardTitleEditor: name
+    property int listId: -1
+
 
 
     width: cardListWidth
     height:cardListHeight
 
-//    function showModelItems(model, layoutItem, delegateItem) {
-//        for (var item = 0; item < model.count; item++) {
-//            var component;
-//            var sprite;
-//            component = Qt.createComponent(delegateItem);
-//            console.log(model.get(item).text)
-//            if (component.status === Component.Ready){
-//                sprite = component.createObject(layoutItem, {cardContent: model.get(item).text});
-//            }
-//        }
-
-//    }
 
     ListModel {
         id: cardModel
@@ -112,43 +103,105 @@ Item {
                 Rectangle {
                     anchors.fill: parent
                     color: "#80f6a2bf"
-                    Text {
-                        id:cardTitle
+                    Row {
                         anchors.fill: parent
-                        verticalAlignment: Text.AlignVCenter
+
                         anchors.leftMargin: dp(15)
-                        color: "#7a163c"
-                        font.pixelSize: dp(24)
-                        text: cardListTitle
-                        font.bold: true
-                        visible: !name.visible
-                    }
-//                    Item {
-//                        anchors.fill: parent
-////                        focus: true
-                        TextField {
-                            id: name
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.margins: dp(20)
-//                            Component.onCompleted: {
-//                                name.forceActiveFocus()
-//                            }
-                            Keys.onEscapePressed: {
-                                focus = false
-                            }
-
-                            anchors.fill: parent
-//                            focus: true
+                        anchors.topMargin: dp(15)
+                        anchors.bottomMargin: dp(15)
+                        Text {
+                            id:cardTitle
+                            height: parent.height
+                            width: parent.width - parent.height
+                            verticalAlignment: Text.AlignVCenter
+                            anchors.leftMargin: dp(15)
                             color: "#7a163c"
-                            onFocusChanged:  {
-                                console.log(cardListTitle + ": " + focus)
-                                if (text.length > 0)
-                                    cardTitle.text = text
-                                visible = focus
+                            font.pixelSize: dp(24)
+                            text: cardListTitle
+                            font.bold: true
+        //                        visible: !name.visible
+                            MouseArea {
+                                id: renameList
+                                anchors.fill: parent
+                                onDoubleClicked: {
+                                    console.log("Renaming List")
+                                    cardTitle.visible = false
+                                    name.visible = true
+                                    name.forceActiveFocus()
+                                }
                             }
-//                        }
+                        }
+                        Item {
+                            height: parent.height
+                            width: parent.width - parent.height - dp(20)
+//                            width: parent.implicitWidth
+                            TextField {
+                                id: name
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                Component.onDestruction: {
+                                    focus = false
+                                    visible = false
+                                }
+                                Component.onCompleted: {
+                                    focus = false
+                                    visible = false
+                                }
 
-                        visible: true
+                                Keys.onEscapePressed: {
+                                    focus = false
+                                    visible = false
+                                }
+
+                                anchors.fill: parent
+                                color: "#7a163c"
+                                onAccepted: {
+                                    if (text.length > 0) {
+                                        cardTitle.text = text
+                                        mWorkflow.renameList(listId, text);
+                                    }
+                                    focus = false
+                                    visible = false
+                                    cardTitle.visible = true
+                                }
+
+                                onFocusChanged:  {
+                                    if(focus == false)
+                                        accepted();
+                                }
+                            }
+                        }
+                        ActionBar {
+                            id: menuListButton
+                            height: parent.height
+                            width: parent.height
+                            anchors.verticalCenter: parent.verticalCenter
+            //                onClicked: snackbar.open("That button is colored!")
+                            maxActionCount: 1
+            //                backgroundColor: "pink"
+                            actions: [
+                                Action {
+                                    id: delPers
+                                    iconName: "action/delete"
+                                    text: "Remove list"
+                                    hoverAnimation: true
+                                    onTriggered: {
+                                        mWorkflow.removeList(listId)
+                                    }
+                                },
+                                Action {
+                                    id: renamePers
+                                    iconName: "image/edit"
+                                    text: "Rename list"
+                                    hoverAnimation: true
+                                    onTriggered: {
+                                        cardTitle.visible = false
+                                        name.visible = true
+                                        name.forceActiveFocus()
+                                    }
+                                }
+                            ]
+                        }
                     }
                 }
             }
@@ -184,10 +237,19 @@ Item {
                     }
                     delegate: CardItem {
                         id:card
-                        cardContent: model.text
+                        cardContent: textCard
                         cardWidth: layout.width
-                        cardId: index
+                        cardId: idCard
+                        parentId: idParent
                         modelOwner: cardsModel
+                        Connections {                               // !
+                            target: cardsModel                      // !
+                            onTaskAppended: {                       // !
+                                control.position = 1.0;             // !
+                                console.log("{}{}{}{}{} Peremoga {}{}{}{}")
+                            }                                       // !
+                        }                                           // !
+
                         states: [
                             State {
                                 name: "inDrag"

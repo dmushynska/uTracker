@@ -28,7 +28,7 @@ Dialog {
             checked: false
             exclusiveGroup: optionGroup
             onClicked: {
-                selectedListId = index + 1              // !!!!!! change to index
+                selectedListId = idD             // !!!!!! change to index
             }
         }
     }
@@ -36,8 +36,8 @@ Dialog {
     positiveButtonText: "Move"
     negativeButtonText: "Cancel"
     onAccepted:  {
-        console.log("card " + idCard + " moved to " + selectedListId)
-
-
+        mWorkflow.moveSetToListId(selectedListId)
+        mWorkflow.moveRequest(true)
+//        console.log("card " + idCard + " moved to " + selectedListId)
     }
 }

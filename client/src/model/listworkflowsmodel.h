@@ -46,6 +46,7 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
+
 private:
     QVector<QPair<QString, int>> m_workflows;
 };

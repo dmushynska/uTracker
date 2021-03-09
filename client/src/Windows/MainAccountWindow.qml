@@ -18,6 +18,20 @@ Page {
 //        sectionItems.model.dataChanged()
     }
 
+    Connections {
+        target: mWorkflow
+        onGotTaskData: {
+            console.debug("EMITTED CAUGHT")
+            var component;
+            var sprite;
+            component = Qt.createComponent("CardView.qml");
+            if (component.status === Component.Ready){
+                sprite = component.createObject(parent);
+            }
+            sprite.show()
+        }
+    }
+
     ListModel {
         id: userSection
         ListElement {
@@ -60,7 +74,7 @@ Page {
     actions: [
         Action {
             id: info
-            iconName: "navigation/menu"
+            iconName: "action/account_circle"
             text: "Info"
             hoverAnimation: false
             onTriggered: {
@@ -72,6 +86,7 @@ Page {
 
     rightSidebar: InfoSidebar {
         id: sidebarInfo
+        showing: false
     }
     backAction: navDrawer.action
     NavigationDrawer {
