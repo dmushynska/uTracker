@@ -64,12 +64,14 @@ Page {
             id: inputNickname
             placeholderContent: "Login or email"
             inputWidth: lable.width
+            input.onAccepted: inputPassword.input.forceActiveFocus()
         }
         S_Input_1 {
             id: inputPassword
             placeholderContent: "Password"
             inputWidth: lable.width
             input.echoMode: TextInput.Password
+            input.onAccepted: signIn.clicked()
         }
         Column {
             spacing: dp(10)
