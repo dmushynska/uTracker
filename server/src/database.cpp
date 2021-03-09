@@ -150,6 +150,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 result = getTasks(map.value("listId").toInt());
                 break;
             case RequestType::UPDATE_TASK:
+                
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
                                     map.value("checkList"),
@@ -523,7 +524,7 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     //треба настроїть щоб коли приходить тайтл - зберігаєш тайтл в останню колонку // а коли дескріпшн і чекліст то створювати нову колонку
-    if (title == 0) {
+    if (title.isEmpty()) {
         QJsonObject obj{
             {"array", checkList.toJsonArray()}};
         QJsonDocument *jsonDoc = new QJsonDocument(obj);

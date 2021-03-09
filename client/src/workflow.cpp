@@ -189,6 +189,7 @@ void Workflow::openDescription(int id) {
 }
 
 void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obg) {
+    m_descriptionModel->clearAllData();
     m_descriptionModel->setTaskDescription(descr);
     m_descriptionModel->setTaskTitle(obg["title"].toString());
     m_descriptionModel->setTaskId(obg["taskId"].toInt());

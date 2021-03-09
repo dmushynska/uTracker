@@ -218,8 +218,7 @@ ToUpdateTask::ToUpdateTask(Connection *socket) : AbstractRequestHandler(socket){
 bool ToUpdateTask::isValid(QJsonObject itemObject) {
     if (itemObject.contains("checkList")
         && itemObject.contains("description")
-        && itemObject.contains("taskId")
-        && itemObject.contains("title"))
+        && itemObject.contains("taskId"))
         return true;
     return false;
 }
