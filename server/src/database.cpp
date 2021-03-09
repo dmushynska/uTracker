@@ -130,10 +130,10 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 break;
             case RequestType::CREATE_LIST:
                 result = createList(map.value("title").toString(),
-                                    map.value("workdlowId").toInt());
+                                    map.value("workflowId").toInt());
                 break;
             case RequestType::GET_LISTS:
-                result = getLists(map.value("workdlowId").toInt());
+                result = getLists(map.value("workflowId").toInt());
                 break;
             case RequestType::REMOVE_LIST:
                 result = removeList(map.value("listId").toInt());
@@ -351,6 +351,9 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
         map["ownerId"] = query.value(0).toInt();
         map["title"] = query.value(1).toString();
         map["deadline"] = query.value(2).toString();
+        // QJsonArray lists;
+        // lists.append(QJsonObject::fromVariantMap(getLists(workflow_id)));
+        // map["lists"] = lists;
         map["message"] = "Workflow successfully has gotten";
     } else {
         map["error"] = 1;
@@ -421,6 +424,7 @@ QVariantMap DataBase::updateProfile(int user_id, const QString &name, const QStr
 QVariantMap DataBase::createList(const QString &title, int workflowId) {
     Q_UNUSED(workflowId);
     Q_UNUSED(title);
+    qDebug() << workflowId;
     QVariantMap map;
     int lastId;
     map["type"] = static_cast<int>(RequestType::CREATE_LIST);
