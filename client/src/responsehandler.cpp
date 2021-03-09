@@ -333,12 +333,17 @@ ToUpdateTaskResponse::ToUpdateTaskResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToUpdateTaskResponse::responseHandle(QJsonObject itemObject) {
-        if (itemObject["error"].toInt() == 1)
+    if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
+    else if (itemObject.contains("title")) {
+        qDebug() << "title :" << itemObject["title"].toString() << "\n";
+
+    }
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "description :" << itemObject["description"].toString() << "\n";
         qDebug() << "checkList :" << itemObject["checkList"].toString() << "\n";
+        
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
