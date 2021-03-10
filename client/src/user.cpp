@@ -3,23 +3,33 @@
 
 User::User(QObject *parent) : QObject(parent), m_userId(-1) {
     qobject_cast<UserManager *>(parent)->getAuthor();
+
 }
 
-void User::setUserId(int id) {
-    m_userId = id;
-}
+
 
 void User::setUserLogin(const QString &login) {
-    m_userLogin = login;
+    if (m_userLogin != login) {
+        m_userLogin = login;
+        emit userLoginChanged();
+    }
 }
 
 void User::setUserMail(const QString &mail) {
-    m_userMail = mail;
+    if (m_userMail != mail) {
+        m_userMail = mail;
+        emit userMailChanged();
+    }
 }
 
-int User::getUserId() const {
-    return m_userId;
+void User::setUserId(int id) {
+    if (m_userId != id) {
+        m_userId = id;
+        emit userIdChanged();
+    }
 }
+
+
 
 QString User::getUserLogin() const {
     return m_userLogin;
@@ -27,6 +37,10 @@ QString User::getUserLogin() const {
 
 QString User::getUserMail() const {
     return m_userMail;
+}
+
+int User::getUserId() const {
+    return m_userId;
 }
 
 

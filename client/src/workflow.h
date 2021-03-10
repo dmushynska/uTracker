@@ -37,7 +37,7 @@ public:
 
     //*     Tasks       *//
     Q_INVOKABLE void appendTask(QString title, int id);
-    Q_INVOKABLE void renameTask(int id, QString name);    ///////////////// Is not implemented
+    Q_INVOKABLE void renameTask(int id, QString name);
     Q_INVOKABLE void openDescription(int id);
     Q_INVOKABLE void saveDescription();
     Q_INVOKABLE void removeTask(int id);
@@ -78,6 +78,7 @@ signals:        // Server Response Signals
     void serverGetTaskDataResponse(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obj);
     void serverRemoveListResponse(const QString &msg, int listId);
     void serverRenameListResponse(const QString &msg, int listId, const QString &name);
+    void serverRenameTaskResponse(const QString &msg, int listId, int taskId, const QString &name);
 
 private slots:  // Server Response Slots
 
@@ -93,6 +94,7 @@ private slots:  // Server Response Slots
     void parseGetTaskData(const QString &msg, const QString &descr, QJsonArray array, QJsonObject obg);
     void parseRemoveList(const QString &msg, int listId);
     void parseRenameList(const QString &msg, int listId, const QString &name);
+    void parseRenameTask(const QString &msg, int listId, int taskId, const QString &name);
 
 
 private:

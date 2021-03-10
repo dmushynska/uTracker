@@ -150,11 +150,12 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
                 result = getTasks(map.value("listId").toInt());
                 break;
             case RequestType::UPDATE_TASK:
-                
+                qDebug() << "zashlo";
                 result = updateTask(map.value("taskId").toInt(),
                                     map.value("description").toString(),
                                     map.value("checkList"),
                                     map.value("title").toString());
+                qDebug() << QJsonDocument(QJsonObject::fromVariantMap(result)).toJson();
                 break;
             case RequestType::MOVE_TASK:
                 result = moveTask(map.value("taskId").toInt(),
@@ -175,6 +176,7 @@ void DataBase::sendData(Connection *m_connection, int type, const QVariantMap &m
     if (!result.isEmpty()) {
         QJsonObject jsonObject = QJsonObject::fromVariantMap(result);
         QJsonDocument jsonDoc = QJsonDocument(jsonObject);
+//        qDebug() << jsonDoc.toJson();
         emit m_connection->sendResponse(jsonDoc.toJson());
     }
 }
@@ -520,10 +522,8 @@ QVariantMap DataBase::createTask(const QString &title, int listId) {
 
 QVariantMap DataBase::updateTask(int taskId, const QString &description, const QVariant &checkList, const QString &title) {
     Q_UNUSED(title);
-
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::UPDATE_TASK);
-    //треба настроїть щоб коли приходить тайтл - зберігаєш тайтл в останню колонку // а коли дескріпшн і чекліст то створювати нову колонку
     if (title.isEmpty()) {
         QJsonObject obj{
             {"array", checkList.toJsonArray()}};
@@ -544,13 +544,13 @@ QVariantMap DataBase::updateTask(int taskId, const QString &description, const Q
         }
     } else {
         QSqlQuery query;
-        query.exec("UPDATE Tasks SET title = :title where task_id = " + QString::number(taskId) + ";");
+        query.prepare("UPDATE Tasks SET title = :title WHERE id = " + QString::number(taskId) + ";");
         query.bindValue(":title", title);
         if (query.exec()) {
-            map["message"] = "Task updated";
+            map["message"] = "Task renamed";
             map["title"] = title;
         } else {
-            map["message"] = "Task wasn't updated";
+            map["message"] = "Task wasn't renamed";
             map["error"] = 1;
         }
     }

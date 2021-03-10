@@ -50,7 +50,7 @@ void SignInResponse::responseHandle(QJsonObject itemObject) {
         m_parent->getManager()->getUser()->setUserId(itemObject["userId"].toInt());
         qDebug() << "COME USER -------- ID -------- " <<itemObject["userId"].toInt();
         WORKFLOW->getAllListWorkflow();
-        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true);
+        emit m_parent->getManager()->getAuthor()->serverResponseSignIn(true, itemObject["login"].toString(), itemObject["email"].toString(), itemObject["userId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -310,7 +310,7 @@ void ToCreateTaskResponse::responseHandle(QJsonObject itemObject) {
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";
         qDebug() << "taskId :" << itemObject["taskId"].toInt() << "\n";
-        emit WORKFLOW->serverCreateTaskResponse(itemObject["message"].toString(), itemObject["taskId"].toInt(), itemObject["listId"].toInt());
+        emit WORKFLOW->serverCreateTaskResponse(itemObject["title"].toString(), itemObject["taskId"].toInt(), itemObject["listId"].toInt());
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -333,11 +333,12 @@ ToUpdateTaskResponse::ToUpdateTaskResponse(Client *parent, QTcpSocket *socket) :
 }
 
 void ToUpdateTaskResponse::responseHandle(QJsonObject itemObject) {
+    qDebug() << "message :" << itemObject["message"].toString() << "\n";
     if (itemObject["error"].toInt() == 1)
         qDebug() << "error message :" << itemObject["message"].toString() << "\n";
     else if (itemObject.contains("title")) {
         qDebug() << "title :" << itemObject["title"].toString() << "\n";
-
+        emit WORKFLOW->serverRenameTaskResponse(itemObject["message"].toString(), itemObject["listId"].toInt(), itemObject["taskId"].toInt(), itemObject["title"].toString());
     }
     else {
         qDebug() << "message :" << itemObject["message"].toString() << "\n";

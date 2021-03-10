@@ -44,6 +44,7 @@ Item {
                         infoText.visible = false
                         infoTextField.visible = true
                         infoTextField.forceActiveFocus()
+                        infoTextField.text = infoText.text
                     }
                 }
             }
@@ -54,9 +55,14 @@ Item {
                 visible: !infoText.visible
 //                acceptableInput: true
                 Component.onCompleted: {
+                    focus = false
                     visible = false
                 }
                 Component.onDestruction: {
+                    focus = false
+                    visible = false
+                }
+                Keys.onEscapePressed: {
                     focus = false
                     visible = false
                 }
@@ -66,6 +72,7 @@ Item {
                         infoText.text = text;
                         mWorkflow.renameTask(cardId, text);
                     }
+                    focus = false
                     visible = false
                     infoText.visible = true
                 }

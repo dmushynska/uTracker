@@ -216,10 +216,13 @@ bool ToGetTasks::isValid(QJsonObject itemObject) {
 ToUpdateTask::ToUpdateTask(Connection *socket) : AbstractRequestHandler(socket){}
 
 bool ToUpdateTask::isValid(QJsonObject itemObject) {
-    if (itemObject.contains("checkList")
-        && itemObject.contains("description")
-        && itemObject.contains("taskId"))
-        return true;
+    if (itemObject.contains("taskId")) {
+        if ((itemObject.contains("checkList")
+            && itemObject.contains("description"))
+            || itemObject.contains("title"))
+            qDebug() << "zashlo nikiti v uho";
+            return true;
+    }
     return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

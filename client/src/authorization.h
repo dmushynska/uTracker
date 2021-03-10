@@ -27,8 +27,11 @@ public:
     void printStr(QString str);
     Q_INVOKABLE void setUserId(int id);
 
+private slots:
+    void parseResponseSignIn(bool valid, const QString &login = "", const QString &mail = "", int id = 0);
+
 signals:
-    void serverResponseSignIn(bool valid);
+    void serverResponseSignIn(bool valid, const QString &login = "", const QString &mail = "", int id = 0);
     void serverResponseSignUp(int err, QString strErr);
 
 private:

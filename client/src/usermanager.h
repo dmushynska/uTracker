@@ -38,7 +38,7 @@ signals:
 
 private:
 //    QQuickView view;
-    User m_user;
+    User *m_user;
     Authorization *m_author;
     Workflow *m_workflow;
     // Models

@@ -2,7 +2,9 @@
 #include "usermanager.h"
 #include <iostream>
 
-Authorization::Authorization(QObject *parent) : QObject(parent) {}
+Authorization::Authorization(QObject *parent) : QObject(parent) {
+    connect(this, &Authorization::serverResponseSignIn, &Authorization::parseResponseSignIn);
+}
 
 void Authorization::setRequest(AbstractRequest *request) {
     m_request = request;
@@ -23,5 +25,11 @@ void Authorization::printStr(QString str) {
 }
 
 void Authorization::setUserId(int id) {
+    PARENT_CAST(UserManager, parent())->getUser()->setUserId(id);
+}
+
+void Authorization::parseResponseSignIn(bool valid, const QString &login, const QString &mail, int id) {
+    PARENT_CAST(UserManager, parent())->getUser()->setUserLogin(login);
+    PARENT_CAST(UserManager, parent())->getUser()->setUserMail(mail);
     PARENT_CAST(UserManager, parent())->getUser()->setUserId(id);
 }

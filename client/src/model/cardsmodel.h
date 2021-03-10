@@ -8,19 +8,19 @@ class CardsModel : public QAbstractListModel
 {
     Q_OBJECT
 
+public:
+
     enum CardsRole {
-        TitleRole,
+        TitleRole = Qt::UserRole,
         IdRole,
         ParentIdRole
     };
-
-public:
     explicit CardsModel(QObject *parent = nullptr, int parentID = -1);
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = TitleRole) override;
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

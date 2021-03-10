@@ -139,11 +139,11 @@ Item {
                                 id: name
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                Component.onDestruction: {
+                                Component.onCompleted: {
                                     focus = false
                                     visible = false
                                 }
-                                Component.onCompleted: {
+                                Component.onDestruction: {
                                     focus = false
                                     visible = false
                                 }

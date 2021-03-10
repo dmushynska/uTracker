@@ -82,11 +82,12 @@ PageSidebar {
                             spacing: dp(5)
                             flickableDirection: Flickable.VerticalFlick
                             boundsBehavior: Flickable.StopAtBounds
-                            model: 15
+                            model: 1
                             clip: true
+
                             delegate: UserForms {
 //                                anchors.horizontalCenter: listColab.horizontalCenter
-                                formContent: "intelek2al"
+                                formContent: mUser.userLogin
                                 formType: ""
 //                                formColor: ""
                                 formWidth: listColab.width

@@ -19,6 +19,7 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverGetTaskDataResponse, &Workflow::parseGetTaskData);
     connect(this, &Workflow::serverRemoveListResponse, &Workflow::parseRemoveList);
     connect(this, &Workflow::serverRenameListResponse, &Workflow::parseRenameList);
+    connect(this, &Workflow::serverRenameTaskResponse, &Workflow::parseRenameTask);
 }
 
 Workflow::~Workflow() {
@@ -216,8 +217,10 @@ void Workflow::renameList(int id, QString name) {
 }
 
 void Workflow::renameTask(int id, QString name) {
-    if (id > -1)
+    if (id > 0) {
+        qDebug() << "<<<<< REQUERST RENAME TASK >>>>>";
         m_request->renameTask(name, id);
+    }
 }
 
 void Workflow::parseRemoveList(const QString &msg, int listId) {
@@ -233,4 +236,13 @@ void Workflow::parseRenameList(const QString &msg, int listId, const QString &na
         return;
     }
     m_currCardListModel->setData(m_currCardListModel->createCustomIndex(index), name, CardListsModel::TitleRole);
+}
+
+void Workflow::parseRenameTask(const QString &msg, int listId, int taskId, const QString &name) {
+    if (listId > 0) {
+        auto model = m_currCardListModel->getKanbById(listId)->model;
+        auto index = 0;
+        model->findById(taskId, &index);
+        model->setData(model->index(index), name, CardsModel::TitleRole);
+    }
 }

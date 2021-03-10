@@ -208,10 +208,12 @@ void AbstractRequest::createTask(const QString& title, int listId) {
 
 void AbstractRequest::renameTask(const QString& title, int taskId) {
     QMap<QString, QVariant> mapa;
+    qDebug() << "FUCKYOU!!!!!" << title << taskId;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     mapa["token"] = m_token;
     mapa["taskId"] = taskId;
     mapa["title"] = title;
+    createJSON(mapa);
 }
 
 void AbstractRequest::getTasks(int listId) {
