@@ -49,6 +49,7 @@ PopupBase {
     property alias enabled: action.visible
 
     readonly property Action action: action
+    property alias viewer: view
 
     onEnabledChanged: {
         if (!enabled)
@@ -63,6 +64,7 @@ PopupBase {
     }
 
     View {
+        id: view
         anchors.fill: parent
         fullHeight: true
         elevation: 3

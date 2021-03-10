@@ -14,7 +14,7 @@ ApplicationWindow {
     minimumHeight: 680
     title: qsTr("uTracker")
     theme {
-        primaryColor: "#fad2e0"
+        primaryColor: Qt.rgba(0.5,0.5,0.56, 1)
         accentColor: "#ffdad8"
         tabHighlightColor: "white"
 

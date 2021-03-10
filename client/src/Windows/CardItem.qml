@@ -21,7 +21,7 @@ Item {
         anchors.centerIn: parent
         width: parent.width - dp(20)
         height: parent.height - dp(5)
-        backgroundColor: "#fde8f5"
+        backgroundColor: "#fbfaf6"
         Row {
             id:lay
             anchors.fill: parent
@@ -32,7 +32,7 @@ Item {
                 text: cardContent
                 height: parent.height
                 width: cardWidth - (menuButton.width - parent.spacing / 2)
-                color: "#7a163c"
+                color: "grey"
                 font.pixelSize: dp(19)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft

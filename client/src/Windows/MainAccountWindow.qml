@@ -69,7 +69,7 @@ Page {
     height: dp(1080)
 
     title: "uTracker"
-    backgroundColor: "#dab6c2"
+    backgroundColor: "#e4e1e0"
     actionBar.decorationColor:"#7a163c"
     actions: [
         Action {
@@ -93,8 +93,10 @@ Page {
         id: navDrawer
 
         enabled: true
+        viewer.backgroundColor: "#fbfaf6"
 
-        overlayColor: "#307a163c"
+        overlayColor: "#308b8da0"
+
         onEnabledChanged: smallLoader.active = enabled
 
         Flickable {
@@ -114,7 +116,8 @@ Page {
 
                         ListItem.Subheader {
                             text: sectionsTitles[index]
-                            textColor:"#7a163c"
+                            textColor: "white"
+                            backgroundColor: "#8b8da0"
                             showDivider: true
                             elevation: 1
                         }
@@ -167,6 +170,7 @@ Page {
                     height: dp(40)
                     width: parent.width
                     onClicked: createNewDesk();
+                    backgroundColor: "#8b8da0"
                 }
             }
         }
