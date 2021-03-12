@@ -11,7 +11,8 @@ import Material.Extras 0.1
 Item {
     id: root
     property string formType: "StandartType"
-    property string formColor: "MainColor"
+    property string formMainColor: "#E7E6E2" // "#fad2e0"
+    property string formFontColor: "#5a585c" // "#7a163c"
     property string formContent: "value"
     property int formWidth: 300
     property int formHeight: 40
@@ -32,25 +33,20 @@ Item {
         data: Rectangle {
             width: parent.width
             height: formHeight
-            border.width: formType == "StandartType" ? 2 : 2
-            border.color: formColor == "MainColor" ? "#f6a2bf" : "#ffb4b0"
-            radius: formType == "StandartType" ? height/2 : 10
+            radius: formType == "StandartType" ? height/2 : 2
 
             Rectangle {
                 z:1
-                border.width: parent.border.width
-                border.color: parent.border.color
                 width: formHeight
                 height: formHeight
                 radius: formType == "StandartType" ? formHeight : parent.radius
-        //        color: formColor != "MainColor" ? "#fad2e0" : "#ffdad8"
-                color: formColor != "MainColor" ? "#7a163c" : "#7a163c"
+                color: formFontColor
                 Text {
                     id: letterName
                     text: formContent[0]
                     anchors.fill: parent
                     font.pixelSize: 20 * Units.dp
-                    color: formColor == "MainColor" ? "#fad2e0" : "#ffdad8"
+                    color: formMainColor
                     font.capitalization: Font.AllUppercase
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -59,17 +55,17 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                anchors.margins: parent.border.width
+//                anchors.margins: parent.border.width
                 id: form
                 radius: parent.radius
-                color: formColor == "MainColor" ? "#fad2e0" : "#ffdad8"
+                color: formMainColor
                 Text {
                     id: text
                     elide: Text.ElideRight
                     anchors.fill: parent
                     text: root.formContent
                     font.pixelSize: 20 * Units.dp
-                    color: formColor == "MainColor" ? "#7a163c" : "#7a163c"
+                    color: formFontColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
         //            MouseArea {

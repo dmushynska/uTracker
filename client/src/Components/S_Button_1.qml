@@ -2,6 +2,8 @@ import QtQuick 2.9
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+import UThemes 1.0
+
 Rectangle {
     id: root
     enum ButtonType {
@@ -14,7 +16,10 @@ Rectangle {
     }
 
     property string buttonType: "StandartType"
-    property string buttonColor: "MainColor"
+    property string buttonMainColor: UThemes.buttonBack
+    property string buttonBorderColor: UThemes.buttonBorder
+    property string buttonHoverColor: UThemes.buttonBackHover
+    property string buttonFontColor: UThemes.buttonFont
     property string buttonContent: "value"
     property int buttonWidth: 125
     property int buttonHeight: 40
@@ -25,7 +30,7 @@ Rectangle {
     width: buttonWidth
     height: buttonHeight
     border.width: buttonType == "StandartType" ? 2 : 2
-    border.color: buttonColor == "MainColor" ? "#f6a2bf" : "#ffb4b0"
+    border.color: buttonBorderColor
     radius: buttonType == "StandartType" ? height/2 : 5
 
     Rectangle {
@@ -33,7 +38,7 @@ Rectangle {
         anchors.margins: parent.border.width
         id: button
         radius: parent.radius
-        color: buttonColor == "MainColor" ? (!mouseArea.containsMouse ? "#fad2e0" : "#ffdad8") : (!mouseArea.containsMouse ? "#ffdad8" : "#fad2e0")
+        color: (!mouseArea.containsMouse ? buttonMainColor : buttonHoverColor)
         Text {
             id: text
 //            clip: true
@@ -41,7 +46,7 @@ Rectangle {
             anchors.fill: parent
             text: qsTr(root.buttonContent)
             font.pixelSize: 16 * Units.dp
-            color: buttonColor == "MainColor" ? "#7a163c" : "#7a163c"
+            color: buttonFontColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             MouseArea {

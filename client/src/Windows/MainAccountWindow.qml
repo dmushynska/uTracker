@@ -118,8 +118,8 @@ Page {
                             text: sectionsTitles[index]
                             textColor: "white"
                             backgroundColor: "#8b8da0"
-                            showDivider: true
-                            elevation: 1
+//                            showDivider: true
+                            elevation: 2
                         }
 
                         ListView {
@@ -144,8 +144,8 @@ Page {
                                         implicitWidth: 3
                                         implicitHeight: 100
                                         radius: width / 2
-                                        color: !(sectionItems.height < sectionItems.contentHeight) ? "#007a163c" :
-                                                                 (control.pressed || control.hovered ? "#807a163c" : "#407a163c")
+                                        color: !(sectionItems.height < sectionItems.contentHeight) ? "#00000000" :
+                                                                 (control.pressed || control.hovered ? "#5a585c" : "#805a585c")
                                 }
                             }
                             delegate: ListItem.Standard {

@@ -12,6 +12,7 @@ UserManager::UserManager(QObject *parent) : QObject(parent), m_user(new User(thi
     m_workflow(new Workflow(this))
 {
 //view.engine();
+    qmlRegisterSingletonType(QUrl("qrc:/Themes.qml"), "UThemes", 1, 0, "UThemes");
     QPM_INIT(engine)
     MaterialPlugin qmlMaterial;
     qmlMaterial.registerTypes("Material");

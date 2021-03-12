@@ -36,8 +36,7 @@ PageSidebar {
         data:
             Rectangle {
                 anchors.fill: parent
-//                color: "#80fad2e0"
-                color: "#ebc7d3"
+                color: "#f08B8D96"
 
                 Column {
                     anchors.fill: parent
@@ -54,7 +53,7 @@ PageSidebar {
 //                            radius: 5
                             Rectangle {
                                 anchors.fill: parent
-                                color: "#80f6a2bf"
+                                color: "#f05a585c"
 //                                border.width: 2
 //                                border.color: "#f6a2bf"
 //                                radius: parent.radius
@@ -63,7 +62,7 @@ PageSidebar {
                                     verticalAlignment: Text.AlignVCenter
     //                                horizontalAlignment: Text.AlignHCenter
                                     anchors.leftMargin: dp(15)
-                                    color: "#7a163c"
+                                    color: "white"
                                     font.pixelSize: dp(24)
                                     text: "Colaborators"
                                     font.bold: true

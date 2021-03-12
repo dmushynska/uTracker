@@ -14,5 +14,6 @@
         <file>Windows/CardView.qml</file>
         <file>Windows/MoveToDialog.qml</file>
         <file>Windows/Profile.qml</file>
+        <file>Themes.qml</file>
     </qresource>
 </RCC>
