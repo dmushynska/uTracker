@@ -86,7 +86,7 @@ Item {
         height: (layout.contentHeight + dp(104)) < parent.height ? (layout.contentHeight + dp(104)) : parent.height
 //        anchors.fill: pa  rent
 //        backgroundColor: Palette.colors["pink"]["50"]
-        backgroundColor: "#fcd8e4"
+        backgroundColor: "#8b8da0"
 
 
         Column {
@@ -102,7 +102,7 @@ Item {
 //                            radius: 5
                 Rectangle {
                     anchors.fill: parent
-                    color: "#80f6a2bf"
+                    color: "#5a585c"
                     Row {
                         anchors.fill: parent
 
@@ -115,7 +115,7 @@ Item {
                             width: parent.width - parent.height
                             verticalAlignment: Text.AlignVCenter
                             anchors.leftMargin: dp(15)
-                            color: "#7a163c"
+                            color: "white"
                             font.pixelSize: dp(24)
                             text: cardListTitle
                             font.bold: true
@@ -226,8 +226,8 @@ Item {
                                 implicitWidth: 3
                                 implicitHeight: 100
                                 radius: width / 2
-                                color: !(layout.height < layout.contentHeight) ? "#007a163c" :
-                                                         (control.pressed || control.hovered ? "#807a163c" : "#407a163c")
+                                color: !(layout.height < layout.contentHeight) ? "#005a585c" :
+                                                         (control.pressed || control.hovered ? "#5a585c" : "#805a585c")
                         }
                     }
 
@@ -265,8 +265,9 @@ Item {
                             id: border
                             anchors.fill: parent
                             radius: 5
-                            color: "transparent"
-                            border.color: "#ffffff"
+//                            color: "transparent"
+                            color: "#fbfaf6"
+//                            border.color: "#ffffff"
                             border.width: 6
                             opacity: 0
                         }
@@ -347,11 +348,11 @@ Item {
 //                            radius: 5
                 Rectangle {
                     anchors.fill: parent
-                    color: "#80f6a2bf"
+                    color: "#5a585c"
                     Button {
                        anchors.fill: parent
                        text: "add card"
-                       textColor: "#7a163c"
+                       textColor: "white"
                        onClicked : createNewCard()
                     }
                 }

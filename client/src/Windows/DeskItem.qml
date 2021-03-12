@@ -68,7 +68,7 @@ Item {
         width: parent.width - dp(20)
         height: parent.height - dp(20)
 //        backgroundColor: Palette.colors["purple"]["50"]
-        backgroundColor: "#ebc7d3"
+        backgroundColor: "#f5f2f1"
         Row{
             id: layout
             width: parent.width - dp(20)
@@ -104,7 +104,7 @@ Item {
                         implicitHeight: 50
                         radius: width / 2
                         color: !(deskListView.width < deskListView.contentWidth) ? "#007a163c" :
-                                                 (control.pressed || control.hovered ? "#807a163c" : "#407a163c")
+                                                 (control.pressed || control.hovered ? "#805a585c" : "#405a585c")
                     }
                 }
 
@@ -153,8 +153,8 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     elevation: 1
                     onClicked: {snackbar.open("Added new List"); createNewList()}
-                    backgroundColor: "#fde8f5"
-                    textColor: "#7a163c"
+                    backgroundColor: "#5a585c"
+                    textColor: "white"
                 }
 
                 Rectangle {
