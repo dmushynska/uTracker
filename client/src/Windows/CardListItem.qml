@@ -6,6 +6,8 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import QtQuick.Layouts 1.3
 
+import UThemes 1.0
+
 Item {
     id: cardList
 
@@ -86,7 +88,7 @@ Item {
         height: (layout.contentHeight + dp(104)) < parent.height ? (layout.contentHeight + dp(104)) : parent.height
 //        anchors.fill: pa  rent
 //        backgroundColor: Palette.colors["pink"]["50"]
-        backgroundColor: "#8b8da0"
+        backgroundColor: UThemes.listBack
 
 
         Column {
@@ -102,7 +104,7 @@ Item {
 //                            radius: 5
                 Rectangle {
                     anchors.fill: parent
-                    color: "#5a585c"
+                    color: UThemes.headerBack
                     Row {
                         anchors.fill: parent
 
@@ -115,7 +117,7 @@ Item {
                             width: parent.width - parent.height
                             verticalAlignment: Text.AlignVCenter
                             anchors.leftMargin: dp(15)
-                            color: "white"
+                            color: UThemes.isClassic ? "white" : UThemes.font
                             font.pixelSize: dp(24)
                             text: cardListTitle
                             font.bold: true
@@ -348,11 +350,11 @@ Item {
 //                            radius: 5
                 Rectangle {
                     anchors.fill: parent
-                    color: "#5a585c"
+                    color: UThemes.addTask
                     Button {
                        anchors.fill: parent
                        text: "add card"
-                       textColor: "white"
+                       textColor: UThemes.addTaskFont
                        onClicked : createNewCard()
                     }
                 }

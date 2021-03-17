@@ -13,12 +13,15 @@ QtObject {
     property string accent: !isClassic ? "#ffdad8" : "#7D7F8E"
     property string task: !isClassic ? "#fde8f5" : "#fbfaf6"
     property string gradienter: !isClassic ? "#dab6c2" : "#80808F"
-//    property string back: !isClassic ? "#dab6c2" : "#80808F"
-    property string headerBack: !isClassic ? "#dab6c2" : "#5a585c" ///++++
-    property string listBack: !isClassic ? "#dab6c2" : "#8b8da0" ///+++
-    property string overlay: !isClassic ? "#dab6c2" : "#308b8da0" ///+++
+    property string backBack: !isClassic ? "#dab6c2" : "#e4e1e0"
+    property string headerBack: !isClassic ? "#80f6a2bf" : "#5a585c"
+    property string addTask: !isClassic ? "#7a163c" : "#5a585c"
+    property string addTaskFont: !isClassic ? "white" : "white"
+    property string listBack: !isClassic ? "#fcd8e4" : "#8b8da0"
+    property string overlay: !isClassic ? "#307a163c" : "#308b8da0"
     property string slider: !isClassic ? "#407a163c" : "#805a585c"
     property string sliderHover: !isClassic ? "#407a163c" : "#5a585c"
+    property string desk: !isClassic ? "#ebc7d3" : "#f5f2f1"
 
     property string infoHeader: !isClassic ? "#80f6a2bf" : "#f05a585c"
     property string infoHeaderFont: !isClassic ? "#7a163c" : "white"

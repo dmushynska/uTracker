@@ -5,6 +5,8 @@ import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+import UThemes 1.0
+
 import "../Components"
 
 PageSidebar {
@@ -36,7 +38,7 @@ PageSidebar {
         data:
             Rectangle {
                 anchors.fill: parent
-                color: "#f08B8D96"
+                color: UThemes.infoBack
 
                 Column {
                     anchors.fill: parent
@@ -53,7 +55,7 @@ PageSidebar {
 //                            radius: 5
                             Rectangle {
                                 anchors.fill: parent
-                                color: "#f05a585c"
+                                color: UThemes.infoHeader
 //                                border.width: 2
 //                                border.color: "#f6a2bf"
 //                                radius: parent.radius
@@ -62,7 +64,7 @@ PageSidebar {
                                     verticalAlignment: Text.AlignVCenter
     //                                horizontalAlignment: Text.AlignHCenter
                                     anchors.leftMargin: dp(15)
-                                    color: "white"
+                                    color: UThemes.infoHeaderFont
                                     font.pixelSize: dp(24)
                                     text: "Colaborators"
                                     font.bold: true

@@ -4,6 +4,7 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 
+import UThemes 1.0
 //Rectangle {
 
 //}
@@ -11,8 +12,8 @@ import Material.Extras 0.1
 Item {
     id: root
     property string formType: "StandartType"
-    property string formMainColor: "#E7E6E2" // "#fad2e0"
-    property string formFontColor: "#5a585c" // "#7a163c"
+    property string formMainColor: UThemes.infoUserBack // "#fad2e0"
+    property string formFontColor: UThemes.infoUserFont // "#7a163c"
     property string formContent: "value"
     property int formWidth: 300
     property int formHeight: 40

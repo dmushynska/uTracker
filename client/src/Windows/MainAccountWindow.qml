@@ -6,6 +6,8 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import QtQuick.Layouts 1.3
 
+import UThemes 1.0
+
 Page {
 
     function createNewDesk() {
@@ -69,7 +71,7 @@ Page {
     height: dp(1080)
 
     title: "uTracker"
-    backgroundColor: "#e4e1e0"
+    backgroundColor: UThemes.backBack
     actionBar.decorationColor:"#7a163c"
     actions: [
         Action {
@@ -95,7 +97,7 @@ Page {
         enabled: true
         viewer.backgroundColor: "#fbfaf6"
 
-        overlayColor: "#308b8da0"
+        overlayColor: UThemes.overlay
 
         onEnabledChanged: smallLoader.active = enabled
 
@@ -116,8 +118,8 @@ Page {
 
                         ListItem.Subheader {
                             text: sectionsTitles[index]
-                            textColor: "white"
-                            backgroundColor: "#8b8da0"
+                            textColor: UThemes.isClassic ? "white" : UThemes.font
+                            backgroundColor: UThemes.listBack
 //                            showDivider: true
                             elevation: 2
                         }
@@ -170,7 +172,8 @@ Page {
                     height: dp(40)
                     width: parent.width
                     onClicked: createNewDesk();
-                    backgroundColor: "#8b8da0"
+                    backgroundColor: UThemes.listBack
+                    textColor: UThemes.isClassic ? "white" : UThemes.font
                 }
             }
         }
