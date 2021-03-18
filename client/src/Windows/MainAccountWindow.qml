@@ -74,7 +74,9 @@ Page {
     height: dp(1080)
 
     title: "uTracker"
+
     backgroundColor: UThemes.backBack
+
     actionBar.decorationColor:"#7a163c"
     actions: [
         Action {
@@ -99,6 +101,7 @@ Page {
 
         enabled: true
         viewer.backgroundColor: "#fbfaf6"
+
 
         overlayColor: UThemes.overlay
 

@@ -49,6 +49,7 @@ PopupBase {
     property alias enabled: action.visible
 
     property Action action: action
+
     property alias viewer: view
 
     onEnabledChanged: {

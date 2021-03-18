@@ -88,6 +88,7 @@ Item {
         height: (layout.contentHeight + dp(104)) < parent.height ? (layout.contentHeight + dp(104)) : parent.height
 //        anchors.fill: pa  rent
 //        backgroundColor: Palette.colors["pink"]["50"]
+
         backgroundColor: UThemes.listBack
 
 
@@ -104,6 +105,7 @@ Item {
 //                            radius: 5
                 Rectangle {
                     anchors.fill: parent
+
                     color: UThemes.headerBack
                     Row {
                         anchors.fill: parent
@@ -117,6 +119,7 @@ Item {
                             width: parent.width - parent.height
                             verticalAlignment: Text.AlignVCenter
                             anchors.leftMargin: dp(15)
+
                             color: UThemes.isClassic ? "white" : UThemes.font
                             font.pixelSize: dp(24)
                             text: cardListTitle
