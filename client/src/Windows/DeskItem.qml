@@ -106,7 +106,7 @@ Item {
                         implicitHeight: 50
                         radius: width / 2
                         color: !(deskListView.width < deskListView.contentWidth) ? "#007a163c" :
-                                                 (control.pressed || control.hovered ? "#805a585c" : "#405a585c")
+                                                 (control.pressed || control.hovered ? UThemes.sliderMainHover : UThemes.sliderMain)
                     }
                 }
 

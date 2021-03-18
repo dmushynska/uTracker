@@ -9,6 +9,9 @@ import QtQuick.Layouts 1.3
 import UThemes 1.0
 
 Page {
+    function showNav () {
+        navDrawer.open()
+    }
 
     function createNewDesk() {
         console.log("Request to create new desk");
@@ -147,7 +150,7 @@ Page {
                                         implicitHeight: 100
                                         radius: width / 2
                                         color: !(sectionItems.height < sectionItems.contentHeight) ? "#00000000" :
-                                                                 (control.pressed || control.hovered ? "#5a585c" : "#805a585c")
+                                                                 (control.pressed || control.hovered ? UThemes.sliderMainHover : UThemes.sliderMain)
                                 }
                             }
                             delegate: ListItem.Standard {
@@ -174,6 +177,54 @@ Page {
                     onClicked: createNewDesk();
                     backgroundColor: UThemes.listBack
                     textColor: UThemes.isClassic ? "white" : UThemes.font
+                }
+            }
+        }
+        Rectangle {
+            id: switcher
+            color: UThemes.primary
+            height: dp(40)
+            width: parent.width
+            anchors.bottom: parent.bottom
+            Row {
+                anchors.fill: parent
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Classic"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Switch {
+                        anchors.centerIn: parent
+                        checked: !UThemes.isClassic
+                        darkBackground: false
+                        onClicked: UThemes.changeTheme()
+                        color: UThemes.font
+                    }
+                }
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Pink"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
                 }
             }
         }

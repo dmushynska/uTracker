@@ -17,19 +17,39 @@ PageSidebar {
 
         actionBar.maxActionCount: 1
 
+        Dialog {
+            id: inviteDialog
+            title: "Invite collaborator"
+            hasActions: true
+
+            TextField {
+                id: optionText
+                width: parent.width
+                placeholderText: "Login"
+            }
+
+            onAccepted: {
+                if (optionText.text !== "") {
+                    snackbar.open("Invite was sent to %1".arg(optionText.text))
+                    optionText.text = ""
+                }
+            }
+        }
+
         actions: [
             Action {
                 id: addPers
                 iconName: "content/add"
-                text: "Add colab"
+                name: "Invite"
                 hoverAnimation: true
                 onTriggered: {
+                    inviteDialog.show()
                 }
             },
             Action {
                 id: delPers
                 iconName: "action/delete"
-                text: "Remove colab"
+                name: "Remove collaborator"
                 hoverAnimation: true
                 onTriggered: {
                 }
@@ -66,7 +86,7 @@ PageSidebar {
                                     anchors.leftMargin: dp(15)
                                     color: UThemes.infoHeaderFont
                                     font.pixelSize: dp(24)
-                                    text: "Colaborators"
+                                    text: "Collaborators"
                                     font.bold: true
 //                                    font.capitalization: Font.AllUppercase
                                 }

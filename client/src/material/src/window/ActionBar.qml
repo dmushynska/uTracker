@@ -14,6 +14,8 @@ import QtQuick.Layouts 1.1
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+import UThemes 1.0
+
 /*!
    \qmltype ActionBar
    \inqmlmodule Material
@@ -79,6 +81,9 @@ Item {
        A custom view to show instead of the title in the action bar.
      */
     property alias customContent: customContentView.data
+
+    property string headColor: UThemes.font_
+    property string menuColor: UThemes.font_
 
     /*!
        \qmlproperty Item extendedContent
@@ -183,6 +188,8 @@ Item {
      */
     readonly property alias overflowMenuShowing: overflowMenu.showing
 
+    property alias iconProperty: overflowButton
+
     /*!
        \internal
 
@@ -231,8 +238,8 @@ Item {
             }
         }
 
-        color: Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
-                                                            Theme.dark.iconColor)
+        color: headColor /*Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
+                                                            Theme.dark.iconColor)*/
         size: iconSize
         action: backAction
 
@@ -267,8 +274,8 @@ Item {
         textFormat: Text.PlainText
         text: actionBar.title
         style: "title"
-        color: Theme.lightDark(actionBar.backgroundColor, Theme.light.textColor,
-                                                            Theme.dark.textColor)
+        color: headColor/*Theme.lightDark(actionBar.backgroundColor, Theme.light.textColor,
+                                                            Theme.dark.textColor)*/
         elide: Text.ElideRight
     }
 
@@ -296,8 +303,8 @@ Item {
 
                 action: __internal.visibleActions[index]
 
-                color: Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
-                                                                  Theme.dark.iconColor)
+                color: headColor/*Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
+                                                                  Theme.dark.iconColor)*/
                 size: iconSize
 
                 anchors.verticalCenter: parent ? parent.verticalCenter : undefined
@@ -310,8 +317,8 @@ Item {
             iconName: "navigation/more_vert"
             objectName: "action/overflow"
             size: 27 * Units.dp
-            color: Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
-                                                              Theme.dark.iconColor)
+            color: menuColor/*Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
+                                                              Theme.dark.iconColor)*/
             visible: actionBar.overflowMenuAvailable
             anchors.verticalCenter: parent.verticalCenter
 
@@ -382,6 +389,8 @@ Item {
                     text: action.name
                     iconSource: action.iconSource
                     enabled: action.enabled
+                    iconColor: action.iconColor
+                    textColor: UThemes.font
 
                     onClicked: {
                         action.triggered(listItem)

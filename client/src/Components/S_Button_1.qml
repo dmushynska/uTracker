@@ -67,63 +67,16 @@ Rectangle {
             z: 1
             color: "#20000000"
         }
-
-    //        onClick: {}
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+            }
+        }
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 200
+            }
+        }
     }
 
 }
-//Rectangle {
-//    id: root
-//    property string content: "value"
-//    Button {
-//        anchors.centerIn: parent
-//        id: button
-//        text: qsTr(content)
-//    }
-//}
-
-
-//        EXAMPLE
-
-
-//Rectangle {
-//    id: root
-//    color: "transparent"
-//    height: 100
-//    width: 200
-
-//    property string text
-//    property color bgColor: "transparent"
-//    property color bgColorSelected: "#14aaff"
-//    property color textColor: "white"
-//    property alias enabled: mouseArea.enabled
-//    property bool active: true
-//    property alias horizontalAlign: text.horizontalAlignment
-
-//    signal clicked
-
-//    Rectangle {
-//        anchors { fill: parent; margins: 1 }
-//        color: mouseArea.pressed ? bgColorSelected : bgColor
-
-//        Text {
-//            id: text
-//            clip: true
-//            text: root.text
-//            anchors { fill: parent; margins: scaledMargin }
-//            font.pixelSize: fontSize
-//            color: textColor
-//            horizontalAlignment: Text.AlignLeft
-//            verticalAlignment: Text.AlignVCenter
-//        }
-
-//        MouseArea {
-//            id: mouseArea
-//            anchors.fill: parent
-//            onClicked: {
-//                root.clicked()
-//            }
-//            enabled: active
-//        }
-//    }
-//}

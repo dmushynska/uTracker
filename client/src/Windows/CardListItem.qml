@@ -185,7 +185,7 @@ Item {
                                 Action {
                                     id: delPers
                                     iconName: "action/delete"
-                                    text: "Remove list"
+                                    name: "Remove list"
                                     hoverAnimation: true
                                     onTriggered: {
                                         mWorkflow.removeList(listId)
@@ -194,7 +194,7 @@ Item {
                                 Action {
                                     id: renamePers
                                     iconName: "image/edit"
-                                    text: "Rename list"
+                                    name: "Rename list"
                                     hoverAnimation: true
                                     onTriggered: {
                                         cardTitle.visible = false
@@ -229,7 +229,7 @@ Item {
                                 implicitHeight: 100
                                 radius: width / 2
                                 color: !(layout.height < layout.contentHeight) ? "#005a585c" :
-                                                         (control.pressed || control.hovered ? "#5a585c" : "#805a585c")
+                                                         (control.pressed || control.hovered ? UThemes.sliderHover : UThemes.slider)
                         }
                     }
 
