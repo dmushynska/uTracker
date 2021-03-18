@@ -26,6 +26,8 @@ QtObject {
     property string sliderMainHover: !isClassic ? "#807a163c" : "#805a585c"
     property string desk: !isClassic ? "#ebc7d3" : "#f5f2f1"
 
+    property string progress: !isClassic ? "#AEF100" : "#e0b864"
+
     property string infoHeader: !isClassic ? "#80f6a2bf" : "#f05a585c"
     property string infoHeaderFont: !isClassic ? "#7a163c" : "white"
     property string infoBack: !isClassic ? "#ebc7d3" : "#f08B8D96"

@@ -13,7 +13,9 @@ public:
     enum CardsRole {
         TitleRole = Qt::UserRole,
         IdRole,
-        ParentIdRole
+        ParentIdRole,
+        StatusRole,
+        CountRole
     };
     explicit CardsModel(QObject *parent = nullptr, int parentID = -1);
 
@@ -38,7 +40,7 @@ public:
 
     void setParentId(int id);
 
-    Q_INVOKABLE bool append(const QString &title, int id, int parentID);
+    Q_INVOKABLE bool append(const QString &title, int id, int parentID, int statD, int countD);
     Q_INVOKABLE bool append(const Card &card);
     Q_INVOKABLE int parentId() const;
 

@@ -91,7 +91,7 @@ void Workflow::parseCreateTask(const QString &title, int id, int listId) {
 //    m_request->getLists(m_idCurrentWorkflow);
     qDebug() << "PARSE CREATE ----------- TK ----------- ID" << title << id;
     try {
-        (*m_currCardListModel)[listId]->model->append(title, id, listId);
+        (*m_currCardListModel)[listId]->model->append(title, id, listId, 0, 0);
     } catch (QString err) {
         qDebug() << "<<<ERROR>>>";
     }
@@ -194,6 +194,7 @@ void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonA
     m_descriptionModel->setTaskDescription(descr);
     m_descriptionModel->setTaskTitle(obg["title"].toString());
     m_descriptionModel->setTaskId(obg["taskId"].toInt());
+    m_descriptionModel->setListId(obg["listId"].toInt());
     for(int i = 0; i < array.count(); i++) {
         m_descriptionModel->insert({array.at(i)["isDone"].toBool(), array.at(i)["str"].toString()});
     }
@@ -203,7 +204,11 @@ void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonA
 
 void Workflow::saveDescription() {
     m_request->updateTask(m_descriptionModel->getTaskId(), "", m_descriptionModel->toMap());
-    qDebug() << m_descriptionModel->toMap();
+    int indx = 0;
+    auto kanb = m_currCardListModel->getKanbById(m_descriptionModel->getListId());
+    kanb->findTaskById(m_descriptionModel->getTaskId(), &indx);
+    kanb->model->setData(kanb->model->index(indx), m_descriptionModel->getStatus().first, CardsModel::StatusRole);
+    kanb->model->setData(kanb->model->index(indx), m_descriptionModel->getStatus().second, CardsModel::CountRole);
 }
 
 void Workflow::removeList(int id) {

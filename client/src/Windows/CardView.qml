@@ -63,6 +63,7 @@ Dialog {
     positiveButtonText: "OK"
     negativeButtonText: "Cancel"
     onAccepted: {
+//        cardRoot.setStatus(8, 10)
         mWorkflow.saveDescription();
         mDescriptor.clearAllData();
         snackbar.open("Data saved");

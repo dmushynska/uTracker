@@ -33,10 +33,27 @@ public:
             m_listId = id;
     }
 
+    // Status
+    int getStatD() const {
+        return m_statD;
+    }
+    void setStatD(int stat) {
+        m_statD = stat;
+    }
+
+    int getCountD() const {
+        return m_countD;
+    }
+    void setCountD(int count) {
+        m_countD = count;
+    }
+
 private:
     QString m_title;
     int m_id;
     int m_listId = -1;
+    int m_statD;
+    int m_countD;
 };
 
 #endif // CARD_H

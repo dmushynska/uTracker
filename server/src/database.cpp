@@ -612,12 +612,33 @@ QVariantMap DataBase::removeTask(int taskId) {
     return map;
 }
 
+QPair<int, int> getDescriptionTaskStatistic(int taskId) {
+    auto pair = QPair<int, int>(-1, -1);
+    QSqlQuery query;
+    QJsonArray arr;
+    if (query.exec("select title, description, checklist, list_id from Tasks where id = " + QString::number(taskId)) && query.first()) {
+        QJsonDocument itemDoc = QJsonDocument::fromJson(query.value(2).toByteArray());
+        QJsonObject object = itemDoc.object();
+        arr = object["array"].toArray();
+//        arr = query.value(2).toJsonObject()["array"].toArray();
+        pair.second = arr.count();
+        pair.first = 0;
+        for (int i = 0; i < arr.count(); i++) {
+            if (arr.at(i)["isDone"].toBool())
+                pair.first++;
+        }
+        qDebug() << "FUCKk" << taskId << pair;
+    }
+    return pair;
+}
+
 QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
                                                  //    Q_UNUSED(taskId);
     QVariantMap map;
     map["type"] = static_cast<int>(RequestType::GET_TASK_DATA);
     QSqlQuery query;
     if (query.exec("select title, description, checklist, list_id from Tasks where id = " + QString::number(taskId)) && query.first()) {
+        auto status = getDescriptionTaskStatistic(taskId);
         map["message"] = "Take your task data bitch";
         // query.first();
         map["title"] = query.value(0).toString();
@@ -625,6 +646,8 @@ QVariantMap DataBase::getTaskData(int taskId) {  //я подивлюся
         map["checkList"] = query.value(2).toString();
         map["listId"] = query.value(3).toInt();
         map["taskId"] = taskId;
+        map["statusDesc"] = status.first;
+        map["countDesc"] = status.second;
     } else {
         map["message"] = "i dont now wtf";
         map["error"] = 1;
@@ -639,14 +662,17 @@ QVariantMap DataBase::getTasks(int listId) {
     map["type"] = static_cast<int>(RequestType::GET_TASKS);
     query.exec("select id from Tasks where list_id = " + QString::number(listId));
     if (query.first()) {
+        getDescriptionTaskStatistic(query.value(0).toInt());
         tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
     } else {
         map["error"] = 1;
         map["message"] = "Tasks don't exist";
     }
     while (query.next()) {
+        getDescriptionTaskStatistic(query.value(0).toInt());
         tasks.append(QJsonObject::fromVariantMap(getTaskData(query.value(0).toInt())));
     }
+    qDebug() << tasks;
     query.exec("select title from Lists where id = " + QString::number(listId));
     if (query.first()) {
         map["title"] = query.value(0).toString();

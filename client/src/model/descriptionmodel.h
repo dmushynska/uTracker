@@ -28,6 +28,15 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    QPair<int, int> getStatus() {
+        QPair<int, int> pair = {0, m_data.size()};
+        for (const auto& data : m_data) {
+            if (data.first)
+                pair.first++;
+        }
+        return pair;
+    }
+
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole) override;
@@ -41,6 +50,10 @@ public:
         m_taskId = id;
     }
 
+    void setListId (int id) {
+        m_listId = id;
+    }
+
     Q_INVOKABLE QString getTaskDescription() const {
         return m_taskDescription;
     }
@@ -49,6 +62,10 @@ public:
     }
     Q_INVOKABLE int getTaskId() const {
         return m_taskId;
+    }
+
+    Q_INVOKABLE int getListId() const {
+        return m_listId;
     }
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -72,6 +89,7 @@ private:
     QString m_taskDescription;
     QVector<QPair<bool, QString>> m_data;
     int m_taskId{-1};
+    int m_listId{-1};
 };
 
 #endif // DESCRIPTIONMODEL_H

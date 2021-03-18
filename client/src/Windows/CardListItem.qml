@@ -247,6 +247,8 @@ Item {
                         cardId: idCard
                         parentId: idParent
                         modelOwner: cardsModel
+                        status: statusD
+                        count: countD
                         Connections {                               // !
                             target: cardsModel                      // !
                             onTaskAppended: {                       // !

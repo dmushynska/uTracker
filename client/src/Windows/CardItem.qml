@@ -7,10 +7,12 @@ import Material.ListItems 0.1 as ListItem
 import UThemes 1.0
 
 Item {
-    id: card
+    id: cardRoot
 
     property int cardId: -1
     property int parentId: -1
+    property real status: 1
+    property real count: 2
     property string cardContent: "value"
     property int cardWidth: dp(100)
     property int cardHeight: dp(80)
@@ -18,6 +20,11 @@ Item {
 
     width: cardWidth
     height: cardHeight
+
+    function setStatus(stat, ct) {
+        status = stat;
+        count = ct;
+    }
 
     Card {
         anchors.centerIn: parent
@@ -42,7 +49,7 @@ Item {
                     id: renameTaskArea
                     anchors.fill: parent
                     onDoubleClicked: {
-                        console.log("Renaming Task #" + cardContent)
+                        console.log(status + " " + count +"Renaming Task #" + cardContent)
                         infoText.visible = false
                         infoTextField.visible = true
                         infoTextField.forceActiveFocus()
@@ -85,7 +92,6 @@ Item {
                 }
 
             }
-
             ActionBar {
                 id: menuButton
                 height: parent.height
@@ -140,7 +146,7 @@ Item {
                             mWorkflow.moveSetCurrListId(parentId);
                             componentMove = Qt.createComponent("MoveToDialog.qml");
                             if (componentMove.status === Component.Ready){
-                                spriteMove = componentMove.createObject(card);
+                                spriteMove = componentMove.createObject(cardRoot);
                                 console.log("Request to server: Id of card: " + componentMove)
                             }
 
@@ -149,6 +155,19 @@ Item {
                     }
                 ]
             }
+        }
+        ProgressBar {
+            width: parent.width
+            height: dp(10)
+            color: value == 1 ? UThemes.progress : UThemes.inputBorder
+            value: status / count
+            Behavior on value {
+                NumberAnimation {
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            
         }
     }
 }
