@@ -6,6 +6,8 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 //import Authorization 1.0
 
+import UThemes 1.0
+
 import "../Components"
 
 Page {
@@ -44,9 +46,9 @@ Page {
             start: Qt.point(0, 0)
             end: Qt.point(parent.width, 0)
             gradient: Gradient {
-                GradientStop { position: 0.0; color: "#dab6c2" }
+                GradientStop { position: 0.0; color: UThemes.gradienter }
                 GradientStop { position: 0.5; color: "white" }
-                GradientStop { position: 1.0; color: "#dab6c2" }
+                GradientStop { position: 1.0; color: UThemes.gradienter }
             }
     }
 
@@ -57,6 +59,7 @@ Page {
         Label {
             id: lable
             text: "uTracker"
+            color: UThemes.font
             font.bold: true
             font.pixelSize: 100 * Units.dp
         }
@@ -106,6 +109,10 @@ Page {
                 id:signInGoogle
                 buttonContent: "Continue with Google"
                 width: parent.width
+                onClicked: {
+                    UThemes.changeTheme()
+                }
+
                 Component.onCompleted: {
 //                    signIn.clicked.connect(signUpRequest);
                 }

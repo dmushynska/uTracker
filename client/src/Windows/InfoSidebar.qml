@@ -5,6 +5,8 @@ import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+import UThemes 1.0
+
 import "../Components"
 
 PageSidebar {
@@ -15,19 +17,39 @@ PageSidebar {
 
         actionBar.maxActionCount: 1
 
+        Dialog {
+            id: inviteDialog
+            title: "Invite collaborator"
+            hasActions: true
+
+            TextField {
+                id: optionText
+                width: parent.width
+                placeholderText: "Login"
+            }
+
+            onAccepted: {
+                if (optionText.text !== "") {
+                    snackbar.open("Invite was sent to %1".arg(optionText.text))
+                    optionText.text = ""
+                }
+            }
+        }
+
         actions: [
             Action {
                 id: addPers
                 iconName: "content/add"
-                text: "Add colab"
+                name: "Invite"
                 hoverAnimation: true
                 onTriggered: {
+                    inviteDialog.show()
                 }
             },
             Action {
                 id: delPers
                 iconName: "action/delete"
-                text: "Remove colab"
+                name: "Remove collaborator"
                 hoverAnimation: true
                 onTriggered: {
                 }
@@ -36,8 +58,7 @@ PageSidebar {
         data:
             Rectangle {
                 anchors.fill: parent
-//                color: "#80fad2e0"
-                color: "#ebc7d3"
+                color: UThemes.infoBack
 
                 Column {
                     anchors.fill: parent
@@ -54,7 +75,7 @@ PageSidebar {
 //                            radius: 5
                             Rectangle {
                                 anchors.fill: parent
-                                color: "#80f6a2bf"
+                                color: UThemes.infoHeader
 //                                border.width: 2
 //                                border.color: "#f6a2bf"
 //                                radius: parent.radius
@@ -63,9 +84,9 @@ PageSidebar {
                                     verticalAlignment: Text.AlignVCenter
     //                                horizontalAlignment: Text.AlignHCenter
                                     anchors.leftMargin: dp(15)
-                                    color: "#7a163c"
+                                    color: UThemes.infoHeaderFont
                                     font.pixelSize: dp(24)
-                                    text: "Colaborators"
+                                    text: "Collaborators"
                                     font.bold: true
 //                                    font.capitalization: Font.AllUppercase
                                 }

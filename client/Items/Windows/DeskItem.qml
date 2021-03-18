@@ -7,6 +7,8 @@ import Material.ListItems 0.1 as ListItem
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
+import UThemes 1.0
+
 //    height:
 //    ListModel {
 //        id: model
@@ -52,7 +54,7 @@ Item {
         width: parent.width - dp(20)
         height: parent.height - dp(20)
 //        backgroundColor: Palette.colors["purple"]["50"]
-        backgroundColor: "#ebc7d3"
+        backgroundColor: UThemes.desk
         Row{
             id: layout
             width: parent.width - dp(20)

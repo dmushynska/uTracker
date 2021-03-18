@@ -9,7 +9,9 @@
  */
 
 import QtQuick 2.4
-import QtQuick.Controls 1.3 as Controls
+import QtQuick.Controls 2.15 as Controls
+
+import UThemes 1.0
 /*!
    \qmltype Action
    \inqmlmodule Material
@@ -22,12 +24,15 @@ import QtQuick.Controls 1.3 as Controls
 Controls.Action {
     id: action
 
+    property string iconName: icon.name
     /*!
        Set to \c true to display a divider between this action and the next action. Used in lists
        or context menus.
      */
     property bool hasDividerAfter
 
+    property string iconColor: UThemes.font
+    icon.color: iconColor
     /*!
        A URL pointing to an image to display as the icon. By default, this is
        a special URL representing the icon named by \l iconName from the Material Design
@@ -61,6 +66,6 @@ Controls.Action {
      */
     property bool hoverAnimation: false
 
-    property alias text: action.name
+    text: action.name
     property alias tooltip: action.summary
 }

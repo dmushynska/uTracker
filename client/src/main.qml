@@ -4,8 +4,11 @@ import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+//import Themes.qml
+
 import "Components"
 import "Windows"
+import UThemes 1.0
 
 ApplicationWindow {
     id:root
@@ -13,12 +16,17 @@ ApplicationWindow {
     minimumWidth: 1000
     minimumHeight: 680
     title: qsTr("uTracker")
+
+
+
     theme {
-        primaryColor: Qt.rgba(0.5,0.5,0.56, 1)
-        accentColor: "#ffdad8"
+//        primaryColor: Qt.rgba(0.5,0.5,0.56, 1)
+        primaryColor: UThemes.primary
+        accentColor: UThemes.accent
         tabHighlightColor: "white"
 
     }
+
     visible: true
     width: 1920
     height: 1080

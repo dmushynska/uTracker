@@ -4,6 +4,8 @@ import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 
+import UThemes 1.0
+
 Item {
     id: card
 
@@ -32,7 +34,7 @@ Item {
                 text: cardContent
                 height: parent.height
                 width: cardWidth - (menuButton.width - parent.spacing / 2)
-                color: "grey"
+                color: UThemes.font
                 font.pixelSize: dp(19)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
@@ -88,16 +90,16 @@ Item {
                 id: menuButton
                 height: parent.height
                 width: parent.height
+                menuColor:UThemes.font
 //                onClicked: snackbar.open("That button is colored!")
                 maxActionCount: 1
-//                backgroundColor: "pink"
 
 
                 actions: [
                     Action {
                         id: details
                         iconName: "image/color_lens"
-                        text: "Details.."
+                        name: "Details.."
                         hoverAnimation: true
                         onTriggered: {
 
@@ -108,7 +110,7 @@ Item {
                     Action {
                         id: delPers
                         iconName: "action/delete"
-                        text: "Remove"
+                        name: "Remove"
                         hoverAnimation: true
                         onTriggered: {
                             mWorkflow.removeTask(cardId)
@@ -117,7 +119,7 @@ Item {
                     Action {
                         id: renamePers
                         iconName: "image/edit"
-                        text: "Rename"
+                        name: "Rename"
                         hoverAnimation: true
                         onTriggered: {
                             infoText.visible = false
@@ -128,7 +130,7 @@ Item {
                     Action {
                         id: movePers
                         iconName: "content/forward"
-                        text: "Move to list.."
+                        name: "Move to list.."
                         hoverAnimation: true
                         onTriggered: {
                             console.log("$$$$$$$$$$$$$$$$$$$$ Request to server: Id of card: " + cardId + " LISTSSST " + parentId)

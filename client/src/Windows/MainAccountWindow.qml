@@ -6,7 +6,12 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import QtQuick.Layouts 1.3
 
+import UThemes 1.0
+
 Page {
+    function showNav () {
+        navDrawer.open()
+    }
 
     function createNewDesk() {
         console.log("Request to create new desk");
@@ -69,7 +74,9 @@ Page {
     height: dp(1080)
 
     title: "uTracker"
-    backgroundColor: "#e4e1e0"
+
+    backgroundColor: UThemes.backBack
+
     actionBar.decorationColor:"#7a163c"
     actions: [
         Action {
@@ -95,7 +102,8 @@ Page {
         enabled: true
         viewer.backgroundColor: "#fbfaf6"
 
-        overlayColor: "#308b8da0"
+
+        overlayColor: UThemes.overlay
 
         onEnabledChanged: smallLoader.active = enabled
 
@@ -116,10 +124,10 @@ Page {
 
                         ListItem.Subheader {
                             text: sectionsTitles[index]
-                            textColor: "white"
-                            backgroundColor: "#8b8da0"
-                            showDivider: true
-                            elevation: 1
+                            textColor: UThemes.isClassic ? "white" : UThemes.font
+                            backgroundColor: UThemes.listBack
+//                            showDivider: true
+                            elevation: 2
                         }
 
                         ListView {
@@ -144,8 +152,8 @@ Page {
                                         implicitWidth: 3
                                         implicitHeight: 100
                                         radius: width / 2
-                                        color: !(sectionItems.height < sectionItems.contentHeight) ? "#007a163c" :
-                                                                 (control.pressed || control.hovered ? "#807a163c" : "#407a163c")
+                                        color: !(sectionItems.height < sectionItems.contentHeight) ? "#00000000" :
+                                                                 (control.pressed || control.hovered ? UThemes.sliderMainHover : UThemes.sliderMain)
                                 }
                             }
                             delegate: ListItem.Standard {
@@ -170,7 +178,56 @@ Page {
                     height: dp(40)
                     width: parent.width
                     onClicked: createNewDesk();
-                    backgroundColor: "#8b8da0"
+                    backgroundColor: UThemes.listBack
+                    textColor: UThemes.isClassic ? "white" : UThemes.font
+                }
+            }
+        }
+        Rectangle {
+            id: switcher
+            color: UThemes.primary
+            height: dp(40)
+            width: parent.width
+            anchors.bottom: parent.bottom
+            Row {
+                anchors.fill: parent
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Classic"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Switch {
+                        anchors.centerIn: parent
+                        checked: !UThemes.isClassic
+                        darkBackground: false
+                        onClicked: UThemes.changeTheme()
+                        color: UThemes.font
+                    }
+                }
+                Item {
+                    height: switcher.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Pink"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
                 }
             }
         }

@@ -7,6 +7,8 @@ import Material.ListItems 0.1 as ListItem
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
+import UThemes 1.0
+
 //    height:
 //    ListModel {
 //        id: model
@@ -68,7 +70,7 @@ Item {
         width: parent.width - dp(20)
         height: parent.height - dp(20)
 //        backgroundColor: Palette.colors["purple"]["50"]
-        backgroundColor: "#f5f2f1"
+        backgroundColor: UThemes.desk
         Row{
             id: layout
             width: parent.width - dp(20)
@@ -104,7 +106,7 @@ Item {
                         implicitHeight: 50
                         radius: width / 2
                         color: !(deskListView.width < deskListView.contentWidth) ? "#007a163c" :
-                                                 (control.pressed || control.hovered ? "#805a585c" : "#405a585c")
+                                                 (control.pressed || control.hovered ? UThemes.sliderMainHover : UThemes.sliderMain)
                     }
                 }
 
@@ -153,8 +155,8 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     elevation: 1
                     onClicked: {snackbar.open("Added new List"); createNewList()}
-                    backgroundColor: "#5a585c"
-                    textColor: "white"
+                    backgroundColor: UThemes.addTask
+                    textColor: UThemes.addTaskFont
                 }
 
                 Rectangle {

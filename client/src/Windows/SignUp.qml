@@ -49,7 +49,7 @@ Page {
             gradient: Gradient {
 
                 GradientStop { position: 0.4; color: "white" }
-                GradientStop { position: 1.0; color: "#dab6c2" }
+                GradientStop { position: 1.0; color: "#80808F" }
             }
     }
 
@@ -60,6 +60,7 @@ Page {
             id: lable
             text: "uTracker"
             font.bold: true
+            color: "#5a585c"
             font.pixelSize: 100 * Units.dp
         }
         S_Input_1 {

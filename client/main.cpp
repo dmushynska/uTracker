@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
         qDebug() << "usage ./uTracker [ip] [port]";
         return 1;
     }
+
     Client client;
     client.doConnect(argv[1], QString(argv[2]).toInt());
 
