@@ -20,6 +20,7 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     connect(this, &Workflow::serverRemoveListResponse, &Workflow::parseRemoveList);
     connect(this, &Workflow::serverRenameListResponse, &Workflow::parseRenameList);
     connect(this, &Workflow::serverRenameTaskResponse, &Workflow::parseRenameTask);
+    connect(this, &Workflow::serverRemoveWorkflowResponse, &Workflow::parseRemoveWorkflow);
 }
 
 Workflow::~Workflow() {
@@ -250,4 +251,14 @@ void Workflow::parseRenameTask(const QString &msg, int listId, int taskId, const
         model->findById(taskId, &index);
         model->setData(model->index(index), name, CardsModel::TitleRole);
     }
+}
+
+void Workflow::removeWorkflow(int id) {
+    qDebug() << "Remove workflow" << id;
+    if (id > 0)
+        m_request->archieveWorkflow(id);
+}
+
+void Workflow::parseRemoveWorkflow(int id) {
+    m_workflowsModel->removeById(id);
 }

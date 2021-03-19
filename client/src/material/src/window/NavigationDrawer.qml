@@ -46,9 +46,11 @@ PopupBase {
 
     property string mode: "left" // or "right"
 
-    property alias enabled: action.visible
+    property alias enabled: actioner.visible
 
-    property Action action: action
+    property Action action: actioner
+
+    property alias tooltip: actioner.name
 
     property alias viewer: view
 
@@ -58,7 +60,7 @@ PopupBase {
     }
 
     Action {
-        id: action
+        id: actioner
         iconName: "navigation/menu"
         name: "Navigation Drawer"
         onTriggered: navDrawer.toggle()

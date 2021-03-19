@@ -372,11 +372,13 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
 
 QVariantMap DataBase::removeWorkflow(int workflow_id) {
     QMap<QString, QVariant> map;
+    map["type"] = static_cast<int>(RequestType::ARCHIVE_WORKFLOW);
     QSqlQuery query;
     if (query.exec("DELETE from WF_connector where id = " + QString::number(workflow_id) + ";")) {
         query.exec("DELETE from WorkFlows where id = " + QString::number(workflow_id) + ";");
         query.exec("DELETE from Lists where id = " + QString::number(workflow_id) + ";");
         map["message"] = "WorkFlow removed";
+        map["workflowId"] = workflow_id;
     } else {
         map["message"] = "WorkFlow wasn't removed";
         map["error"] = 1;

@@ -28,6 +28,8 @@ public:
     //*     Workflows    *//
     Q_INVOKABLE void getAllListWorkflow() const;
     Q_INVOKABLE void createWorkflow(QString title);
+    Q_INVOKABLE void removeWorkflow(int id);
+
 
     //*     Lists       *//
     Q_INVOKABLE void appendLists(QString title);
@@ -69,6 +71,7 @@ private slots:  // Model Slots
 signals:        // Server Response Signals
     void serverAllListWorkflowsResponse(QJsonArray array);
     void serverCreateWorkflowResponse(QString title, int id);
+    void serverRemoveWorkflowResponse(int id);
     void serverWorkflowListsResponse(QJsonObject array);
     void serverCreatedListResponse(const QString &title, int id);
     void serverCreateTaskResponse(const QString &title, int id, int listId);
@@ -85,6 +88,7 @@ private slots:  // Server Response Slots
 
     void parseAllListWorkflows(QJsonArray array);
     void parseCreatedWorkflow(QString title, int id);
+    void parseRemoveWorkflow(int id);
     void parseLists(QJsonObject array);
     void parseCreatedList(const QString &title, int id);
     void parseCreateTask(const QString &title, int id, int listId);

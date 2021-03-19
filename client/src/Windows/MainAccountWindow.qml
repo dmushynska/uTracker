@@ -13,6 +13,10 @@ Page {
         navDrawer.open()
     }
 
+    function removeWorkflow(id) {
+        mWorkflow.removeWorkflow(id)
+    }
+
     function createNewDesk() {
         console.log("Request to create new desk");
         console.log("!!!!!" + (rootAccount.height - userSection.count * (48 * Units.dp + 3) - dp(200)))
@@ -102,6 +106,8 @@ Page {
         enabled: true
         viewer.backgroundColor: "#fbfaf6"
 
+        tooltip: "Menu"
+
 
         overlayColor: UThemes.overlay
 
@@ -157,8 +163,36 @@ Page {
                                 }
                             }
                             delegate: ListItem.Standard {
+                                id: itemList
                                 text: model.titleWorkflow
                                 selected: model.idWorkflow === selectedComponent
+
+                                secondaryItem: IconButton {
+                                    id: buttonIcon
+                                    visible: model.idWorkflow !== 0
+                                    color: itemList.hovered || hover ? "red" : "#00000000"
+
+                                    anchors.centerIn: parent
+                                    iconName: "navigation/close"
+                                    hoverAnimation: true
+                                    size: dp(15)
+                                    Behavior on color {
+                                        ColorAnimation {
+                                            duration: 200
+                                        }
+                                    }
+                                    onClicked: {
+                                        if (selectedComponent === model.idWorkflow)
+                                            selectedComponent = 0
+                                        removeWorkflow(model.idWorkflow)
+                                    }
+                                }
+//                                action: Action {
+//                                    iconName: "action/settings"
+//                                    name: "Settings"
+//                                    hoverAnimation: true
+//                                }
+
                                 onClicked: {
                                     selectedComponent = model.idWorkflow;
 //                                    mWorkflow.

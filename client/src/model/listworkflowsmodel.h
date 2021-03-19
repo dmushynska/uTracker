@@ -38,6 +38,7 @@ public:
 
     Q_INVOKABLE bool append(QString title, int id);
     Q_INVOKABLE bool clear();
+    Q_INVOKABLE bool removeById(int id);
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;

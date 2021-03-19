@@ -27,6 +27,7 @@ Item {
     property bool hoverAnimation: action ? action.hoverAnimation : false
     property alias color: icon.color
     property alias size: icon.size
+    property bool hover: ink.containsMouse
 
     signal clicked
 

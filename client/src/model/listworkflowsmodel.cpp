@@ -103,4 +103,20 @@ QModelIndex WorkflowsModel::createModelIndex(int row) {
     return createIndex(row, 0);
 }
 
+#include <algorithm>
+
+bool WorkflowsModel::removeById(int id) {
+    if (id > 0) {
+        auto index = 0;
+        for (const auto &[namew, idw] : m_workflows) {
+            if (idw == id)
+                break;
+            index++;
+        }
+        if (index < m_workflows.size())
+            return removeRows(index, 0);
+    }
+    return false;
+}
+
 

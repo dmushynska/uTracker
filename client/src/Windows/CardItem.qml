@@ -158,13 +158,19 @@ Item {
         }
         ProgressBar {
             width: parent.width
-            height: dp(10)
+//            height: dp(10)
             color: value == 1 ? UThemes.progress : UThemes.inputBorder
             value: status / count
             Behavior on value {
                 NumberAnimation {
                     duration: 500
                     easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
+//                    easing.type: Easing.InOutQuad
                 }
             }
             

@@ -115,7 +115,7 @@ Controls.Button {
             }
         }
         label: Item {
-            implicitHeight: isMiniSize ? 40 * Units.dp : 56 * Units.dp
+            implicitHeight: isMiniSize ? 20 * Units.dp : 56 * Units.dp
             implicitWidth: implicitHeight
             Icon {
                 id: icon
@@ -123,7 +123,7 @@ Controls.Button {
                 anchors.centerIn: parent
                 name: control.iconName
                 color: button.iconColor
-                size: 24 * Units.dp
+                size: 15 * Units.dp
             }
         }
     }

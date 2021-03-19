@@ -34,6 +34,7 @@ View {
 
     property int dividerInset: 0
     property bool showDivider: false
+    property bool hover: ink.containsMouse
 
     signal clicked()
     signal pressAndHold()
