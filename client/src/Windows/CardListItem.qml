@@ -18,6 +18,7 @@ Item {
         control.position = 1.0
     }
 
+
     property int cardListWidth: dp(300)
     property int cardListHeight: dp(1080)
     property string cardListTitle: "Value"
@@ -32,56 +33,6 @@ Item {
     height:cardListHeight
 
 
-    ListModel {
-        id: cardModel
-        ListElement {
-            text: "Task1"
-        }
-//        ListElement {
-//            text: "Task2"
-//        }
-//        ListElement {
-//            text: "Task3"
-//        }
-//        ListElement {
-//            text: "Task4"
-//        }
-//        ListElement {
-//            text: "Task5"
-//        }
-//        ListElement {
-//            text: "Task6"
-//        }
-//        ListElement {
-//            text: "Task7"
-//        }
-//        ListElement {
-//            text: "Task8"
-//        }
-//        ListElement {
-//            text: "Task9"
-//        }
-//        ListElement {
-//            text: "Task10"
-//        }
-//        ListElement {
-//            text: "Task11"
-//        }
-//        ListElement {
-//            text: "Task12"
-//        }
-//        ListElement {
-//            text: "Task13"
-//        }
-//        ListElement {
-//            text: "Task14"
-//        }
-//        ListElement {
-//            text: "Task15"
-//        }
-
-    }
-
     Card {
         id: cardBack
         width: parent.width
@@ -90,6 +41,11 @@ Item {
 //        backgroundColor: Palette.colors["pink"]["50"]
 
         backgroundColor: UThemes.listBack
+        Behavior on height {
+            NumberAnimation {
+                duration: 100
+            }
+        }
 
 
         Column {
@@ -214,6 +170,8 @@ Item {
                 height: cardBack.height - dp(104)
                 width: parent.width
 
+
+
                 ListView {
                     id:layout
                     width: parent.width
@@ -221,6 +179,7 @@ Item {
                     model:mCardModel
                     flickableDirection: Flickable.VerticalFlick
                     boundsBehavior: Flickable.StopAtBounds
+                    clip: true
                     ScrollBar.vertical: ScrollBar{
                         property real globalPos: control.position * layout.contentHeight
                         id: control
@@ -235,6 +194,12 @@ Item {
                                                          (control.pressed || control.hovered ? UThemes.sliderHover : UThemes.slider)
                         }
                     }
+
+//                    Behavior on height {
+//                        NumberAnimation {
+//                            duration: 200
+//                        }
+//                    }
 
                     anchors {
                         left: parent.left;

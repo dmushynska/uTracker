@@ -11,8 +11,8 @@ Item {
 
     property int cardId: -1
     property int parentId: -1
-    property real status: 1
-    property real count: 2
+    property int status: 1
+    property int count: 2
     property string cardContent: "value"
     property int cardWidth: dp(100)
     property int cardHeight: dp(80)
@@ -86,7 +86,6 @@ Item {
                     infoText.visible = true
                 }
                 onFocusChanged: {
-//                    console.log("#" + cardContent + " % " + focus)
                     if (focus == false)
                         accepted()
                 }
@@ -97,7 +96,6 @@ Item {
                 height: parent.height
                 width: parent.height
                 menuColor:UThemes.font
-//                onClicked: snackbar.open("That button is colored!")
                 maxActionCount: 1
 
 
@@ -139,7 +137,6 @@ Item {
                         name: "Move to list.."
                         hoverAnimation: true
                         onTriggered: {
-                            console.log("$$$$$$$$$$$$$$$$$$$$ Request to server: Id of card: " + cardId + " LISTSSST " + parentId)
                             var componentMove;
                             var spriteMove;
                             mWorkflow.moveSetCardId(cardId);
@@ -158,9 +155,13 @@ Item {
         }
         ProgressBar {
             width: parent.width
+            Component.onCompleted: {
+                console.debug("value:" + status + " " + count)
+            }
+
 //            height: dp(10)
             color: value == 1 ? UThemes.progress : UThemes.inputBorder
-            value: status / count
+            value: count <= 0 ? 0 : status / count;
             Behavior on value {
                 NumberAnimation {
                     duration: 500

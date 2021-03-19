@@ -71,6 +71,7 @@ Item {
         height: parent.height - dp(20)
 //        backgroundColor: Palette.colors["purple"]["50"]
         backgroundColor: UThemes.desk
+
         Row{
             id: layout
             width: parent.width - dp(20)
@@ -87,11 +88,11 @@ Item {
                 orientation: Qt.Horizontal
                 flickableDirection: Flickable.HorizontalFlick
                 boundsBehavior: Flickable.StopAtBounds
-//                anchors {
-//                    top: parent.top
-//                    left: parent.left
-//                    margins: dp(10)
-//                }
+                Behavior on width {
+                    NumberAnimation {
+                        duration: 100
+                    }
+                }
                 interactive: false
                 model: mCardListsModel
 

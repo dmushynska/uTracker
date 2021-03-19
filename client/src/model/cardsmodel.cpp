@@ -40,10 +40,14 @@ QVariant CardsModel::data(const QModelIndex &index, int role) const
         return m_cards[index.row()].getId();
     if (role == ParentIdRole)
         return m_parentId;
-    if (role == StatusRole)
+    if (role == StatusRole) {
+        qDebug() << "|" << m_cards[index.row()].getStatD();
         return m_cards[index.row()].getStatD();
-    if (role == CountRole)
+    }
+    if (role == CountRole) {
+        qDebug() << "|" << m_cards[index.row()].getCountD();
         return m_cards[index.row()].getCountD();
+    }
     return QVariant();
 }
 
@@ -56,10 +60,14 @@ bool CardsModel::setData(const QModelIndex &index, const QVariant &value, int ro
             m_cards[index.row()].setId(value.toInt());
         if (role == ParentIdRole)
             m_cards[index.row()].setListId(m_parentId);
-        if (role == StatusRole)
+        if (role == StatusRole) {
+            qDebug() << "|>" << value.toInt();
             m_cards[index.row()].setStatD(value.toInt());
-        if (role == CountRole)
+        }
+        if (role == CountRole) {
+            qDebug() << "|>>" << value.toInt();
             m_cards[index.row()].setCountD(value.toInt());
+        }
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
