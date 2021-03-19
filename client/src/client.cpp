@@ -43,6 +43,7 @@ void Client::initResponses() {
 
 Client::~Client() {
     m_socket->abort();
+    delete m_manager;
     delete m_socket;
 }
 
