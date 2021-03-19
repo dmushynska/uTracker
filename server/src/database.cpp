@@ -356,6 +356,7 @@ QVariantMap DataBase::getWorkflow(int workflow_id) {
     if (query.first()) {
         map["type"] = static_cast<int>(RequestType::GET_SINGLE_WORKFLOW_DATA);
         map["workflowId"] = workflow_id;
+        qDebug()<< "workflow = " << workflow_id << "\n";
         map["ownerId"] = query.value(0).toInt();
         map["title"] = query.value(1).toString();
         map["deadline"] = query.value(2).toString();
@@ -377,6 +378,7 @@ QVariantMap DataBase::removeWorkflow(int workflow_id) {
     if (query.exec("DELETE from WF_connector where id = " + QString::number(workflow_id) + ";")
         && query.exec("DELETE from WorkFlows where id = " + QString::number(workflow_id) + ";")
         && query.exec("DELETE from Lists where id = " + QString::number(workflow_id) + ";")) {
+        qDebug() << workflow_id << "\n";
         map["message"] = "WorkFlow removed";
         map["workflowId"] = workflow_id;
     } else {

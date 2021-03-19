@@ -35,7 +35,6 @@ void Workflow::setRequest(AbstractRequest *request) {
 
 void Workflow::getAllListWorkflow() const
 {
-    qDebug() << "USER -------- ID -------- " << PARENT_CAST(UserManager, parent())->getUser()->getUserId();
     m_request->getAllWorkflows(PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
@@ -53,10 +52,7 @@ void Workflow::parseAllListWorkflows(QJsonArray array) {
 //    if (array.size() != m_workflowsModel->rowCount())
         m_workflowsModel->clear();
     for(int i = 0; i < array.count(); i++) {
-//        QModelIndex index = m_workflowsModel->createModelIndex(i);
         m_workflowsModel->append(array.at(i)["title"].toString(), array.at(i)["workflowId"].toInt());
-//        m_workflowsModel->setData(index, array.at(i)["title"].toString(), WorkflowsModel::WorkflowRole::TitleRole);
-//        m_workflowsModel->setData(index, array.at(i)["workflowId"].toInt(), WorkflowsModel::WorkflowRole::IdRole);
     }
 }
 

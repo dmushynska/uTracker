@@ -73,7 +73,7 @@ bool WorkflowsModel::append(QString title, int id)
 {
     insertRows(rowCount(), 1);
     setData(createIndex(rowCount() - 1, 0), title, TitleRole);
-    setData(createIndex(rowCount() - 1, 0), rowCount(), IdRole);
+    setData(createIndex(rowCount() - 1, 0), id, IdRole);
     return true;
 }
 

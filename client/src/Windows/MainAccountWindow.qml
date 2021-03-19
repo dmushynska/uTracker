@@ -17,14 +17,30 @@ Page {
         mWorkflow.removeWorkflow(id)
     }
 
-    function createNewDesk() {
-        console.log("Request to create new desk");
-        console.log("!!!!!" + (rootAccount.height - userSection.count * (48 * Units.dp + 3) - dp(200)))
-//        mWorkflowList.append("Desk " + (mWorkflowList.rowCount + 1))
-        var name = (mWorkflowList.rowCount() + 1)
-        mWorkflow.createWorkflow("Desk " + name)
+    Dialog {
+        id: nameingWorkflow
+        title: "Input title"
+        hasActions: true
+
+        TextField {
+            id: optionText
+            width: parent.width
+            placeholderText: "Title"
+            onAccepted: nameingWorkflow.positiveButton.clicked();
+        }
+
+        onAccepted: {
+            if (optionText.text !== "") {
+                createNewDesk(optionText.text)
+                snackbar.open("Workflow \"%1\" created".arg(optionText.text))
+                optionText.text = ""
+            }
+        }
+    }
+
+    function createNewDesk(title) {
+        mWorkflow.createWorkflow(title)
         control.position = 1.0
-//        sectionItems.model.dataChanged()
     }
 
     Connections {
@@ -162,6 +178,12 @@ Page {
                                                                  (control.pressed || control.hovered ? UThemes.sliderMainHover : UThemes.sliderMain)
                                 }
                             }
+                            Behavior on height {
+                                NumberAnimation {
+                                    duration: 200
+                                }
+                            }
+
                             delegate: ListItem.Standard {
                                 id: itemList
                                 text: model.titleWorkflow
@@ -211,7 +233,7 @@ Page {
                     elevation: 1
                     height: dp(40)
                     width: parent.width
-                    onClicked: createNewDesk();
+                    onClicked: nameingWorkflow.show();
                     backgroundColor: UThemes.listBack
                     textColor: UThemes.isClassic ? "white" : UThemes.font
                 }
