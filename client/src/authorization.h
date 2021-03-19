@@ -27,6 +27,8 @@ public:
     void printStr(QString str);
     Q_INVOKABLE void setUserId(int id);
 
+    Q_SIGNAL void connectionRefused();
+
 private slots:
     void parseResponseSignIn(bool valid, const QString &login = "", const QString &mail = "", int id = 0);
 

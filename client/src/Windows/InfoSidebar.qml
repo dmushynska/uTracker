@@ -72,23 +72,17 @@ PageSidebar {
                             width: parent.width
                             height: parent.height / 8
                             elevation: 1
-//                            radius: 5
                             Rectangle {
                                 anchors.fill: parent
                                 color: UThemes.infoHeader
-//                                border.width: 2
-//                                border.color: "#f6a2bf"
-//                                radius: parent.radius
                                 Text {
                                     anchors.fill: parent
                                     verticalAlignment: Text.AlignVCenter
-    //                                horizontalAlignment: Text.AlignHCenter
                                     anchors.leftMargin: dp(15)
                                     color: UThemes.infoHeaderFont
                                     font.pixelSize: dp(24)
                                     text: "Collaborators"
                                     font.bold: true
-//                                    font.capitalization: Font.AllUppercase
                                 }
                             }
                         }
@@ -96,7 +90,6 @@ PageSidebar {
                         ListView {
                             id: listColab
                             anchors.horizontalCenter: parent.horizontalCenter
-    //                        anchors.fill: parent
                             width: parent.width
                             height: parent.height * 0.875
 
@@ -107,21 +100,14 @@ PageSidebar {
                             clip: true
 
                             delegate: UserForms {
-//                                anchors.horizontalCenter: listColab.horizontalCenter
                                 formContent: mUser.userLogin
                                 formType: ""
-//                                formColor: ""
                                 formWidth: listColab.width
                                 formHeight: 40
                             }
 
                         }
                     }
-    //                Rectangle {
-    //                    height: 2
-    //                    color: "#f6a2bf"
-    //                    width: parent.width
-    //                } //separator
                 }
             }
     }

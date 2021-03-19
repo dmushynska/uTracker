@@ -4,16 +4,20 @@ import QtQuick.Window 2.11
 import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
-//import Authorization 1.0
 
 import UThemes 1.0
 
 import "../Components"
 
 Page {
-//    Authorization {
-//        id:author
-//    }
+    Connections {
+        target: mAuthor
+        onConnectionRefused: {
+            connRef.visible = true
+            signUp.buttonEnabled = false
+            signIn.buttonEnabled = false
+        }
+    }
 
     function checkValid () {
         var ident = inputNickname.inputText
@@ -32,15 +36,8 @@ Page {
     }
 
     function toSignUpPage () {
-        console.log("SignUp")
         pageStack.push(Qt.resolvedUrl("SignUp.qml"))
     }
-//    Rectangle {
-//        z: -1
-//        anchors.fill: parent
-
-
-//    }
     LinearGradient {
             anchors.fill: parent
             start: Qt.point(0, 0)
@@ -107,15 +104,19 @@ Page {
             }
             S_Button_1 {
                 id:signInGoogle
-                buttonContent: "Continue with Google"
+                buttonContent: "Switch Theme"
                 width: parent.width
                 onClicked: {
                     UThemes.changeTheme()
                 }
-
-                Component.onCompleted: {
-//                    signIn.clicked.connect(signUpRequest);
-                }
+            }
+            Label {
+                id: connRef
+                text: "Connection Refused"
+                visible: false
+                style: "body2"
+                color: UThemes.font
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
 

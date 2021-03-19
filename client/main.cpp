@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
 
     QGuiApplication app(argc, argv);
 
-//    UserManager manager(nullptr);
     if (argc != 3) {
         qDebug() << "usage ./uTracker [ip] [port]";
         return 1;

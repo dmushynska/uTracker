@@ -3,7 +3,6 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QAbstractSocket>
-#include <QDebug>
 
 #include "responsehandler.h"
 #include "usermanager.h"
@@ -22,6 +21,8 @@ public:
 
     UserManager *getManager();
     std::shared_ptr<AbstractRequest> getRequest();
+
+    Q_SIGNAL void connectionRefused();
 
 public slots:
 

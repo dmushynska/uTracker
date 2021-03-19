@@ -46,7 +46,6 @@ Page {
     Connections {
         target: mWorkflow
         onGotTaskData: {
-            console.debug("EMITTED CAUGHT")
             var component;
             var sprite;
             component = Qt.createComponent("CardView.qml");
@@ -64,29 +63,9 @@ Page {
             idWorkflow: 0
         }
     }
-//    ListModel {
-//        id: desksSection
-//        ListElement {
-//            title: "Desk 1"
-//            idNum: 1
-//        }
-//        ListElement{
-//            title: "Desk 2"
-//            idNum: 2
-//        }
-//        ListElement{
-//            title: "Desk 3"
-//            idNum: 3
-//        }
-//        ListElement{
-//            title: "Desk 4"
-//            idNum: 4
-//        }
-//    }
     property var sections: [userSection, mWorkflowList]
     property var sectionsTitles: ["User information", "Desks"]
     property int selectedComponent: 0
-//    property bool isListContentHeight: true
 
     id: rootAccount
     visible: true
@@ -148,7 +127,6 @@ Page {
                             text: sectionsTitles[index]
                             textColor: UThemes.isClassic ? "white" : UThemes.font
                             backgroundColor: UThemes.listBack
-//                            showDivider: true
                             elevation: 2
                         }
 
@@ -209,17 +187,8 @@ Page {
                                         removeWorkflow(model.idWorkflow)
                                     }
                                 }
-//                                action: Action {
-//                                    iconName: "action/settings"
-//                                    name: "Settings"
-//                                    hoverAnimation: true
-//                                }
-
                                 onClicked: {
                                     selectedComponent = model.idWorkflow;
-//                                    mWorkflow.
-//                                    console.log(model.title)
-//                                    requestForDesk(model)
                                     mWorkflow.getWorkflowsModelById(selectedComponent)
                                     navDrawer.close()
                                 }
@@ -229,7 +198,6 @@ Page {
                 }
                 Button {
                     text: "New desk +"
-//                    elevation: sectionItems.isContentHeight ? 1 : 0
                     elevation: 1
                     height: dp(40)
                     width: parent.width
@@ -301,7 +269,6 @@ Page {
                 anchors.fill: parent
                 asynchronous: true
                 visible: status == Loader.Ready
-                // selectedComponent will always be valid, as it defaults to the first component
                 source: {
                     if(selectedComponent == 0)
                         return Qt.resolvedUrl("Profile.qml")

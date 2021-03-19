@@ -37,7 +37,6 @@ QVariant WorkflowsModel::data(const QModelIndex &index, int role) const
         return m_workflows[index.row()].second;
     return QVariant();
 }
-#include <QDebug>
 bool WorkflowsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (data(index, role) != value) {

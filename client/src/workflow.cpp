@@ -39,7 +39,6 @@ void Workflow::getAllListWorkflow() const
 }
 
 void Workflow::printStr(QString str) {
-    qDebug() << str;
 }
 
 CardListsModel *Workflow::getCardListModel() {
@@ -61,7 +60,6 @@ WorkflowsModel *Workflow::getWorkflowsModel() {
 }
 
 void Workflow::createWorkflow(QString title) {
-    qDebug() << "REQUEST CREATE ----------- WF ----------- USER ID" <<  PARENT_CAST(UserManager, parent())->getUser()->getUserId();
     m_request->createWorkflow(title, "", PARENT_CAST(UserManager, parent())->getUser()->getUserId());
 }
 
@@ -86,28 +84,23 @@ void Workflow::appendLists(QString title) {
 
 void Workflow::parseCreateTask(const QString &title, int id, int listId) {
 //    m_request->getLists(m_idCurrentWorkflow);
-    qDebug() << "PARSE CREATE ----------- TK ----------- ID" << title << id;
     try {
         (*m_currCardListModel)[listId]->model->append(title, id, listId, 0, 0);
     } catch (QString err) {
-        qDebug() << "<<<ERROR>>>";
     }
 }
 
 void Workflow::appendTask(QString title, int id) {
-    qDebug() << "REQUEST CREATE ----------- TK ----------- USER ID" << title;
     m_request->createTask(title, id);
 }
 
 void Workflow::parseLists(QJsonObject array) {
     m_currCardListModel->clearAllLists();
     if (array["error"] != 1) {
-        qDebug() << "Some problem";
     }
     QJsonArray lists = array["lists"].toArray();
     for (auto l : lists) {
         auto list = l.toObject();
-//    qDebug() << list["title"].toString();
         auto model = CardsModel::creatCardsModel(list, nullptr, list["listId"].toInt());
         m_currCardListModel->append(list["title"].toString(), list["listId"].toInt(), model);
     }
@@ -132,7 +125,6 @@ void Workflow::moveSetCurrListId(int id) {
 
 void Workflow::moveRequest(bool toOtherList, int index) {
     m_move.toOtherList = toOtherList;
-    qDebug() << "REQUEST MOVE ----------- TK ----------- TASK ID" <<  m_move.cardId << "--- FROM ID" << m_move.listId << "--- TO ID" << m_move.toListId;
     if (toOtherList)
         m_request->moveTask(m_move.cardId, m_move.toListId, index == -1 ? 0 : index);
     else
@@ -140,7 +132,6 @@ void Workflow::moveRequest(bool toOtherList, int index) {
 }
 
 void Workflow::parseMoveTask(const QString &msg) {
-    qDebug () << "============ Paresed MOVE =============" << m_move.cardId << m_move.listId << m_move.toListId;
     if (m_move.toOtherList) { // implement finding tasks by id & use it here
         try {
             auto *from = m_currCardListModel->getKanbById(m_move.listId);
@@ -165,16 +156,14 @@ void Workflow::parseRemoveTask(const QString &msg, int listId, int taskId) {
         auto *from = m_currCardListModel->getKanbById(listId);
         int index = 0;
         Card *movableTask = from->findTaskById(taskId, &index);
-        qDebug() << "2654872364872634872638476238746287364      " <<  index;
         if (movableTask) {
             if (index != -1)
                 from->model->removeRows(index, 1);
         }
-    } catch (const QString &ex) { qDebug() << "2654872364872634872638476238746287364     FUCK YOU " << ex; return; }
+    } catch (const QString &ex) {  return; }
 }
 
 void Workflow::removeTask(int id) {
-    qDebug() << "REQUEST REMOVE ----------- TK ----------- ID" << id;
     m_request->removeTask(id);
 }
 
@@ -195,7 +184,6 @@ void Workflow::parseGetTaskData(const QString &msg, const QString &descr, QJsonA
     for(int i = 0; i < array.count(); i++) {
         m_descriptionModel->insert({array.at(i)["isDone"].toBool(), array.at(i)["str"].toString()});
     }
-    qDebug() << "DATA EMITTED";
     emit gotTaskData();
 }
 
@@ -220,7 +208,6 @@ void Workflow::renameList(int id, QString name) {
 
 void Workflow::renameTask(int id, QString name) {
     if (id > 0) {
-        qDebug() << "<<<<< REQUERST RENAME TASK >>>>>";
         m_request->renameTask(name, id);
     }
 }
@@ -250,7 +237,6 @@ void Workflow::parseRenameTask(const QString &msg, int listId, int taskId, const
 }
 
 void Workflow::removeWorkflow(int id) {
-    qDebug() << "Remove workflow" << id;
     if (id > 0)
         m_request->archieveWorkflow(id);
 }

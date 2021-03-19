@@ -8,7 +8,6 @@ void AbstractRequest::createJSON(QMap<QString, QVariant> map) {
     QJsonObject jsonObject =  QJsonObject::fromVariantMap(map);
     QJsonDocument *jsonDoc = new QJsonDocument(jsonObject);
     QByteArray json = jsonDoc->toJson();
-    // qDebug() << json;
 
     QByteArray buffer;
     m_socket->write(buffer.setNum(json.size()));
@@ -208,7 +207,6 @@ void AbstractRequest::createTask(const QString& title, int listId) {
 
 void AbstractRequest::renameTask(const QString& title, int taskId) {
     QMap<QString, QVariant> mapa;
-    qDebug() << "FUCKYOU!!!!!" << title << taskId;
     mapa["type"] = static_cast<int>(RequestType::UPDATE_TASK);
     mapa["token"] = m_token;
     mapa["taskId"] = taskId;
@@ -290,5 +288,4 @@ void AbstractRequest::getTaskData(int taskId) {
 // //};
 // //QJsonDocument *jsonDoc = new QJsonDocument(jsonObject);
 // //QByteArray json = jsonDoc->toJson();
-// //qDebug() << "WANNA SIGNUP !";
 // //m_socket->write(json);

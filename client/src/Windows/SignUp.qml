@@ -17,17 +17,6 @@ Page {
         var mail = inputEmail.inputText
         var password = inputPassword.inputText
         mAuthor.signUpHandler(login, mail, password)
-
-//        switch(isValid) {
-//        case Authorization.LOGIN_EX:
-//            snackbar.open("Login already exsist"); break;
-//        case Authorization.MAIL_EX:
-//            snackbar.open("Mail already exsist"); break;
-//        case Authorization.NO_ERR:
-//            snackbar.open("Account created successfully");
-//            signUpPage.pop();
-//        }
-
     }
     Connections {
         target: mAuthor
@@ -74,7 +63,6 @@ Page {
                 focus: true
                 onTextChanged: {
                     inputLogin.error = (input.text.length < 4)
-//                    console.log("login: " + error)
                     logLableLogin.toLogLable()
                 }
                 validator: RegExpValidator { regExp:/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/ }
@@ -109,7 +97,6 @@ Page {
                     else {
                         inputEmail.error = false
                     }
-//                    console.log("email: " + error)
                     logLableMail.toLogLable()
                 }
                 validator: RegExpValidator { regExp:/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/ }
@@ -142,7 +129,6 @@ Page {
             input {
                 onTextChanged: {
                     inputPassword.error = (input.text.length < 7)
-//                    console.log("pass: " + error)
                     logLablePassword.toLogLable()
                     inputPasswordConfirm.error = (inputPassword.input.text != inputPasswordConfirm.input.text) ||
                             (inputPasswordConfirm.input.text.length <= 0)
@@ -177,8 +163,6 @@ Page {
                 onTextChanged: {
                     inputPasswordConfirm.error = (inputPassword.input.text != inputPasswordConfirm.input.text) ||
                             (inputPasswordConfirm.input.text.length <= 0)
-//                    console.log("pass confirm: " + error)
-//                    console.log("GENERAL: " + error)
                     logLableConfirm.toLogLable()
                 }
             }

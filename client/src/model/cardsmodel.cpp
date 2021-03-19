@@ -41,11 +41,9 @@ QVariant CardsModel::data(const QModelIndex &index, int role) const
     if (role == ParentIdRole)
         return m_parentId;
     if (role == StatusRole) {
-        qDebug() << "|" << m_cards[index.row()].getStatD();
         return m_cards[index.row()].getStatD();
     }
     if (role == CountRole) {
-        qDebug() << "|" << m_cards[index.row()].getCountD();
         return m_cards[index.row()].getCountD();
     }
     return QVariant();
@@ -61,11 +59,9 @@ bool CardsModel::setData(const QModelIndex &index, const QVariant &value, int ro
         if (role == ParentIdRole)
             m_cards[index.row()].setListId(m_parentId);
         if (role == StatusRole) {
-            qDebug() << "|>" << value.toInt();
             m_cards[index.row()].setStatD(value.toInt());
         }
         if (role == CountRole) {
-            qDebug() << "|>>" << value.toInt();
             m_cards[index.row()].setCountD(value.toInt());
         }
         emit dataChanged(index, index, QVector<int>() << role);
@@ -102,7 +98,6 @@ bool CardsModel::append(const QString &title, int id, int parentID, int statD, i
     setData(createIndex(rowCount() - 1, 0), countD, CountRole);
 
     emit taskAppended();
-    qDebug() << "{}{}{} {}{}{} {}{}{} {}{}{} {}{}{} {}{}{}" << m_parentId;
 
 //    m_parentId = parentID;
     return true;
@@ -140,7 +135,6 @@ std::shared_ptr<CardsModel> CardsModel::creatCardsModel(const QJsonObject &array
     std::shared_ptr<CardsModel> model = std::make_shared<CardsModel>(parent, parentID);
     for(const auto &t : array["tasks"].toArray()) {
         auto task = t.toObject();
-        qDebug() << ")()()()()()()()()()9 Creating Tasks ID:" << task["statusDesc"].toInt() << task["countDesc"].toInt();
         model->append(task["title"].toString(), task["taskId"].toInt(), parentID, task["statusDesc"].toInt(), task["countDesc"].toInt());
     }
     return model;

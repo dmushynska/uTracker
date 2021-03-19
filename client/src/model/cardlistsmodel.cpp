@@ -53,12 +53,10 @@ bool CardListsModel::setData(const QModelIndex &index, const QVariant &value, in
             m_kanb[index.row()].id = value.toInt();
             if (m_kanb[index.row()].model)
                 m_kanb[index.row()].model->setParentId(value.toInt());
-            qDebug() << "!@#!@#!@#!@#!@#!@#!@#!@# IDRole" << m_kanb[index.row()].id;
         }
         if (role == ModelsRole) {
             m_kanb[index.row()].model = qvariant_cast<std::shared_ptr<CardsModel>>(value);
             m_kanb[index.row()].model->setParentId(m_kanb[index.row()].id);
-            qDebug() << "!@#!@#!@#!@#!@#!@#!@#!@# ModelsRole" << m_kanb[index.row()].id;
         }
         emit dataChanged(index, index, QVector<int>() << role);
         return true;

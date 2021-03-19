@@ -21,7 +21,6 @@ void Authorization::signInHandler(QString ident, QString password) {
 }
 
 void Authorization::printStr(QString str) {
-    qDebug() << str;
 }
 
 void Authorization::setUserId(int id) {

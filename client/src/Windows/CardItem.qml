@@ -49,7 +49,6 @@ Item {
                     id: renameTaskArea
                     anchors.fill: parent
                     onDoubleClicked: {
-                        console.log(status + " " + count +"Renaming Task #" + cardContent)
                         infoText.visible = false
                         infoTextField.visible = true
                         infoTextField.forceActiveFocus()
@@ -62,7 +61,6 @@ Item {
                 height: parent.height
                 width: lay.width - (menuButton.height + parent.spacing * 2)
                 visible: !infoText.visible
-//                acceptableInput: true
                 Component.onCompleted: {
                     focus = false
                     visible = false
@@ -106,8 +104,6 @@ Item {
                         name: "Details.."
                         hoverAnimation: true
                         onTriggered: {
-
-                            console.log("Request to server: Id of card: " + cardId)
                             mWorkflow.openDescription(cardId);
                         }
                     },
@@ -144,7 +140,6 @@ Item {
                             componentMove = Qt.createComponent("MoveToDialog.qml");
                             if (componentMove.status === Component.Ready){
                                 spriteMove = componentMove.createObject(cardRoot);
-                                console.log("Request to server: Id of card: " + componentMove)
                             }
 
                             spriteMove.show()
@@ -155,11 +150,6 @@ Item {
         }
         ProgressBar {
             width: parent.width
-            Component.onCompleted: {
-                console.debug("value:" + status + " " + count)
-            }
-
-//            height: dp(10)
             color: value == 1 ? UThemes.progress : UThemes.inputBorder
             value: count <= 0 ? 0 : status / count;
             Behavior on value {
@@ -171,7 +161,6 @@ Item {
             Behavior on color {
                 ColorAnimation {
                     duration: 200
-//                    easing.type: Easing.InOutQuad
                 }
             }
             

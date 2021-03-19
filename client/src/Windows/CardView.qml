@@ -49,8 +49,6 @@ Dialog {
         }
         Button {
             id: addButton
-//            anchor.right: parent.right
-//            anchor.margin: 32
             height: dp(30)
             width: parent.width
             text: "+ Add +"
@@ -63,7 +61,6 @@ Dialog {
     positiveButtonText: "OK"
     negativeButtonText: "Cancel"
     onAccepted: {
-//        cardRoot.setStatus(8, 10)
         mWorkflow.saveDescription();
         mDescriptor.clearAllData();
         snackbar.open("Data saved");

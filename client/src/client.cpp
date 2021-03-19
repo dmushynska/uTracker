@@ -49,45 +49,13 @@ Client::~Client() {
 void Client::doConnect(char *ip, int port) {
     connect(m_socket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(m_socket, &QTcpSocket::readyRead, this, &Client::readyRead);
+    connect(this, &Client::connectionRefused, m_manager->getAuthor(), &Authorization::connectionRefused);
+
     m_socket->connectToHost(ip, port);
-    if (!m_socket->waitForConnected(5000))
+    if (!m_socket->waitForConnected(5000)) {
+        emit connectionRefused();
         qDebug() << "Error: " << m_socket->errorString();
-}
-
-void Client::testRequestLoop() {
-    //  m_request->m_token = mx_hash("const QString& pass", "salt");
-////            ////auth sector
-//    m_request->signUp("ndykyy", "21453#gs8kFSdfD1F244iuSn1", "Nazar", "Dykyy", "NazarDykyy@gmail.com");
-    //  m_request->signIn("NazarDykyy1@gmail.com", "ndykyy", "21453#gs8kFSdfD1F244iuSn1");
-     //m_request->autoSignIn();//-
-     //m_request->autoSignInWithGoogle();//-
-     //m_request->logOut(1);//+
-
-////            ////workdflow (desk) sector
-//      m_request->createWorkflow("EL TITLE", "EL DESCRIPTION", 1);
-    //  m_request->updateWorkflow("QString title", "QString description", 1);
-//    m_request->removeFromWorkflow(1);
-//    m_request->getUsersFromWorkflow(1);
-    //  m_request->inviteToWorkflow(1, 1);
-//        m_request->getAllWorkflows(0);
-        // m_request->getSingleWorkflowData(1);
-
-     //m_request->getStatistics();//-
-    //// // profile sector
-    //  m_request->getProfile(1);
-    //  m_request->updateProfile(1, "Nazar", "Dykyy");
-
-            ////list sector
-    // m_request->createList("ListName", 1);
-    // m_request->getLists(1);
-    // m_request->removeList(1);
-            ////task sector
-    // m_request->createTask("Task name", 1);
-    // m_request->getTasks(1);
-//    m_request->updateTask(1, "description", {{"One",true}, {"Two", true}, {"Three", false}});
-//     m_request->moveTask(1, 2);
-    // m_request->removeTask(1);
-//        m_request->getTaskData(1);
+    }
 }
 
 void Client::parseJSON(QJsonDocument itemDoc) {
@@ -139,7 +107,6 @@ void Client::disconnected() {
 void Client::readyRead() {
     while (!m_socket->atEnd()) {
         QByteArray size = m_socket->readLine();
-        // qDebug() << m_socket->read(size.toInt());
        QJsonDocument itemDoc = QJsonDocument::fromJson(m_socket->read(size.toInt()));
        if (!itemDoc.isNull())
            parseJSON(itemDoc);

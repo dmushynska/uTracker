@@ -2,7 +2,6 @@
 #define CARD_H
 
 #include <QObject>
-#include <QDebug>
 
 class Card : public QObject
 {
@@ -36,7 +35,6 @@ public:
 
     // Status
     int getStatD() const {
-        qDebug() << "|{" << m_statD;
         return m_statD;
     }
     void setStatD(int stat) {
@@ -44,7 +42,6 @@ public:
     }
 
     int getCountD() const {
-        qDebug() << "|{{" << m_countD;
         return m_countD;
     }
     void setCountD(int count) {

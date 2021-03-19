@@ -21,8 +21,6 @@ Item {
             width: lable.implicitWidth + 40
             elevation: 1
             backgroundColor: UThemes.listBack
-//            border.width: 2
-//            border.color: "#f6a2bf"
             Label {
                 anchors.centerIn: parent
                 id: lable

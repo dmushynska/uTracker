@@ -28,7 +28,7 @@ Dialog {
             checked: false
             exclusiveGroup: optionGroup
             onClicked: {
-                selectedListId = idD             // !!!!!! change to index
+                selectedListId = idD
             }
         }
     }
@@ -38,6 +38,5 @@ Dialog {
     onAccepted:  {
         mWorkflow.moveSetToListId(selectedListId)
         mWorkflow.moveRequest(true)
-//        console.log("card " + idCard + " moved to " + selectedListId)
     }
 }
