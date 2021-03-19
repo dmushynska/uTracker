@@ -114,7 +114,7 @@ bool WorkflowsModel::removeById(int id) {
             index++;
         }
         if (index < m_workflows.size())
-            return removeRows(index, 0);
+            return removeRows(index, 1);
     }
     return false;
 }
