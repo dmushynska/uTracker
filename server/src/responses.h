@@ -111,10 +111,10 @@ public:
     bool isValid(QJsonObject itemObject);
 };
 
-class toArchieveWorkflow : public AbstractRequestHandler {
+class ToArchiveWorkflow : public AbstractRequestHandler {
 Q_OBJECT
 public:
-    toArchieveWorkflow(Connection *socket);
+    ToArchiveWorkflow(Connection *socket);
     bool isValid(QJsonObject itemObject);
 };
 

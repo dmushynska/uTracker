@@ -43,6 +43,7 @@ private:
     std::shared_ptr<AbstractResponseHandler> m_logOut;
     std::shared_ptr<AbstractResponseHandler> m_createdWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_updateWorkflow;
+    std::shared_ptr<AbstractResponseHandler> m_archieveWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_inviteToWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_removeFromWorkflow;
     std::shared_ptr<AbstractResponseHandler> m_getUsersFromWorkflow;

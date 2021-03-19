@@ -20,6 +20,7 @@ void Client::initResponses() {
     m_logOut = std::make_shared<LogOutResponse>(this, m_socket);
     m_createdWorkflow = std::make_shared<CreatedWorkflowResponse>(this, m_socket);
     m_updateWorkflow = std::make_shared<UpdateWorkflowResponse>(this, m_socket);
+    m_archieveWorkflow = std::make_shared<ArchieveWorkflowResponse>(this, m_socket);
     m_inviteToWorkflow = std::make_shared<InvitedToWorkflowResponse>(this, m_socket);
     m_removeFromWorkflow = std::make_shared<RemovedFromWorkflowResponse>(this, m_socket);
     m_getUsersFromWorkflow = std::make_shared<GetUsersFromWorkflowResponse>(this, m_socket);
@@ -94,7 +95,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
 
     QVector<std::shared_ptr<AbstractResponseHandler>> funcList;
     funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createdWorkflow});
-    funcList.append({m_updateWorkflow, m_inviteToWorkflow, m_removeFromWorkflow, m_getUsersFromWorkflow});
+    funcList.append({m_updateWorkflow, m_archieveWorkflow, m_inviteToWorkflow, m_removeFromWorkflow, m_getUsersFromWorkflow});
     funcList.append({m_allWorkflow, m_singleWorkflow, m_sendStat, m_sendProfile, m_updateProfile});
     funcList.append({m_createListResponse, m_renameListResponse, m_getListsResponse, m_removeListResponse, m_createTaskResponse});
     funcList.append({m_getTasksResponse, m_updateTaskResponse, m_moveTaskResponse, m_removeTaskResponse, m_sendTaskDataResponse});
@@ -107,6 +108,7 @@ void Client::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::LOG_OUT);
     types.append(RequestType::CREATE_WORKFLOW);
     types.append(RequestType::UPDATE_WORKFLOW);
+    types.append(RequestType::ARCHIVE_WORKFLOW);
     types.append(RequestType::INVITE_TO_WORKFLOW);
     types.append(RequestType::REMOVE_FROM_WORKFLOW);
     types.append(RequestType::GET_USERS_FROM_WORKFLOW);

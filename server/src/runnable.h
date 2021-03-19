@@ -33,6 +33,7 @@ private:
     std::shared_ptr<AbstractRequestHandler> m_logOut;
     std::shared_ptr<AbstractRequestHandler> m_createWorkFlow;
     std::shared_ptr<AbstractRequestHandler> m_updateWorkFlow;
+    std::shared_ptr<AbstractRequestHandler> m_archiveWorkflow;
     std::shared_ptr<AbstractRequestHandler> m_inviteToWorkFlow;
     std::shared_ptr<AbstractRequestHandler> m_removeFromWorkFlow;
     std::shared_ptr<AbstractRequestHandler> m_getUsersFromWorkFlow;

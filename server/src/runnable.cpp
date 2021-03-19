@@ -11,6 +11,7 @@ Runnable::Runnable(Connection *socket) {
     m_logOut = std::make_shared<ToLogOut>(socket);
     m_createWorkFlow = std::make_shared<ToCreatedWorkflow>(socket);
     m_updateWorkFlow = std::make_shared<ToUpdateWorkflow>(socket);
+    m_archiveWorkflow = std::make_shared<ToArchiveWorkflow>(socket);
     m_inviteToWorkFlow = std::make_shared<ToInvitedToWorkflow>(socket);
     m_removeFromWorkFlow = std::make_shared<ToRemoveFromWorkflow>(socket);
     m_getUsersFromWorkFlow = std::make_shared<ToGetUsersFromWorkflow>(socket);
@@ -35,7 +36,7 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     QJsonObject itemObject = itemDoc.object();
     QVector<std::shared_ptr<AbstractRequestHandler>> funcList;
     funcList.append({m_signUp, m_signIn, m_autoSignIn, m_googleSignIn, m_logOut, m_createWorkFlow});
-    funcList.append({m_updateWorkFlow, m_inviteToWorkFlow,m_removeFromWorkFlow, m_getUsersFromWorkFlow, m_sendAllWorkFlows});
+    funcList.append({m_updateWorkFlow, m_archiveWorkflow, m_inviteToWorkFlow, m_removeFromWorkFlow, m_getUsersFromWorkFlow, m_sendAllWorkFlows});
     funcList.append({m_sendSingleWorkFlow, m_sendStatistics, m_sendProfile, m_updateProfile, m_createList});
     funcList.append({m_renameList, m_getLists, m_removeList, m_createTask, m_getTasks, m_updateTask});
     funcList.append({m_moveTask, m_removeTask, m_sendTaskData});
@@ -47,6 +48,7 @@ void Runnable::parseJSON(QJsonDocument itemDoc) {
     types.append(RequestType::LOG_OUT);
     types.append(RequestType::CREATE_WORKFLOW);
     types.append(RequestType::UPDATE_WORKFLOW);
+    types.append(RequestType::ARCHIVE_WORKFLOW);
     types.append(RequestType::INVITE_TO_WORKFLOW);
     types.append(RequestType::REMOVE_FROM_WORKFLOW);
     types.append(RequestType::GET_USERS_FROM_WORKFLOW);
