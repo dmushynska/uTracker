@@ -32,6 +32,7 @@ void UserManager::initModules() const
 //    auto root = engine.rootContext();
 //    root->setContextProperty()
 //    engine.rootContext()->setContextProperty("mAuthor", QVariant::fromValue(&m_author));
+
     engine.rootContext()->setContextProperty("mAuthor", (QObject *)m_author);
     engine.rootContext()->setContextProperty("mWorkflow", (QObject *)m_workflow);
     engine.rootContext()->setContextProperty("mUser", (QObject *)m_user);

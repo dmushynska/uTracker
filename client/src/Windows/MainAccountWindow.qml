@@ -64,7 +64,7 @@ Page {
         }
     }
     property var sections: [userSection, mWorkflowList]
-    property var sectionsTitles: ["User information", "Desks"]
+    property var sectionsTitles: ["User information", "Workflows"]
     property int selectedComponent: 0
 
     id: rootAccount
@@ -80,7 +80,7 @@ Page {
     actions: [
         Action {
             id: info
-            iconName: "action/account_circle"
+            iconName: "action/language"
             text: "Info"
             hoverAnimation: false
             onTriggered: {
@@ -102,7 +102,7 @@ Page {
         viewer.backgroundColor: "#fbfaf6"
 
         tooltip: "Menu"
-
+        width: dp(300)
 
         overlayColor: UThemes.overlay
 
@@ -123,11 +123,20 @@ Page {
                     delegate: Column {
                         width: parent.width
 
-                        ListItem.Subheader {
+                        ListItem.Standard {
+
                             text: sectionsTitles[index]
                             textColor: UThemes.isClassic ? "white" : UThemes.font
                             backgroundColor: UThemes.listBack
                             elevation: 2
+                            textStyle: "body2"
+                            action: Icon {
+                                anchors.centerIn: parent
+                                color: UThemes.isClassic ? "white" : UThemes.font
+                                name: sectionsTitles[index] === "User information" ? "action/account_circle" : "action/workflow"
+//                                size: dp(15)
+                            }
+
                         }
 
                         ListView {
@@ -166,6 +175,16 @@ Page {
                                 id: itemList
                                 text: model.titleWorkflow
                                 selected: model.idWorkflow === selectedComponent
+
+                                itemValueLabel.style: "caption"
+
+                                action: Icon {
+                                    anchors.centerIn: parent
+                                    color: UThemes.font
+                                    name: "navigation/chevron_right"
+                                    size: dp(15)
+                                }
+                                valueText: "19.12.20"
 
                                 secondaryItem: IconButton {
                                     id: buttonIcon
@@ -207,8 +226,126 @@ Page {
                 }
             }
         }
+
         Rectangle {
-            id: switcher
+            id: switcherSound
+            color: UThemes.primary
+            height: dp(40)
+            width: parent.width
+            anchors.bottom: dividerNS.top
+            Row {
+                anchors.fill: parent
+                Item {
+                    height: switcherSound.height
+                    width: parent.width / 3
+                    Icon {
+                        anchors.centerIn: parent
+                        name: "action/sound_off"
+                        color: UThemes.font_
+                        size: 15
+                    }
+                }
+                Item {
+                    height: switcherSound.height
+                    width: parent.width / 3
+                    Switch {
+                        id: swSound
+                        anchors.centerIn: parent
+                        checked: true
+                        darkBackground: false
+                        onClicked: snackbar.sound = checked
+                        color: UThemes.font_
+                    }
+                }
+                Item {
+                    height: switcherSound.height
+                    width: parent.width / 3
+                    Icon {
+                        anchors.centerIn: parent
+                        name: "action/sound_on"
+                        color: UThemes.font_
+                        size: 15
+                    }
+                }
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
+                }
+            }
+        }
+
+        Rectangle {
+            id: dividerNS
+            height: dp(2)
+            width: parent.width
+            color: "white"
+            anchors.bottom: switcherNotif.top
+        }
+
+        Rectangle {
+            id: switcherNotif
+            color: UThemes.primary
+            height: dp(40)
+            width: parent.width
+            anchors.bottom: divider.top
+            Row {
+                anchors.fill: parent
+                Item {
+                    height: switcherNotif.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Notify off"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+                Item {
+                    height: switcherNotif.height
+                    width: parent.width / 3
+                    Switch {
+                        anchors.centerIn: parent
+                        checked: true
+                        darkBackground: false
+                        onClicked: {
+                            snackbar.sound = !checked ? false : swSound.checked
+                            swSound.enabled = checked
+                            snackbar.duration = checked ? 3000 : 0
+                        }
+                        color: UThemes.font_
+                    }
+                }
+                Item {
+                    height: switcherNotif.height
+                    width: parent.width / 3
+                    Label {
+                        anchors.centerIn: parent
+                        text: "Notify on"
+                        style: "body2"
+                        color: UThemes.font_
+
+                    }
+                }
+            }
+            Behavior on color {
+                ColorAnimation {
+                    duration: 200
+                }
+            }
+        }
+
+        Rectangle {
+            id: divider
+            height: dp(2)
+            width: parent.width
+            color: "white"
+            anchors.bottom: switcherTemes.top
+        }
+
+        Rectangle {
+            id: switcherTemes
             color: UThemes.primary
             height: dp(40)
             width: parent.width
@@ -216,7 +353,7 @@ Page {
             Row {
                 anchors.fill: parent
                 Item {
-                    height: switcher.height
+                    height: switcherTemes.height
                     width: parent.width / 3
                     Label {
                         anchors.centerIn: parent
@@ -227,7 +364,7 @@ Page {
                     }
                 }
                 Item {
-                    height: switcher.height
+                    height: switcherTemes.height
                     width: parent.width / 3
                     Switch {
                         anchors.centerIn: parent
@@ -238,7 +375,7 @@ Page {
                     }
                 }
                 Item {
-                    height: switcher.height
+                    height: switcherTemes.height
                     width: parent.width / 3
                     Label {
                         anchors.centerIn: parent
@@ -285,11 +422,5 @@ Page {
         Scrollbar {
             flickableItem: flickable
         }
-    }
-
-
-
-    Snackbar {
-        id: snackbar
     }
 }

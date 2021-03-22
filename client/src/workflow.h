@@ -2,6 +2,7 @@
 #define WORKFLOW_H
 
 #include <QObject>
+#include <QProcess>
 
 #include "model/cardlistsmodel.h"
 #include "model/listworkflowsmodel.h"
@@ -50,7 +51,11 @@ public:
     Q_INVOKABLE void moveSetCurrListId(int id);
     Q_INVOKABLE void moveRequest(bool toOtherList, int index = -1);
 
+    Q_SIGNAL void soundSignal();
 
+    Q_SLOT void soundSlot() {
+        m_process->start("afplay /System/Library/Sounds/Funk.aiff");
+    }
 
     CardListsModel *getCardListModel();
     WorkflowsModel *getWorkflowsModel();
@@ -106,6 +111,7 @@ private:
     CardListsModel *m_currCardListModel;
     AbstractRequest *m_request;
     DescriptionModel *m_descriptionModel;
+    QProcess *m_process;
     MoveData m_move;
     int m_idCurrentWorkflow;
 };

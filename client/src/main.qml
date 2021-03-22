@@ -3,6 +3,8 @@ import QtQuick.Window 2.11
 import QtQuick.Controls 1.3 as Controls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
+import QtQuick 2.15
+import QtQuick 2.8
 
 import "Components"
 import "Windows"
@@ -28,6 +30,9 @@ ApplicationWindow {
 
     Snackbar {
         id: snackbar
+        duration: 3000
+        backColor: UThemes.font
+
     }
 
     function goMainWindow() {

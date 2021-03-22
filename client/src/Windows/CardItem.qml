@@ -26,11 +26,17 @@ Item {
         count = ct;
     }
 
+    function duplicateCard(name) {
+        mWorkflow.appendTask(name, parentId)
+        control.position = 1.0
+    }
+
     Card {
         anchors.centerIn: parent
         width: parent.width - dp(20)
         height: parent.height - dp(5)
         backgroundColor: "#fbfaf6"
+
         Row {
             id:lay
             anchors.fill: parent
@@ -53,6 +59,7 @@ Item {
                         infoTextField.visible = true
                         infoTextField.forceActiveFocus()
                         infoTextField.text = infoText.text
+                        infoTextField.selectAll()
                     }
                 }
             }
@@ -61,6 +68,8 @@ Item {
                 height: parent.height
                 width: lay.width - (menuButton.height + parent.spacing * 2)
                 visible: !infoText.visible
+                property bool escaped: false
+
                 Component.onCompleted: {
                     focus = false
                     visible = false
@@ -70,16 +79,20 @@ Item {
                     visible = false
                 }
                 Keys.onEscapePressed: {
+                    escaped = true
                     focus = false
                     visible = false
                 }
 
                 onAccepted: {
-                    if (text !== "") {
+                    if (text.length > 0 && !escaped) {
+                        snackbar.open("Task \"%1\" was renamed to \"%2\"".arg(infoText.text).arg(text))
                         infoText.text = text;
                         mWorkflow.renameTask(cardId, text);
                     }
-                    focus = false
+                    text = ""
+                    escaped = false
+//                    focus = false
                     visible = false
                     infoText.visible = true
                 }
@@ -113,6 +126,7 @@ Item {
                         name: "Remove"
                         hoverAnimation: true
                         onTriggered: {
+                            snackbar.open("Task \"%1\" was successfuly deleted.".arg(cardContent))
                             mWorkflow.removeTask(cardId)
                         }
                     },
@@ -126,6 +140,13 @@ Item {
                             infoTextField.visible = true
                             infoTextField.forceActiveFocus()
                         }
+                    },
+                    Action {
+                        id: duplicate
+                        iconName: "action/copy_link"
+                        name: "Duplicate"
+                        hoverAnimation: true
+                        onTriggered: duplicateCard(cardContent)
                     },
                     Action {
                         id: movePers

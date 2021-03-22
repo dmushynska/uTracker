@@ -7,6 +7,9 @@ Workflow::Workflow(QObject *parent) : QObject(parent) {
     m_workflowsModel = new WorkflowsModel(this);
     m_currCardListModel = new CardListsModel(this);
     m_descriptionModel = new DescriptionModel(this);
+    m_process = new QProcess(this);
+
+    connect(this, &Workflow::soundSignal, &Workflow::soundSlot);
 
     connect(this, &Workflow::serverAllListWorkflowsResponse, &Workflow::parseAllListWorkflows);
     connect(this, &Workflow::serverCreateWorkflowResponse, &Workflow::parseCreatedWorkflow);

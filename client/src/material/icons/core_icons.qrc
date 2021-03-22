@@ -51,6 +51,12 @@
         <file alias="delete.svg">action_delete.svg</file>
         <file alias="language.svg">action_language.svg</file>
         <file alias="settings.svg">action_settings.svg</file>
+        <file alias="workflow.svg">workflow.svg</file>
+        <file alias="copy_link.svg">copy-link.svg</file>
+
+        <file alias="sound_on.svg">sound-medium.svg</file>
+        <file alias="sound_off.svg">sound-off.svg</file>
+
 </qresource>
 
 <qresource prefix="/icons/navigation">

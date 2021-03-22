@@ -27,6 +27,7 @@ BaseListItem {
 
     property alias text: label.text
     property alias valueText: valueLabel.text
+    property string textStyle: "subheading"
 
     property alias action: actionItem.children
     property alias iconName: icon.name
@@ -119,7 +120,7 @@ BaseListItem {
                 Layout.fillWidth: true
 
                 elide: Text.ElideRight
-                style: "subheading"
+                style: textStyle
 
                 color: listItem.selected ? Theme.primaryColor
                         : darkBackground ? Theme.dark.textColor : Theme.light.textColor

@@ -91,6 +91,8 @@ Item {
                                 id: name
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                property bool escaped: false
+
                                 Component.onCompleted: {
                                     focus = false
                                     visible = false
@@ -101,18 +103,25 @@ Item {
                                 }
 
                                 Keys.onEscapePressed: {
+                                    escaped = true
+                                    text = ""
                                     focus = false
                                     visible = false
                                 }
 
                                 anchors.fill: parent
-                                color: "#7a163c"
+                                color: UThemes.isClassic ? "white" : UThemes.font
+//                                characterLimit: 20
+
                                 onAccepted: {
-                                    if (text.length > 0) {
+                                    if (text.length > 0 && !escaped) {
+                                        snackbar.open("List \"%1\" was renamed to \"%2\"".arg(cardTitle.text).arg(text))
                                         cardTitle.text = text
                                         mWorkflow.renameList(listId, text);
                                     }
-                                    focus = false
+                                    text = ""
+                                    escaped = false
+//                                    focus = false
                                     visible = false
                                     cardTitle.visible = true
                                 }
@@ -136,6 +145,7 @@ Item {
                                     name: "Remove list"
                                     hoverAnimation: true
                                     onTriggered: {
+                                        snackbar.open("List \"%1\" was successfuly deleted.".arg(cardListTitle))
                                         mWorkflow.removeList(listId)
                                     }
                                 },
@@ -197,12 +207,14 @@ Item {
                         modelOwner: cardsModel
                         status: statusD
                         count: countD
-                        Connections {                               // !
-                            target: cardsModel                      // !
-                            onTaskAppended: {                       // !
-                                control.position = 1.0;             // !
-                            }                                       // !
-                        }                                           // !
+
+                        Connections {
+                            target: cardsModel
+                            onTaskAppended: {
+                                control.position = 1.0;
+                                snackbar.open("Added new task into %1".arg(cardListTitle))
+                            }
+                        }
 
                         states: [
                             State {

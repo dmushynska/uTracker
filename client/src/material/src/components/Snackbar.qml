@@ -12,6 +12,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import Material 0.3
+import QtMultimedia 5.15
 
 /*!
    \qmltype Snackbar
@@ -27,14 +28,18 @@ View {
     property string text
     property bool opened
     property int duration: 2000
+    property bool sound: true
+
     property bool fullWidth: Device.type === Device.phone || Device.type === Device.phablet
+    property string backColor: "#323232"
 
     signal clicked
-
     function open(text) {
         snackbar.text = text
         opened = true;
         timer.restart();
+        if (sound)
+            mWorkflow.soundSignal()
     }
 
     anchors {
@@ -49,7 +54,7 @@ View {
         }
     }
     radius: fullWidth ? 0 : 2 * Units.dp
-    backgroundColor: "#323232"
+    backgroundColor: backColor
     height: snackLayout.height
     width: fullWidth ? undefined : snackLayout.width
     opacity: opened ? 1 : 0
